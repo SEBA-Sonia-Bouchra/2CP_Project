@@ -1,8 +1,15 @@
 import React from 'react'
 import tickCircle from '../assets/images/tick-circle.png'
 import image from '../assets/images/background.png'
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export default function () {
+  const navigate=useNavigate();
+  useEffect(() => {
+    const timer = setTimeout(() => { navigate("/account-request"); // navigate to Account Request after 2 seconds
+    }, 2000);
+  return () => clearTimeout(timer);  }, [navigate]); 
   return (
     <>
       <div className='sm:flex gap-8 sm:flex-col md:grid md:grid-cols-3 md:h-screen'>
