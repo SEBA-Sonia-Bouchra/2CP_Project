@@ -78,7 +78,7 @@ export default function SignUpPage() {
   };
   return (
     <>
-      <div className='sm:flex gap-8 sm:flex-col md:grid md:grid-cols-3 md:h-screen'>
+      <div className='sm:flex gap-8 sm:flex-col md:grid md:grid-cols-3 md:h-screen bg-[#F2F2E1]'>
         <div className=' col-span-1 '>
           <img src={image} alt="background" className='sm:w-full md:h-screen md:w-full object-cover rounded-br-[50px] 
           rounded-tr-[50px] min-w-full'/>
