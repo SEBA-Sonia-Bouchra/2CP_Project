@@ -13,12 +13,14 @@ import RejectRequest from './pages/RejectRequest.jsx';
 import ProfileModification from './pages/ProfileModification.jsx';
 import ProfileModificationProfessional from './pages/ProfileModificationProfessional.jsx';
 import NotificationsPage from './pages/NotificationsPage.jsx'
+import AccountsPage from './pages/AccountsPage.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/'>
       {/* <Route index element={<ProfileModification/>}/> */}
-      <Route index element={<NotificationsPage />}/>
+      {/* <Route index element={<NotificationsPage />}/> */}
+      <Route index element={<AccountsPage/>} />
     </Route>
   )
   );

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import search from '../assets/images/search.png'
 import icon from '../assets/images/icon-placeholder.png'
 import logo from '../assets/images/logo.svg'
@@ -6,8 +6,11 @@ import title from '../assets/images/BinaA.svg'
 import notifications from '../assets/images/notifications.svg'
 import down from '../assets/images/down.svg'
 import { Link } from 'react-router-dom'
+import Notifications from './Notifications.jsx'
 
 export default function NavbarProfessional() {
+  const [showNotifications, setShowNotifications] = useState(false);
+
   return (
     <>
         <div className='bg-[#8C9480] font-montserral grid items-center h-[80px] md:h-[110px] grid-cols-2 w-contain'>
@@ -31,13 +34,20 @@ export default function NavbarProfessional() {
                <img src={search} alt="search-icon" className='self-center w-4 h-4' />
                <p className='self-center text-xl'>Search</p>
              </button>
-             <div>
+             <div onClick = {() => setShowNotifications(!showNotifications)}>
                 <img src={notifications} alt="notifications-icon" className='rounded-full bg-[#DFD8C8] p-4 w-14 h-14 text-[#213824]' />
              </div>
-             <div className=' w-14 h-14 '>
+             <div className=' w-14 h-14 ' >
                <img src={icon} alt="icon" className='rounded-full'/>
              </div>
             </div>
+
+            {/* show notifications as an overlay */}
+            {showNotifications && (
+              <div>
+                <Notifications />
+              </div>
+            )}
         </div>
     </>
   )
