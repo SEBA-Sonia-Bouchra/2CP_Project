@@ -52,7 +52,7 @@ const NotificationBox = () => {
 
   return (
     <>
-    <div className="flex items-center justify-center h-screen bg-black bg-opacity-25">
+    <div className="flex items-center justify-center h-screen bg-black bg-opacity-25 font-montserral">
       {notifications.length > 0 ? (
       <div className="w-3/4 h-80 overflow-y-auto bg-[#F3ECD6] rounded-lg shadow-lg ">
         {notifications.map((notification) => (
@@ -119,13 +119,13 @@ const NotificationBox = () => {
 
 
                 {notification.type === "accepted-edit" && (
-                  <button className="px-7 pt-1 pb-2 bg-[#213824CC] text-[#FFF8E3] text-base rounded-full hover:bg-[#21382499]">
+                  <button className="px-7 pt-1 pb-1 bg-[#213824CC] text-[#FFF8E3] text-base rounded-full hover:bg-[#21382499]">
                     Edit
                   </button>
                 )}
 
                 {notification.type === "annotation" && (
-                  <button className="px-6 pt-1 pb-2 bg-[#213824CC] text-[#FFF8E3] text-base rounded-full hover:bg-[#21382499]">
+                  <button className="px-6 pt-1 pb-1 bg-[#213824CC] text-[#FFF8E3] text-base rounded-full hover:bg-[#21382499]">
                     Open
                   </button>
                 )}

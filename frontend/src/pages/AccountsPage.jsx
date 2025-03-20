@@ -1,9 +1,7 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect } from 'react';
 import FileTickIcon from '../assets/images/file-tick.svg'
 import NoAccounts from '../components/NoAccounts';
 import Background from '../assets/images/background.png'
-import xicon from "../assets/images/x.svg"
-import certificate from '../assets/images/CERTIFICAT DE SCOLARITE.pdf'
 
 const AccountsData = [
     {
@@ -52,13 +50,14 @@ const AccountsData = [
       time: "02/03/2025",
       email: "Foulanfoulani@gmail.com",
       status : "pending",
-      CertificateUrl: certificate,
+      CertificateUrl: "/CERTIFICAT DE SCOLARITE.pdf",
     },
   ];
 
 const AccountsPage = () => {
     const [Accounts, setAccounts] = useState(AccountsData);
     const [selectedFile, setSelectedFile] = useState(null);
+    const certificateUrl = "/CERTIFICAT DE SCOLARITE.pdf";
 
     const updateStatus = (id, newStatus) => {
       setAccounts((prevAccounts) =>
@@ -73,8 +72,21 @@ const AccountsPage = () => {
       setAccounts(Accounts.filter(account => account.id !== id));
     };
 
+    useEffect(() => {
+      if (selectedFile) {
+        document.body.style.overflow = "hidden";
+      } else {
+        document.body.style.overflow = "auto"; 
+      }
+    
+      return () => {
+        document.body.style.overflow = "auto"; 
+      };
+    }, [selectedFile]);
+
   return (
-    <div className="flex justify-center bg-[#FFFFF1] pt-36 pb-28">
+    <>
+    <div className="flex justify-center bg-[#FFFFF1] pt-36 pb-28 font-montserral">
       {Accounts.length > 0 ? (
       <div className="w-3/4">
         {Accounts.map((account) => (
@@ -151,26 +163,29 @@ const AccountsPage = () => {
 
       {selectedFile && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center overflow-y-auto">
-          <div className="p-5 rounded-lg ">
-            <button className="mb-2 p-2 rounded-full hover:bg-[#00000022]" onClick={() => setSelectedFile(null)}>
-              <img src={xicon} alt="return button" className='w-3 h-3 min-w-[12px] min-h-[12px]'/>
+          <div className="p-5 rounded-lg w-full flex justify-center relative">
+            <button className="absolute left-4 top-4 p-[9px] rounded-full flex items-center justify-center hover:bg-[#00000033]" onClick={() => setSelectedFile(null)}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="white"
+                className="w-6 h-6"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M6.225 4.811a1 1 0 0 1 1.414 0L12 9.172l4.361-4.36a1 1 0 1 1 1.414 1.414L13.415 10.586l4.36 4.361a1 1 0 0 1-1.414 1.414L12 12l-4.361 4.361a1 1 0 0 1-1.414-1.414l4.36-4.36-4.36-4.36a1 1 0 0 1 0-1.415z"
+                  clipRule="evenodd"
+                />
+              </svg>
             </button>
-            <img src={selectedFile} className="w-[600px]" />
-            {/* {typeof selectedFile === "string" ? (
-              <img src={selectedFile} className="w-[600px]" />
-            ) : selectedFile?.type?.startsWith("image/") ? (
-              <img src={URL.createObjectURL(selectedFile)} className="w-[600px]" />
-            ) : selectedFile?.type === "application/pdf" ? (
-              <a href={URL.createObjectURL(selectedFile)} target="_blank" rel="noopener noreferrer">
-                Open PDF
-              </a>
-            ) : (
-              <p>Unsupported file type</p>
-            )}           */}
+            <object data={selectedFile}
+            type='application/pdf' className='w-3/4 h-[500px]'/>
+    
           </div>
         </div>
       )}
     </div>
+    </>
   )
 }
 
