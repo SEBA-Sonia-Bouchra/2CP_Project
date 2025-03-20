@@ -97,10 +97,10 @@ const NotificationBox = () => {
               <div className="space-x-2">
                 {notification.type === "request" && (
                   <>
-                    <button className="px-4 pt-1 pb-1 text-[#213824CC] text-base rounded-full hover:text-[#21382499] border border-[#213824CC] hover:border-[#21382499]">
+                    <button className="px-4 pt-1 pb-1 text-[#213824CC] text-base rounded-full shadow-sm hover:text-[#21382499] border border-[#213824CC] hover:border-[#21382499]">
                       Decline
                     </button>
-                    <button className="px-5 pt-1 pb-1 bg-[#213824CC] text-[#FFF8E3] text-base rounded-full hover:bg-[#21382499]">
+                    <button className="px-5 pt-1 pb-1 bg-[#213824CC] text-[#FFF8E3] text-base shadow-md rounded-full hover:bg-[#21382499]">
                       Accept
                     </button>
                   </>
@@ -108,10 +108,10 @@ const NotificationBox = () => {
 
                 {notification.type === "conflict" && (
                   <>
-                    <button className="px-4 pt-1 pb-1 text-[#213824CC] text-base rounded-full hover:text-[#21382499] border border-[#213824CC] hover:border-[#21382499]">
+                    <button className="px-4 pt-1 pb-1 text-[#213824CC] text-base rounded-full shadow-sm hover:text-[#21382499] border border-[#213824CC] hover:border-[#21382499]">
                       Dismiss
                     </button>
-                    <button className="px-6 pt-1 pb-1 bg-[#213824CC] text-[#FFF8E3] text-base rounded-full hover:bg-[#21382499]">
+                    <button className="px-6 pt-1 pb-1 bg-[#213824CC] text-[#FFF8E3] text-base shadow-md rounded-full hover:bg-[#21382499]">
                       Open
                     </button>
                   </>
@@ -119,13 +119,13 @@ const NotificationBox = () => {
 
 
                 {notification.type === "accepted-edit" && (
-                  <button className="px-7 pt-1 pb-1 bg-[#213824CC] text-[#FFF8E3] text-base rounded-full hover:bg-[#21382499]">
+                  <button className="px-7 pt-1 pb-1 shadow-md bg-[#213824CC] text-[#FFF8E3] text-base rounded-full hover:bg-[#21382499]">
                     Edit
                   </button>
                 )}
 
                 {notification.type === "annotation" && (
-                  <button className="px-6 pt-1 pb-1 bg-[#213824CC] text-[#FFF8E3] text-base rounded-full hover:bg-[#21382499]">
+                  <button className="px-6 pt-1 pb-1 shadow-md bg-[#213824CC] text-[#FFF8E3] text-base rounded-full hover:bg-[#21382499]">
                     Open
                   </button>
                 )}

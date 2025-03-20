@@ -57,7 +57,6 @@ const AccountsData = [
 const AccountsPage = () => {
     const [Accounts, setAccounts] = useState(AccountsData);
     const [selectedFile, setSelectedFile] = useState(null);
-    const certificateUrl = "/CERTIFICAT DE SCOLARITE.pdf";
 
     const updateStatus = (id, newStatus) => {
       setAccounts((prevAccounts) =>
@@ -94,7 +93,7 @@ const AccountsPage = () => {
             key={account.id}
             className='p-4 bg-[#FFF8E3] flex w-full flex-col mb-5 shadow-md rounded-lg' >
             <div className="flex flex-row justify-between items-end">
-                <p> <strong className='font-semibold'>{account.firstname}{account.lastName} </strong>wants to create an acount.</p>
+                <p> <strong className='font-semibold'>{account.firstname} {account.lastName} </strong>wants to create an acount.</p>
               
               {account.isProfessional == 'false' &&
                 <span className='text-gray-500 text-sm'>Normal user</span>
@@ -104,8 +103,10 @@ const AccountsPage = () => {
               }
             </div>
 
-              <p className='underline'>{account.email}</p>
-              <p className="mt-1 text-xs text-gray-500">{account.time}</p>
+            <a href={`mailto:${account.email}`} className='underline hover:text-blue-800'>
+              {account.email}
+            </a>
+            <p className="mt-1 text-xs text-gray-500">{account.time}</p>
                 
 
               {/* Buttons Section */}
@@ -114,11 +115,11 @@ const AccountsPage = () => {
               <div className="space-x-2">
                 {account.isProfessional === "false" && (
                   <>
-                    <button className="px-5 pt-1 pb-1 bg-[#213824CC] text-[#FFF8E3] text-base rounded-full hover:bg-[#21382499]"
+                    <button className="px-5 pt-1 pb-1 shadow-md bg-[#213824CC] text-[#FFF8E3] text-base rounded-full hover:bg-[#21382499]"
                     onClick={() => {updateStatus(account.id, "rejected"); handleDelete(account.id);}}>
                       Refuse
                     </button>
-                    <button className="px-5 pt-1 pb-1 bg-[#213824CC] text-[#FFF8E3] text-base rounded-full hover:bg-[#21382499]"
+                    <button className="px-5 pt-1 pb-1 shadow-md bg-[#213824CC] text-[#FFF8E3] text-base rounded-full hover:bg-[#21382499]"
                     onClick={() => {updateStatus(account.id, "accepted"); handleDelete(account.id);}}>
                       Accept
                     </button>
@@ -127,7 +128,7 @@ const AccountsPage = () => {
                 {account.isProfessional === "true" && (
                   <>
                     <button
-                      className="px-5 pt-1 pb-1 text-[#213824CC] text-base rounded-full hover:text-[#21382499] border border-[#213824CC] hover:border-[#21382499]"
+                      className="px-5 pt-1 pb-1 shadow-sm text-[#213824CC] text-base rounded-full hover:text-[#21382499] border border-[#213824CC] hover:border-[#21382499]"
                       onClick={() => {
                         if (account.CertificateUrl) {
                           setSelectedFile(account.CertificateUrl);
@@ -142,11 +143,11 @@ const AccountsPage = () => {
                       </div>
                     </button>
 
-                    <button className="px-5 pt-1 pb-1 bg-[#213824CC] text-[#FFF8E3] text-base rounded-full hover:bg-[#21382499]"
+                    <button className="px-5 pt-1 pb-1 shadow-md bg-[#213824CC] text-[#FFF8E3] text-base rounded-full hover:bg-[#21382499]"
                     onClick={() => {updateStatus(account.id, "rejected"); handleDelete(account.id);}}>
                       Refuse
                     </button>
-                    <button className="px-5 pt-1 pb-1 bg-[#213824CC] text-[#FFF8E3] text-base rounded-full hover:bg-[#21382499]"
+                    <button className="px-5 pt-1 pb-1 shadow-md bg-[#213824CC] text-[#FFF8E3] text-base rounded-full hover:bg-[#21382499]"
                      onClick={() => {updateStatus(account.id, "accepted"); handleDelete(account.id);}}>
                       Accept
                     </button>
