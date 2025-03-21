@@ -6,6 +6,7 @@ import title from '../assets/images/BinaA.svg'
 import { Link } from 'react-router-dom'
 
 export default function NavbarNormal() {
+
   return (
     <>
       <div className='bg-[#8C9480] font-montserral grid items-center h-[80px] md:h-[110px] grid-cols-2 w-contain'>
@@ -18,9 +19,9 @@ export default function NavbarNormal() {
             <img src={search} alt="search-icon" className='self-center w-4 h-4' />
             <p className='self-center text-xl'>Search</p>
           </button>
-          <div className=' w-14 h-14 '>
+          <button className=' w-14 h-14 ' >
             <img src={icon} alt="icon" className='rounded-full'/>
-          </div>
+          </button>
         </div>
       </div>
     </>
