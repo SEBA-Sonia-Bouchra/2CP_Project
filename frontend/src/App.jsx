@@ -3,7 +3,9 @@ import {
   Route,
   createBrowserRouter,
   createRoutesFromElements,
-  RouterProvider
+  RouterProvider,
+  Routes,
+  Router
 } from 'react-router-dom'
 import SignUpPage from './pages/SignUpPage.jsx'
 import EmailVerification from './pages/EmailVerification.jsx'
@@ -12,11 +14,12 @@ import AccountRequest from './pages/AccountRequest.jsx';
 import RejectRequest from './pages/RejectRequest.jsx';
 import ProfileModification from './pages/ProfileModification.jsx';
 import ProfileModificationProfessional from './pages/ProfileModificationProfessional.jsx';
+import MainLayout from './layouts/MainLayout.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/'>
-      <Route index element={<ProfileModification/>}/>
+      <Route index element={<ProfileModificationProfessional/>}/>
     </Route>
   )
   );
