@@ -28,7 +28,7 @@ export default function SignUpPage() {
     setFormErrors(validationErrors); // treat errors
     if (Object.keys(validationErrors).length === 0) {
       setIsSubmit(true); // Allow submission only if no errors
-      navigate("/email"); // Navigate to email verification
+      navigate("/Email_verify"); // Navigate to email verification
     }
   };
   useEffect(() => {
@@ -151,7 +151,7 @@ export default function SignUpPage() {
               <button type='submit' className='bg-[#b57D57] rounded-[50px] object-cover text-[20px] text-[#FFF8E3] px-8 py-2 place-self-center
               drop-shadow-md mt-3 mb-3'>Create account</button>
             <p className="text-center text-sm sm:text-base">Already have an account ?
-              <Link to='#' className='text-black underline'> Sign in here</Link>
+              <Link to='/signin' className='text-black underline'> Sign in here</Link>
             </p>
           </form>
         </div>
