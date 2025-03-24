@@ -61,7 +61,7 @@ const sendOtpEmail = (email, otp) => {
 // ✅ Signup Route
 router.post("/signup", upload.single("certificate"), async (req, res) => {
     try {
-        const { firstname, lastname , email, password, isProfessional } = req.body;
+        const { firstname, lastname , email, password, isProfessional, institution } = req.body;
 
         // Check if user already exists
         let user = await User.findOne({ email });
@@ -87,6 +87,7 @@ router.post("/signup", upload.single("certificate"), async (req, res) => {
             otp,
             otpExpires,
             isVerified: false,
+            institution,
             status: "pending"
         });
 
