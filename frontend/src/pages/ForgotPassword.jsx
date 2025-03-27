@@ -50,11 +50,11 @@ const ForgotPassword = () => {
           <h2 className="font-playfairdisplay text-3xl text-[#FFF8E3] mb-4">
             Forgot Password
           </h2>
-          <p className="text-[#FFF8E3] text-sm mb-10">
+          <p className="text-[#FFF8E3] text-sm mb-10 font-montserral">
             Please enter your email address to receive a verification code.
           </p>
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="font-montserral">
             {/* Email Input */}
             <div className="flex flex-col gap-1 mb-4 text-left">
               <input

@@ -21,23 +21,25 @@ import VerifyCode from './pages/verifycode.jsx'
 import ForgotPassword from './pages/ForgotPassword.jsx'
 import SetNewPassword from './pages/setnewpassword.jsx'
 import Signinpage from './pages/signinpage.jsx'
+import MainLayout from './layouts/MainLayout.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/">
-      {/*  <Route index element={<AccountsPage />} /> */}
-      {/* <Route index element={<LandingPage />} /> */} 
-      {/* <Route path="/verify-code" element={<VerifyCode />} /> */}
-      {/* <Route path="/signup" element={<SignUpPage/>} /> */}
-      {/* <Route path="/signin" element={<Signinpage/>} /> */}
-      {/* <Route path="/landin_gpage" element={<LandingPage />} /> */}
-      {/* <Route path="/forgot-password" element={<ForgotPassword />} /> */}
-      {/* <Route path="/set_new_password" element={<SetNewPassword />} /> */}
-      {/* <Route path="/Email_verify" element={<EmailVerification />} /> */}
-      {/* <Route path="/Email_approved" element={<EmailVerificationApproval />} /> */}
-      {/* <Route path="/account-request" element={<AccountRequest />} />     */}
-      <Route index element={<ProfileModificationProfessional/>}/>
-      </Route>
+  <>
+    <Route path="/" element={<MainLayout/>}>
+      { <Route index path='/accounts' element={<AccountsPage />} /> }
+    </Route>
+    <Route>
+      {/*<Route index element={<LandingPage/>}></Route>}
+      {<Route path='/signup' element={<SignUpPage/>}></Route>}
+      {<Route path='/signin' element={<Signinpage/>}></Route>}
+      {<Route path='/forgot-password' element={<ForgotPassword/>}></Route>}
+      {<Route path='/email-verification' element={<EmailVerification/>}></Route>}
+      {<Route path='/email-approval' element={<EmailVerificationApproval/>}></Route>}
+      {<Route path='/request-review' element={<AccountRequest/>}></Route>}
+      {<Route path='/request-rejected' element={<RejectRequest/>}></Route>*/}
+    </Route>
+  </>
   )
   );
 

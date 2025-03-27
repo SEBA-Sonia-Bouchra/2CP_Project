@@ -20,9 +20,9 @@ export default function NavbarNormal() {
             <img src={search} alt="search-icon" className='self-center w-4 h-4' />
             <p className='self-center text-xl'>Search</p>
           </button>
-          <button className=' w-14 h-14 ' >
+          <Link to='/profile-modification' className=' w-14 h-14 ' >
             <img src={icon} alt="icon" className='rounded-full'/>
-          </button>
+          </Link>
         </div>
       </div>
     </>

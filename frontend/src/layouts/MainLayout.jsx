@@ -1,17 +1,45 @@
-import React from 'react'
+import React , {useState, useEffect} from 'react'
 import NavbarNormal from '../components/NavbarNormal'
 import Footer from '../components/Footer'
 import { Outlet } from 'react-router-dom'
+import NavbarProfessional from '../components/NavbarProfessional';
+import Notifications from '../components/Notifications.jsx'
+import NavbarAdmin from '../components/NavbarAdmin.jsx'
 
 export default function MainLayout() {
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(3);
+  const toggleNotifications= () => {
+    setShowNotifications(!showNotifications);
+    if (!showNotifications) {
+      setUnreadCount(0);
+    }
+  }
+  useEffect(() => {
+    if (showNotifications) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto"; 
+    }
+    return () => {
+      document.body.style.overflow = "auto"; 
+    };
+  }, [showNotifications]);
   return (
     <>
       <div>
-        <NavbarNormal />
-        <main className="pt-16">
+        <NavbarAdmin toggleNotifications={toggleNotifications} showNotifications={showNotifications}
+        unreadCount={unreadCount} />
+        {showNotifications && (
+              <div className='w-screen fixed top-0'>
+                <Notifications toggleNotifications={() => setShowNotifications(false)} />
+              </div>
+            )}
+        <main>
           <Outlet />
         </main>
-      </div>
+        </div>
+      <Footer/>
     </>
   )
 }

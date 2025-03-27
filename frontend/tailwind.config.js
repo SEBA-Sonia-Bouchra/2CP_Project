@@ -9,7 +9,10 @@ export default {
       fontFamily:{
         montserral:['Montserral','sans-serif'],
         playfairdisplay:['PlayfairDisplay','sans-serif']
-      }
+      },
+      screens:{
+        '1200':'1200px',
+      },
     },
   },
   plugins: [],

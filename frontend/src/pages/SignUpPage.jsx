@@ -28,7 +28,7 @@ export default function SignUpPage() {
     setFormErrors(validationErrors); // treat errors
     if (Object.keys(validationErrors).length === 0) {
       setIsSubmit(true); // Allow submission only if no errors
-      navigate("/Email_verify"); // Navigate to email verification
+      navigate("/email-verification"); // Navigate to email verification
     }
   };
   useEffect(() => {
