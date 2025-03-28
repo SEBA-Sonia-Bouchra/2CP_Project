@@ -31,7 +31,7 @@ export default function MainLayout() {
         <NavbarAdmin toggleNotifications={toggleNotifications} showNotifications={showNotifications}
         unreadCount={unreadCount} />
         {showNotifications && (
-              <div className='w-screen fixed top-0'>
+              <div className='w-screen fixed top-0 z-50'>
                 <Notifications toggleNotifications={() => setShowNotifications(false)} />
               </div>
             )}
@@ -39,7 +39,7 @@ export default function MainLayout() {
           <Outlet />
         </main>
         </div>
-      <Footer/>
+      <Footer />
     </>
   )
 }

@@ -183,7 +183,7 @@ const AccountsPage = () => {
               </svg>
             </button>
             <object data={selectedFile}
-            type='application/pdf' className='w-3/4 h-[500px]'/>
+            type='application/pdf' className='w-3/4 h-screen z-50'/>
     
           </div>
         </div>

@@ -31,13 +31,14 @@ export default function NavbarProfessional({toggleNotifications , showNotificati
           {/*This will be hidden in sm screens*/}
            <div className="hidden 1200:flex justify-end items-center 1200:col-span-2 text-white text-xl gap-6 mr-4">
                 <Link to="#" className="mr-4">Home</Link>
-                <div className="relative inline-block group">
-                    <button className="px-4 py-2 flex items-center">
+                <div className="relative inline-block">
+                    <button className="px-4 py-2 flex items-center">  {/* here i removed the group property */}
                         Projects
                         <img src={down} alt="down-icon" className="w-5 h-5 ml-2" />
                     </button>
-                    <ul className="absolute left-0 mt-2 w-56 bg-[#A3AD92] text-white shadow-lg rounded-1200 opacity-0 group-hover:opacity-100
-                     transition-opacity duration-300 z-50">
+                    {/* <ul className="absolute left-0 mt-2 w-56 bg-[#A3AD92] text-white shadow-lg rounded-1200 opacity-0 group-hover:opacity-100
+                     transition-opacity duration-300 z-50"> */}
+                    <ul className="absolute left-0 mt-2 w-56 bg-[#A3AD92] text-white shadow-lg rounded-1200 opacity-0 z-50 hidden-ul">
                         <li className="px-4 py-2 hover:bg-[#F5F5DC] hover:text-[#213824] cursor-pointer">My Projects</li>
                         <li className="px-4 py-2 hover:bg-[#F5F5DC] hover:text-[#213824] cursor-pointer">My Contributions</li>
                     </ul>
@@ -64,13 +65,14 @@ export default function NavbarProfessional({toggleNotifications , showNotificati
             {/*Used to move the home, projects...etc section down a line in small screens*/}
             <div className={`${menuOpen ? "flex" : "hidden"} 1200:hidden text-white text-lg gap-10 justify-center col-span-2 `}>
                 <Link to="#" className="py-2 border-[#F5F5DC]">Home</Link>
-                <div className="relative group">
+                <div className="relative"> {/* here i removed group property */}
                     <button className="py-2 flex items-center w-full">
                         Projects
                         <img src={down} alt="down-icon" className="w-5 h-5 ml-2" />
                     </button>
-                    <ul className="absolute left-0 mt-2 w-56 bg-[#A3AD92] text-white shadow-lg rounded-1200 opacity-0 group-hover:opacity-100 
-                    transition-opacity duration-300 z-50">
+                    {/* <ul className="absolute left-0 mt-2 w-56 bg-[#A3AD92] text-white shadow-lg rounded-1200 opacity-0 group-hover:opacity-100 
+                    transition-opacity duration-300 z-50"> */}
+                    <ul className="absolute left-0 mt-2 w-56 bg-[#A3AD92] text-white shadow-lg rounded-1200 opacity-0 z-50 hidden-ul">
                         <li className="px-4 py-2 hover:bg-[#F5F5DC] hover:text-[#213824] cursor-pointer">My Projects</li>
                         <li className="px-4 py-2 hover:bg-[#F5F5DC] hover:text-[#213824] cursor-pointer">My Contributions</li>
                     </ul>
