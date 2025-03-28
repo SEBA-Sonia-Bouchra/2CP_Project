@@ -19,11 +19,11 @@ import VerifyCode from './pages/verifycode.jsx'
 import ForgotPassword from './pages/ForgotPassword.jsx'
 import SetNewPassword from './pages/setnewpassword.jsx'
 import Signinpage from './pages/signinpage.jsx'
+import OpenedProjectPage from './pages/OpenedProjectPage.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/">
-        <Route index element={<AccountsPage />} />
       {/* <Route index element={<LandingPage />} /> */} 
       {/* <Route path="/verify-code" element={<VerifyCode />} /> */}
       {/* <Route path="/signup" element={<SignUpPage/>} /> */}
@@ -34,6 +34,7 @@ const router = createBrowserRouter(
       {/* <Route path="/Email_verify" element={<EmailVerification />} /> */}
       {/* <Route path="/Email_approved" element={<EmailVerificationApproval />} /> */}
       {/* <Route path="/account-request" element={<AccountRequest />} />     */}
+      <Route path="/" element={<OpenedProjectPage />} />    
       </Route>
   )
   );

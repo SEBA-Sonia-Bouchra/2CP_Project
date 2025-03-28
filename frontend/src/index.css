@@ -45,3 +45,43 @@
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.25); /* Darker color when hovered */
 }
+
+/* .hidden-div:hover div span {
+  display: flex;
+} */
+.hidden-div {
+  overflow: hidden; /* Contains expanding content */
+}
+
+.hidden-div div .hidden-span {
+  opacity: 0;
+  max-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: all 400ms ease-in-out;
+  -webkit-transition: all 400ms ease-in-out;
+  -moz-transition: all 400ms ease-in-out;
+  -ms-transition: all 400ms ease-in-out;
+  -o-transition: all 400ms ease-in-out;
+}
+
+.hidden-div:hover div .hidden-span {
+  opacity: 1;
+  max-width: 200px;
+}
+
+.hidden-div div:hover .hidden-span{
+  color: #F3ECD6;
+}
+
+.hidden-div div:hover .hidden-img {
+  filter: brightness(0) saturate(100%) invert(94%) sepia(6%) saturate(716%) hue-rotate(314deg) brightness(107%) contrast(101%);
+  -webkit-filter: brightness(0) saturate(100%) invert(94%) sepia(6%) saturate(716%) hue-rotate(314deg) brightness(107%) contrast(101%);
+}
+
+.clamped-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
