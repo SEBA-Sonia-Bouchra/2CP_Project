@@ -31,7 +31,7 @@ const LandingPage = () => {
           </p>
 
           {/* Buttons */}
-          <div className="mt-6 flex justify-center  mb-4 space-x-4">
+          <div className="mt-6 flex justify-center  mb-4 space-x-4 font-montserral">
             <Link to="/signin" className="px-6 py-2 bg-[#FFF8E3] text-black rounded-full shadow-md 
             border-black border hover:bg-transparent">
               Sign in

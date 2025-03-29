@@ -43,7 +43,7 @@ export default function EmailVerification() {
              />
             ))}
             </div>
-            <Link to='/access' className='flex place-content-center'>
+            <Link to='/email-approval' className='flex place-content-center'>
               <button type='submit' className='bg-[#b57D57] rounded-[50px] object-cover text-[20px] text-[#FFF8E3] px-8 py-2
               drop-shadow-md mt-3 mb-3 font-montserral place-delf-center' >Verify</button>
             </Link>

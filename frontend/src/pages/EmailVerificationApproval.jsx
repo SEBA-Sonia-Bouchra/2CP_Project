@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 export default function () {
   const navigate=useNavigate();
   useEffect(() => {
-    const timer = setTimeout(() => { navigate("/account-request"); // navigate to Account Request after 2 seconds
+    const timer = setTimeout(() => { navigate("/request-review"); // navigate to Account Request after 2 seconds
     }, 2000);
   return () => clearTimeout(timer);  }, [navigate]); 
   return (

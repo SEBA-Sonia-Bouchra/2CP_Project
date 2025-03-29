@@ -31,19 +31,20 @@ export default function NavbarProfessional({toggleNotifications , showNotificati
           {/*This will be hidden in sm screens*/}
            <div className="hidden 1200:flex justify-end items-center 1200:col-span-2 text-white text-xl gap-6 mr-4">
                 <Link to="#" className="mr-4">Home</Link>
-                <div className="relative inline-block">  {/* here i removed the group property */}
-                    <button className="px-4 py-2 flex items-center">
+                <div className="relative inline-block">
+                    <button className="px-4 py-2 flex items-center">  {/* here i removed the group property */}
                         Projects
                         <img src={down} alt="down-icon" className="w-5 h-5 ml-2" />
                     </button>
                     {/* <ul className="absolute left-0 mt-2 w-56 bg-[#A3AD92] text-white shadow-lg rounded-1200 opacity-0 group-hover:opacity-100
                      transition-opacity duration-300 z-50"> */}
-                     <ul className="absolute left-0 mt-2 w-56 bg-[#A3AD92] text-white shadow-lg rounded-1200 opacity-0 z-50 hidden-ul">
+                    <ul className="absolute left-0 mt-2 w-56 bg-[#A3AD92] text-white shadow-lg rounded-1200 opacity-0 z-50 hidden-ul">
                         <li className="px-4 py-2 hover:bg-[#F5F5DC] hover:text-[#213824] cursor-pointer">My Projects</li>
                         <li className="px-4 py-2 hover:bg-[#F5F5DC] hover:text-[#213824] cursor-pointer">My Contributions</li>
                     </ul>
                 </div>
                 <Link className='whitespace-nowrap'>Add Project</Link>
+                <Link to="/accounts" className="ml-2">Accounts</Link>
             </div>
            <div className='1200:grid flex 1200:grid-cols-4 gap-2 1200:gap-4 justify-center 1200:justify-end'>
              <button className='bg-[#DFD8C8] flex rounded-[70px] py-1 px-3 1200:py-2 1200:px-8 gap-2 place-content-center justify-self-end

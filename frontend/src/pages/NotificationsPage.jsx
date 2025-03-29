@@ -2,7 +2,8 @@ import React from 'react'
 import NoNotifications from '../components/NoNotifications'
 import Notifications from '../components/Notifications'
 
-const NotificationsPage = () => {
+// just for testinggg
+const NotificationsPage = () => {         
   return (
     <>
         <Notifications />
