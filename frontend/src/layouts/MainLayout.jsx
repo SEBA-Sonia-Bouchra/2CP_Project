@@ -27,7 +27,7 @@ export default function MainLayout() {
   }, [showNotifications]);
   return (
     <>
-      <div>
+      <div className="min-h-screen">
         <NavbarAdmin toggleNotifications={toggleNotifications} showNotifications={showNotifications}
         unreadCount={unreadCount} />
         {showNotifications && (
@@ -35,11 +35,11 @@ export default function MainLayout() {
                 <Notifications toggleNotifications={() => setShowNotifications(false)} />
               </div>
             )}
-        <main>
+        <main className='z-10'>
           <Outlet />
         </main>
-        </div>
-      <Footer />
+        <Footer className='z-0'/>
+      </div>
     </>
   )
 }

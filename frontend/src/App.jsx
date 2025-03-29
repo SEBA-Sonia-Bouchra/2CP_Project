@@ -31,6 +31,7 @@ import HomePageExample from './pages/home_page_example.jsx'
 const router = createBrowserRouter(
   createRoutesFromElements(
   <>
+
       {/*<Route index element={<LandingPage/>}></Route>}
       {<Route path='/signup' element={<SignUpPage/>}></Route>}
       {<Route path='/signin' element={<Signinpage/>}></Route>}
