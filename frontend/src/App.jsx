@@ -22,14 +22,15 @@ import ForgotPassword from './pages/ForgotPassword.jsx'
 import SetNewPassword from './pages/setnewpassword.jsx'
 import Signinpage from './pages/signinpage.jsx'
 import MainLayout from './layouts/MainLayout.jsx'
+import Home_page_opened_for_the_first_time from "./pages/home_page_opened_for_the_first_time.jsx";
+import Home_page from "./pages/home_page.jsx";
+import Myprojects from "./pages/myprojects.jsx";
+import Mycontributions from "./pages/Mycontributions.jsx";
+import HomePageExample from './pages/home_page_example.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
   <>
-    <Route path="/" element={<MainLayout/>}>
-      { <Route index path='/accounts' element={<AccountsPage />} /> }
-    </Route>
-    <Route>
       {/*<Route index element={<LandingPage/>}></Route>}
       {<Route path='/signup' element={<SignUpPage/>}></Route>}
       {<Route path='/signin' element={<Signinpage/>}></Route>}
@@ -38,7 +39,13 @@ const router = createBrowserRouter(
       {<Route path='/email-approval' element={<EmailVerificationApproval/>}></Route>}
       {<Route path='/request-review' element={<AccountRequest/>}></Route>}
       {<Route path='/request-rejected' element={<RejectRequest/>}></Route>*/}
-    </Route>
+      <Route path="/" element={<MainLayout/>}>
+        <Route index element={<Home_page/>} />
+        <Route path="/My_Projects" element={<Myprojects />} />
+        <Route path="/home_page" element={<Home_page />} />
+        <Route path="/My_contributions" element={<Mycontributions />} />
+      </Route>
+
   </>
   )
   );
