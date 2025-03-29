@@ -166,7 +166,7 @@ const AccountsPage = () => {
       )}
 
       {selectedFile && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center overflow-y-auto mt-20 pt-4">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center overflow-y-auto mt-20 pt-4 z-40">
           <div className="p-5 rounded-lg w-full flex justify-center relative">
             <button className="absolute left-4 top-4 p-[9px] rounded-full flex items-center justify-center hover:bg-[#00000033]" onClick={() => setSelectedFile(null)}>
               <svg
