@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 const EditRequest = () => {
-    const [editRequest, setEditREquest] = useState('rejected')
+    const [editRequest, setEditREquest] = useState('noRequest')
     const [waitingMessage, setWaitingMessage] = useState(false)
 
   return (
@@ -25,6 +25,7 @@ const EditRequest = () => {
         ) : (
             <div className='text-xs my-3 mx-4 text-center'>Your editting request has been declined.</div>
         )}
+         <span className='h-[0.1px] bg-[#4f37267b] w-full'></span>
     </>
   )
 }
