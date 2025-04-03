@@ -96,10 +96,10 @@ const AccountsPage = () => {
                 <p> <strong className='font-semibold'>{account.firstname} {account.lastName} </strong>wants to create an acount.</p>
               
               {account.isProfessional == 'false' &&
-                <span className='text-gray-500 text-sm'>Normal user</span>
+                <span className='text-gray-500 text-sm whitespace-nowrap self-start'>Normal user</span>
               }
               {account.isProfessional == 'true' &&
-                <span className='text-gray-500 text-sm'>Expert user</span>
+                <span className='text-gray-500 text-sm whitespace-nowrap self-start'>Expert user</span>
               }
             </div>
 

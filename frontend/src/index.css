@@ -6,6 +6,7 @@
     * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
 }
 
@@ -30,7 +31,7 @@
 
 ::-webkit-scrollbar-track {
   background: #F3ECD6;
-  /*Backgroundofthescrollbartrack*/border-radius: 8px;
+  Backgroundofthescrollbartrackborder-radius: 8px;
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
   -ms-border-radius: 8px;
@@ -88,5 +89,9 @@ div.selected img {
 
 .red-filter {
   filter: brightness(0) saturate(100%) invert(16%) sepia(99%) saturate(7452%) hue-rotate(359deg) brightness(106%) contrast(118%);
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 

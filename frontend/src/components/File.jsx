@@ -1,144 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import bg from '../assets/images/background.png'
-import vid from '../assets/Videos/vid.mp4'
+import bg from '../assets/images/background.png';
+import SectionDropDown from './SectionDropDown';
 
-const Projects = [
-  {
-    _id: '1',
-    title: {
-      content: 'Timeless Elegance: The Architecture of Algiers',
-      styles: { fontFamily: 'PlayfairDisplay' , fontSize: '20px' },
-    },
-    description: {
-      content: 'Exploring the blend of Moorish, Ottoman, and modernist architectural styles in Algiers.',
-      styles: { fontFamily: 'Arial' , fontSize: '14px', color: '#000', fontWeight: 'normal' },
-    },
-    author: { name: 'Dahmane Lharachi' },
-    dateOfPublish: '2025-02-03T00:00:00Z',
-    coverPhoto: bg, 
-    media: [
-      bg, 
-      vid 
-    ],
-    sections: [
-      {
-        id: 'sec1',
-        dimension: 'architecture',
-        elements: [
-          {
-            type: 'text',
-            content: 'Algiers is home to a fusion of architectural influences, from Ottoman mosques to French colonial buildings. Algiers is home to a fusion of architectural influences, from Ottoman mosques to French colonial buildings Algiers is home to a fusion of architectural influences, from Ottoman mosques to French colonial buildings Algiers is home to a fusion of architectural influences, from Ottoman mosques to French colonial buildings Algiers is home to a fusion of architectural influences, from Ottoman mosques to French colonial buildings [1]',
-            position: { rowStart: 1, colStart: 1, colSpan: 2, rowSpan: 1 },
-            styles: { fontFamily: 'Arial' , fontSize: '14px', color: '#000', fontWeight: 'normal' },
-          },
-          {
-            type: 'image',
-            content: bg,
-            position: { rowStart: 1, colStart: 3, colSpan: 1, rowSpan: 2 },
-          }
-        ]
-      },
-      {
-        id: 'sec2',
-        dimension: 'history',
-        elements: [
-          {
-            type: 'text',
-            content: 'This video explores the historical evolution of Algiers\' architecture.',
-            position: { rowStart: 1, colStart: 1, colSpan: 3, rowSpan: 1 },
-            styles: { fontFamily: 'Arial', fontSize: '16px', fontWeight: 'bold', textAlign: 'center' },
-          },
-          {
-            type: 'video',
-            content: vid,
-            position: { rowStart: 2, colStart: 1, colSpan: 3, rowSpan: 2 },
-          }
-        ]
-      },
-      {
-        id: 'sec3',
-        dimension: 'archeology',
-        elements: [
-          {
-            type: 'text',
-            content: 'Highlighted architectural dimensions:',
-            position: { rowStart: 1, colStart: 1, colSpan: 2, rowSpan: 1 },
-            styles: { fontFamily: 'Arial', fontSize: '18px', fontWeight: 'bold' },
-          },
-          {
-            type: 'link',
-            url: 'https://talents.esi.dz/scolar/index',
-            content: "Learn more about Algiers' archeological sites",
-            position: { rowStart: 2, colStart: 2, colSpan: 2, rowSpan: 2 },
-            styles: { color: 'blue', textDecoration: 'underline' },
-          },
-          {
-            type: 'shape',
-            shapeType: 'triangle',
-            position: { rowStart: 2, colStart: 2, colSpan: 2, rowSpan: 2 },
-            styles: { fill: '#ffcc00', rotation: '45' },
-          },
-          {
-            type: 'shape',
-            shapeType: 'line',
-            position: { rowStart: 4, colStart: 2, colSpan: 3, rowSpan: 1 },
-            styles: { stroke: '#000', x1: 10, y1: 50, x2: 300, y2: 50, rotation: 0 },
-          },
-          {
-            type: 'shape',
-            shapeType: 'arrow',
-            position: { rowStart: 5, colStart: 2, colSpan: 2, rowSpan: 1 },
-            styles: { stroke: '#000', fill: 'transparent',x1: 10, y1: 50, x2: 50, y2: 50, rotation: 60 }
-          },
-          {
-            type: 'shape',
-            shapeType: 'circle',
-            position: { rowStart: 2, colStart: 1, colSpan: 1, rowSpan: 1 },
-            styles: { fill: '#3498db'}
-          },
-          {
-            type: 'shape',
-            shapeType: 'rectangle', // Can be 'line', 'arrow', 'rectangle', 'triangle', 'circle'
-            position: { rowStart: 3, colStart: 1, colSpan: 2, rowSpan: 2 },
-            styles: { fill: 'transparent', stroke: '#000', width: 100, height: 50 }
-          }
-        ]
-      }
-    ],
-    references: [
-      { title: '"The Architectural Heritage of Algiers" - A. Benyamina, 2021',             
-        styles: { fontFamily: 'Arial' , fontSize: '14px', color: '#000', fontWeight: 'normal' },
-      },
-      { title: 'National Institute of Urban Studies -', link: "https://www.nius-architecture.org" ,
-        styles: { fontFamily: 'Arial' , fontSize: '14px', color: '#000', fontWeight: 'normal' },
-      },
-    ],
-  },
-];
-
-const File = () => {
+const File = ({ project, isOwner, currentUser }) => {
     const [selectedCoverPicture, setSelectedCoverPicure] = useState(null);
-    const project = Projects[0];
+    const [sectionDropDown, setSectionDropDown] = useState(null);
     const colors = ["#5D9AD0", "#3CC435", "#D662C4", "#D05D5F"];
 
+    useEffect(() => {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+          return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }, []);
+    
   return (
-    <div className='w-full max-w-[800px] bg-white shadow-md h-fit rounded-md'>
+    <div className='w-full max-w-[800px] bg-white shadow-md h-fit rounded-md '>
         {/* cover picture section */}
         <div className='w-full h-56 overflow-hidden rounded-t-md'>
             <img src={bg} alt="cover-picture" className='w-full h-full object-cover object-center cursor-pointer'
             onClick={ () => setSelectedCoverPicure(project.coverPhoto)}
             />
         {selectedCoverPicture && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center overflow-y-auto">
-                <div className="p-5 rounded-lg w-full flex justify-center relative">
-                  <button className="absolute left-4 top-4 p-[9px] rounded-full flex items-center justify-center hover:bg-[#00000033]" onClick={() => setSelectedCoverPicure(null)}>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="w-6 h-6">
-                      <path fillRule="evenodd" d="M6.225 4.811a1 1 0 0 1 1.414 0L12 9.172l4.361-4.36a1 1 0 1 1 1.414 1.414L13.415 10.586l4.36 4.361a1 1 0 0 1-1.414 1.414L12 12l-4.361 4.361a1 1 0 0 1-1.414-1.414l4.36-4.36-4.36-4.36a1 1 0 0 1 0-1.415z" clipRule="evenodd" />
-                    </svg>
-                  </button>
-                  <img src={selectedCoverPicture} alt="Selected Cover" className="max-w-full max-h-[90vh] rounded-md shadow-lg" />
-                </div>
-              </div>
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center overflow-y-auto z-20">
+            <div className="p-5 rounded-lg w-full flex justify-center relative">
+              <button className="absolute left-4 top-4 p-[9px] rounded-full flex items-center justify-center hover:bg-[#00000033]" onClick={() => setSelectedCoverPicure(null)}>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="w-6 h-6">
+                  <path fillRule="evenodd" d="M6.225 4.811a1 1 0 0 1 1.414 0L12 9.172l4.361-4.36a1 1 0 1 1 1.414 1.414L13.415 10.586l4.36 4.361a1 1 0 0 1-1.414 1.414L12 12l-4.361 4.361a1 1 0 0 1-1.414-1.414l4.36-4.36-4.36-4.36a1 1 0 0 1 0-1.415z" clipRule="evenodd" />
+                </svg>
+              </button>
+              <img src={selectedCoverPicture} alt="Selected Cover" className="max-w-full max-h-[90vh] rounded-md shadow-lg" />
+            </div>
+          </div>
         )} 
         </div>
 
@@ -151,24 +45,27 @@ const File = () => {
             </p>
             {/* description */}
             { project.description &&
-              <div className='my-3 w-full'>
+              <div id='description' className='my-3 w-full'>
                 <h2 className='font-playfairdisplay mb-2'>Description</h2>
-                <div className='h-[1.5px] rounded-full bg-gray-300 mb-2'></div>
+                <div className='h-[1.5px] rounded-full bg-[#4f3726] mb-2'></div>
                 <p style={project.description.styles}>{ project.description.content }</p>
               </div>
             }
             {/* sections */}
             { project.sections.map((section, index) => (
-              <div key={index} className='my-3 w-full'>
+              <div key={index} id={`${section.id}`} className='my-3 w-full'>
                 <div className='w-full flex flex-row justify-between mb-1'>
                   <h2 style={{ color: colors[index], fontFamily: project.title.styles.fontFamily}} className='capitalize self-center text-[16px]'>{ section.dimension }</h2>
-                  <button className='rounded-full p-2 hover:bg-[#00000023] self-center'> 
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4" style={{ color: colors[index] }}>
-                      <circle cx="12" cy="5" r="2" />
-                      <circle cx="12" cy="12" r="2" />
-                      <circle cx="12" cy="19" r="2" />
-                    </svg> 
-                  </button>
+                  <div className='relative flex flex-col'>
+                    <button className='rounded-full p-2 hover:bg-[#00000023] self-center' onClick={() => (setSectionDropDown(sectionDropDown === index ? null : index))}> 
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4" style={{ color: colors[index] }}>
+                        <circle cx="12" cy="5" r="2" />
+                        <circle cx="12" cy="12" r="2" />
+                        <circle cx="12" cy="19" r="2" />
+                      </svg> 
+                    </button>
+                    {sectionDropDown === index && <SectionDropDown color={colors[index]} section={section} isOwner={isOwner} currentUser={currentUser}/>}
+                  </div>
                 </div>
                 <div style={{ backgroundColor: colors[index] }} className={`h-[1.5px] rounded-full mb-2`}></div>
                 {/* section content */}
@@ -255,9 +152,9 @@ const File = () => {
               </div>
             ))}
             {/* refrences */}
-              <div className='my-3 w-full'>
+              <div id='references' className='my-3 w-full'>
                 <h2 className='font-playfairdisplay mb-2'>References</h2>
-                <div className='h-[1.5px] rounded-full bg-gray-300 mb-2'></div>
+                <div className='h-[1.5px] rounded-full bg-gray-400 mb-2'></div>
                 <ol className='list-decimal list-inside font-montserral text-sm'>
                   {project.references.map((reference, index) => (
                     <li key={index} id={`reference-${index}`} style={reference.styles}>

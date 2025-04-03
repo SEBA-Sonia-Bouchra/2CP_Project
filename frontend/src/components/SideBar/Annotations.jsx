@@ -8,9 +8,35 @@ const annotationsData = [
     user: "660f12ab34cd56ef78901234",
     name: "Dahmane",
     surname: "Lharachi",
+    profilePicture: ba,
     content: "From the intricate Moorish palaces of the Casbah to the striking modernist facades, Algiers' architecture is a blend of history and innovation.",
     project: "661987abcdef123456789012", 
     sectionId: "sec1", 
+    dimension: "architecture",
+    createdAt: "2026-02-24T10:30:00Z",
+  },
+  {
+    _id: "66123abcde4567f890123456",
+    user: "660f12ab34cd56ef78901234",
+    name: "Dahmane",
+    surname: "Lharachi",
+    profilePicture: ba,
+    content: "From the intricate Moorish palaces of the Casbah to the striking modernist facades, Algiers' architecture is a blend of history and innovation.",
+    project: "661987abcdef123456789012", 
+    sectionId: "sec2", 
+    dimension: "history",
+    createdAt: "2026-02-24T10:30:00Z",
+  },
+  {
+    _id: "66123abcde4567f890123456",
+    user: "660f12ab34cd56ef78901234",
+    name: "Dahmane",
+    surname: "Lharachi",
+    profilePicture: ba,
+    content: "From the intricate Moorish palaces of the Casbah to the striking modernist facades, Algiers' architecture is a blend of history and innovation.",
+    project: "661987abcdef123456789012", 
+    sectionId: "sec3", 
+    dimension: "archeology",
     createdAt: "2026-02-24T10:30:00Z",
   },
   {
@@ -18,16 +44,18 @@ const annotationsData = [
     user: "660f12ab34cd56ef78901235",
     name: "Amina",
     surname: "Bouzid",
+    profilePicture: ba,
     content: "The fusion of Ottoman, French colonial, and contemporary styles creates a unique architectural identity in Algiers.",
     project: "661987abcdef123456789013",
     sectionId: "sec3",
+    dimension: "archeology",
     createdAt: "2026-03-10T15:45:00Z",
   },
 ];
 
 const Annotations = ({ setClickedAnnotation }) => {
   return (
-    <div className='text-black w-full'>
+    <div className='text-black h-[300px] overflow-y-auto hide-scrollbar'>
       {annotationsData.map((annotation) => (
         <div key={annotation._id} className='w-full flex-grow flex flex-col'>
           {/* Author Info */}
@@ -42,7 +70,7 @@ const Annotations = ({ setClickedAnnotation }) => {
           </div>
 
           {/* Annotation Content */}
-          <div className='px-3 pb-3 pt-2 w-full max-w-[300px] flex items-start'>
+          <div className='px-3 pb-3 pt-2 w-full flex items-start'>
             <p className='text-xs overflow-hidden break-words clamped-text cursor-pointer'
               onClick={() => setClickedAnnotation(annotation)}>
               <span>
