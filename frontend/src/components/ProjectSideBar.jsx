@@ -12,7 +12,7 @@ import Annotations from './SideBar/Annotations';
 import ClickedAnnotation from './SideBar/ClickedAnnotation'
 import EditRequests from './EditRequests';
 
-const ProjectSideBar = ({ project, isOwner }) => {
+const ProjectSideBar = ({ project, isOwner, currentUser, isProfessional }) => {
   const [selectedItem, setSelectedItem] = useState(null)
   const [isStatic, setIsStatic] = useState(false); // Controls sidebar behavior, the sidebar becomes static (not affected by hovers) if we click on an option)
   const [clickedAnnotation, setClickedAnnotation] = useState(null); 
@@ -38,22 +38,28 @@ const ProjectSideBar = ({ project, isOwner }) => {
       document.body.style.overflow = "auto"; 
     };
   }, [clickedAnnotation]);
+
+  const sidebarItems = [
+    { id: 'options', label: 'Options', icon: options, component: <Options isOwner={isOwner} /> },
+    { id: 'users', label: 'Contributors', icon: users, component: <Contributers project={project} isOwner={isOwner}/> },
+    ...(isProfessional ? [{
+      id: 'edit',
+      label: isOwner ? 'Edit Requests' : 'Edit Request',
+      icon: edit,
+      component: isOwner ? <EditRequests /> : <EditRequest />
+    }] : []),
+    { id: 'sections', label: 'Sections', icon: sections, component: <Sections project={project}/> },
+    { id: 'annotations', label: 'Annotations', icon: annotations, component: <Annotations setClickedAnnotation={setClickedAnnotation} currentUser={currentUser} isOwner={isOwner}/> },
+  ];
   
   return (
     <>
     
-    <div className={`sticky top-3 h-fit ${isStatic ? 'w-[232px] lg:w-[300px]' : 'hidden-div'}`}> {/* Prevent hover effect when static' */}
+    <div className={`sticky top-3 h-fit ${isStatic ? 'w-[232px] lg:w-[300px]' : 'hover:lg:w-[300px] hidden-div'}`}> {/* Prevent hover effect when static' */}
       <div
         className={`z-10 flex flex-col items-start bg-white shadow-md h-fit border border-[#4f37267b] 
           rounded-md text-[#4f3726] overflow-hidden font-montserral`}>
-        {/* Sidebar Items */}
-        {[
-          { id: 'options', label: 'Options', icon: options, component: <Options isOwner={isOwner} />},
-          { id: 'users', label: 'Contributors', icon: users, component: <Contributers project={project} isOwner={isOwner}/> },
-          { id: 'edit', label: isOwner? 'Edit Requests' : 'Edit Request', icon: edit, component: isOwner ? <EditRequests/> : <EditRequest /> },
-          { id: 'sections', label: 'Sections', icon: sections, component: <Sections project={project}/> },
-          { id: 'annotations', label: 'Annotations', icon: annotations, component: <Annotations project={project} setClickedAnnotation={setClickedAnnotation} /> },
-        ].map(({ id, label, icon, component }) => (
+          { sidebarItems.map(({id, label, icon, component}, index) => (
           <div key={id} className="w-full flex flex-col">
             <div
               onClick={() => handleItemClick(id)}
@@ -62,7 +68,9 @@ const ProjectSideBar = ({ project, isOwner }) => {
               <img src={icon} alt={label} className={`h-5 w-5 m-4 hidden-img ${selectedItem === id ? 'selected-img' : ''}`} />
               <span className={`self-center hidden-span ${isStatic || selectedItem === id ? 'opacity-100 w-[200px]' : ''}`}>{label}</span>
             </div>
-            <span className='h-[0.1px] bg-[#4f37267b] w-full'></span>
+            {index < sidebarItems.length - 1 && (
+              <span className='h-[0.1px] bg-[#4f37267b] w-full'></span>
+            )}
             {selectedItem === id && component}
           </div>
         ))}

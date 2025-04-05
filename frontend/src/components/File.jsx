@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import bg from '../assets/images/background.png';
 import SectionDropDown from './SectionDropDown';
 
-const File = ({ project, isOwner, currentUser }) => {
+const File = ({ project, isOwner, currentUser, isProfessional }) => {
     const [selectedCoverPicture, setSelectedCoverPicure] = useState(null);
     const [sectionDropDown, setSectionDropDown] = useState(null);
     const colors = ["#5D9AD0", "#3CC435", "#D662C4", "#D05D5F"];
@@ -55,15 +55,17 @@ const File = ({ project, isOwner, currentUser }) => {
             { project.sections.map((section, index) => (
               <div key={index} id={`${section.id}`} className='my-3 w-full'>
                 <div className='w-full flex flex-row justify-between mb-1'>
-                  <h2 style={{ color: colors[index], fontFamily: project.title.styles.fontFamily}} className='capitalize self-center text-[16px]'>{ section.dimension }</h2>
+                  <h2 style={{ color: colors[index], fontFamily: project.title.styles.fontFamily}} className='capitalize self-center text-[16px] '>{ section.dimension }</h2>
                   <div className='relative flex flex-col'>
-                    <button className='rounded-full p-2 hover:bg-[#00000023] self-center' onClick={() => (setSectionDropDown(sectionDropDown === index ? null : index))}> 
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4" style={{ color: colors[index] }}>
-                        <circle cx="12" cy="5" r="2" />
-                        <circle cx="12" cy="12" r="2" />
-                        <circle cx="12" cy="19" r="2" />
-                      </svg> 
-                    </button>
+                    { isProfessional && (
+                      <button className='rounded-full p-2 hover:bg-[#00000023] self-center' onClick={() => (setSectionDropDown(sectionDropDown === index ? null : index))}> 
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4" style={{ color: colors[index] }}>
+                          <circle cx="12" cy="5" r="2" />
+                          <circle cx="12" cy="12" r="2" />
+                          <circle cx="12" cy="19" r="2" />
+                        </svg> 
+                      </button>
+                    )}
                     {sectionDropDown === index && <SectionDropDown color={colors[index]} section={section} isOwner={isOwner} currentUser={currentUser}/>}
                   </div>
                 </div>
@@ -144,7 +146,26 @@ const File = ({ project, isOwner, currentUser }) => {
                           )}
                         </svg>
                       )}
-
+                      { element.type === 'table' && (
+                        <table style={element.styles} className="w-full border border-collapse">
+                          <thead>
+                            <tr>
+                              {element.content.headers.map((header, idx) => (
+                                <th key={idx} className="border px-2 py-1">{header}</th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {element.content.rows.map((row, rowIndex) => (
+                              <tr key={rowIndex}>
+                                {row.map((cell, cellIndex) => (
+                                  <td key={cellIndex} className="border px-2 py-1">{cell}</td>
+                                ))}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      )}
 
                     </div>
                   ))} 

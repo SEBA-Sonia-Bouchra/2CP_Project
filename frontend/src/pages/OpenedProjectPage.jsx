@@ -116,7 +116,20 @@ const Projects = [
             shapeType: 'rectangle', // Can be 'line', 'arrow', 'rectangle', 'triangle', 'circle'
             position: { rowStart: 3, colStart: 1, colSpan: 2, rowSpan: 2 },
             styles: { fill: 'transparent', stroke: '#000', width: 100, height: 50 }
-          }
+          },
+          {
+            type: 'table',
+            position: { rowStart: 6, colStart: 1, colSpan: 3, rowSpan: 2 },
+            content: {
+              headers: ['Year', 'Architect', 'Style'],
+              rows: [
+                ['1930', 'Pierre', 'Art Deco'],
+                ['1950', 'Ali', 'Modernist'],
+                ['2000', 'Zaha Hadid', 'Futuristic']
+              ]
+            },
+            styles: { border: '1px solid #000000', fontSize: '14px', textAlign: 'center' }
+          }       
         ]
       }
     ],
@@ -134,13 +147,13 @@ const Projects = [
 const OpenedProjectPage = () => {
   const token = localStorage.getItem("token");
   const currentUser = token ? JSON.parse(atob(token.split(".")[1])) : null;
-  // const isOwner = Projects[0].author.id === currentUser?.id; 
-  const isOwner = true;
+  const isOwner = Projects[0].author.id === currentUser?.id; 
+  const isProfessional = true;   // test, should be replaced by currentUser.isProfessional
 
   return (
       <div className='pt-12 flex flex-row gap-[1%] justify-center bg-[#FFFFF1] w-full min-h-screen '>
-        <File project={Projects[0]} isOwner={isOwner} currentUser={currentUser}/>
-        <ProjectSideBar project={Projects[0]} isOwner={isOwner}/>
+        <File project={Projects[0]} isOwner={isOwner} currentUser={currentUser} isProfessional={isProfessional}/>
+        <ProjectSideBar project={Projects[0]} isOwner={isOwner} currentUser={currentUser} isProfessional={isProfessional}/>
     </div>
   )
 }
