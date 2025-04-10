@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    * {
+      margin: 0;
+      padding: 0;
+    }
+}
+
+@font-face {
+  font-family: 'Montserral';
+  src: url('./assets/fonts/Montserrat-VariableFont_wght.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PlayfairDisplay';
+  src: url('./assets/fonts/PlayfairDisplay-VariableFont_wght.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #F3ECD6;
+  /*Backgroundofthescrollbartrack*/border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #F3ECD6; /* Color of the scrollbar */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25); /* Darker color when hovered */
+}
+
+/* added a class for the ul in navbar */
+.hidden-ul {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 300ms cubic-bezier(0.4, 0, 0.2, 1), visibility 300ms;
+}
+
+.relative:hover .hidden-ul {
+  opacity: 1;
+  visibility: visible;
+}
