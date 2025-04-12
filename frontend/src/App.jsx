@@ -22,22 +22,24 @@ import ForgotPassword from './pages/ForgotPassword.jsx'
 import SetNewPassword from './pages/setnewpassword.jsx'
 import Signinpage from './pages/signinpage.jsx'
 import MainLayout from './layouts/MainLayout.jsx'
+import EditorToolbar from './components/EditorToolbar.jsx'
+import EditProject from './components/EditProject.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
   <>
-    <Route path="/" element={<MainLayout/>}>
-      { <Route index element={<AccountsPage />} /> }
-    </Route>
+    {/*<Route path="/" element={<MainLayout/>}>*/}
+      { /*<Route index element={<EditProject />} /> */}
+    {/*</Route>*/}
     <Route>
-      {/*<Route index element={<LandingPage/>}></Route>}
+      {<Route index element={<LandingPage/>}></Route>}
       {<Route path='/signup' element={<SignUpPage/>}></Route>}
       {<Route path='/signin' element={<Signinpage/>}></Route>}
       {<Route path='/forgot-password' element={<ForgotPassword/>}></Route>}
       {<Route path='/email-verification' element={<EmailVerification/>}></Route>}
       {<Route path='/email-approval' element={<EmailVerificationApproval/>}></Route>}
       {<Route path='/request-review' element={<AccountRequest/>}></Route>}
-      {<Route path='/request-rejected' element={<RejectRequest/>}></Route>*/}
+      {<Route path='/request-rejected' element={<RejectRequest/>}></Route>}
     </Route>
   </>
   )
