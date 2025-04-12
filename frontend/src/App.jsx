@@ -33,7 +33,7 @@ import HomePageExample from './pages/home_page_example.jsx'
 const router = createBrowserRouter(
   createRoutesFromElements(
   <>
-      {/*<Route index element={<LandingPage/>}></Route>}
+      {<Route index element={<LandingPage/>}></Route>}
       {<Route path='/signup' element={<SignUpPage/>}></Route>}
       {<Route path='/signin' element={<Signinpage/>}></Route>}
       {<Route path='/forgot-password' element={<ForgotPassword/>}></Route>}
@@ -41,15 +41,14 @@ const router = createBrowserRouter(
       {<Route path='/email-approval' element={<EmailVerificationApproval/>}></Route>}
       {<Route path='/request-review' element={<AccountRequest/>}></Route>}
       {<Route path='/request-rejected' element={<RejectRequest/>}></Route>}
-    </Route>
-      {<Route path='/request-rejected' element={<RejectRequest/>}></Route>*/}
-      <Route path="/" element={<MainLayout/>}>
+      {<Route path='/request-rejected' element={<RejectRequest/>}></Route>}
+     {/* <Route path="/" element={<MainLayout/>}>
         <Route index element={<Home_page/>} />
         <Route path="/My_Projects" element={<Myprojects />} />
         <Route path="/home_page" element={<Home_page />} />
         <Route path="/My_contributions" element={<Mycontributions />} />
         <Route path='/accounts' element={<AccountsPage/>} />
-      </Route>
+      </Route>*/}
   </>
   )
   );
