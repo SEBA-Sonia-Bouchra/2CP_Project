@@ -1,23 +1,23 @@
 import React from 'react'
 import ProjectSideBar from '../components/ProjectSideBar'
 import File from '../components/File'
-import bg from '../assets/images/background.png'
-import vid from '../assets/Videos/vid.mp4'
+import bg from '../assets/images/Casbah of Algiers Restoration.jpg'
+import casbah from '../assets/images/casbah-of-algiers.jpg'
 
 
 const Projects = [
   {
     _id: '1',
     title: {
-      content: 'Timeless Elegance: The Architecture of Algiers',
+      content: 'Restoration of the Casbah of Algiers',
       styles: { fontFamily: 'PlayfairDisplay' , fontSize: '20px' },
     },
     description: {
-      content: 'Exploring the blend of Moorish, Ottoman, and modernist architectural styles in Algiers.',
+      content: "Preserving the historic Casbah, a symbol of Algeria's resistance and cultural heritage.",
       styles: { fontFamily: 'Arial' , fontSize: '14px', color: '#000', fontWeight: 'normal' },
     },
     author: { 
-      name: 'Dahmane Lharachi',
+      name: 'Amine Mohammed',
       id: '660f12ab34cd56ef78901234',
       profilePicture: bg
      },
@@ -28,20 +28,21 @@ const Projects = [
         id: 'sec1',
         dimension: 'architecture',
         author: {
-          name: 'John Doe',
+          name: 'Hamach Ali',
+          id: '660f12ab34cd54ef78901234',
           profilePicture: bg
         },
         elements: [
           {
             type: 'text',
-            content: 'Algiers is home to a fusion of architectural influences, from Ottoman mosques to French colonial buildings. Algiers is home to a fusion of architectural influences, from Ottoman mosques to French colonial buildings Algiers is home to a fusion of architectural influences, from Ottoman mosques to French colonial buildings Algiers is home to a fusion of architectural influences, from Ottoman mosques to French colonial buildings Algiers is home to a fusion of architectural influences, from Ottoman mosques to French colonial buildings [1]',
+            content: "The Casbah of Algiers features a complex network of narrow streets, traditional Ottoman-style houses, and intricate urban planning that reflects centuries of architectural evolution. The restoration process focuses on:\n Reinforcing the structural integrity of ancient homes.\n Reviving traditional craftsmanship using local materials.\n Preserving the whitewashed walls, wooden mashrabiyas, and interior courtyards.\n Rehabilitating public spaces like fountains, stairs, and small plazas.\n This effort ensures that modern interventions remain discreet and respectful to the original urban fabric of the Medina. [1]",
             position: { rowStart: 1, colStart: 1, colSpan: 2, rowSpan: 1 },
             styles: { fontFamily: 'Arial' , fontSize: '14px', color: '#000', fontWeight: 'normal' },
           },
           {
             type: 'image',
-            content: bg,
-            position: { rowStart: 1, colStart: 3, colSpan: 1, rowSpan: 2 },
+            content: casbah,
+            position: { rowStart: 1, colStart: 3, colSpan: 1, rowSpan: 1 },
           }
         ]
       },
@@ -49,95 +50,88 @@ const Projects = [
         id: 'sec2',
         dimension: 'history',
         author: {
-          name: 'John Doe',
+          name: 'Zaouch Sidahmad',
+          id: '660f12ab34cd56ef78901222',
           profilePicture: bg
         },
         elements: [
           {
             type: 'text',
-            content: 'This video explores the historical evolution of Algiers\' architecture.',
+            content: "The Casbah, or Al Qasbah, meaning \"the citadel,\" dates back to the 10th century and flourished under Ottoman rule. It became a focal point of Algeria's resistance, especially during the Algerian War of Independence (1954-1962). Key historical highlights:\n Capital of the Regency of Algiers (1516-1830).\n A hub for anti-colonial resistance movements.\n Home to prominent historical figures, including Emir Abdelkader and revolutionary militants.\n Declared a UNESCO World Heritage Site in 1992.\n Its historical depth is intertwined with Algeria's national identity and fight for sovereignty.[2]",
             position: { rowStart: 1, colStart: 1, colSpan: 3, rowSpan: 1 },
-            styles: { fontFamily: 'Arial', fontSize: '16px', fontWeight: 'bold', textAlign: 'center' },
+            styles: { fontFamily: 'Arial' , fontSize: '14px', color: '#000', fontWeight: 'normal' },
           },
-          {
-            type: 'video',
-            content: vid,
-            position: { rowStart: 2, colStart: 1, colSpan: 3, rowSpan: 2 },
-          }
         ]
       },
       {
         id: 'sec3',
         dimension: 'archeology',
         author: {
-          name: 'John Doe',
+          name: 'Safi Sidra',
+          id: '660f12ab34cd56ef78901232',
           profilePicture: bg
         },
         elements: [
           {
             type: 'text',
-            content: 'Highlighted architectural dimensions:',
+            content: `Excavations and studies conducted during the restoration process revealed:
+            Remnants of Phoenician and Roman-era settlements beneath some modern structures.
+            Hidden water canals and old hammams (public baths) once used during the Ottoman period.
+            Artifacts such as pottery, coins, and mosaic fragments that helped date certain buildings.
+            Archaeologists work alongside architects to ensure findings are documented and preserved without halting progress.`,
             position: { rowStart: 1, colStart: 1, colSpan: 2, rowSpan: 1 },
-            styles: { fontFamily: 'Arial', fontSize: '18px', fontWeight: 'bold' },
+            styles: { fontFamily: 'Arial' , fontSize: '14px', color: '#000', fontWeight: 'normal'},
           },
           {
             type: 'link',
             url: 'https://talents.esi.dz/scolar/index',
             content: "Learn more about Algiers' archeological sites",
-            position: { rowStart: 2, colStart: 2, colSpan: 2, rowSpan: 2 },
+            position: { rowStart: 2, colStart: 1, colSpan: 2, rowSpan: 2 },
             styles: { color: 'blue', textDecoration: 'underline' },
           },
+                 
+        ]
+      },
+      {
+        id: 'sec4',
+        dimension: 'other',
+        author: {
+          name: 'Amine Mohammed',
+          id: '660f12ab34cd56ef78901234',
+          profilePicture: bg
+        },
+        elements: [
           {
-            type: 'shape',
-            shapeType: 'triangle',
-            position: { rowStart: 2, colStart: 2, colSpan: 2, rowSpan: 2 },
-            styles: { fill: '#ffcc00', rotation: '45' },
-          },
-          {
-            type: 'shape',
-            shapeType: 'line',
-            position: { rowStart: 4, colStart: 2, colSpan: 3, rowSpan: 1 },
-            styles: { stroke: '#000', x1: 10, y1: 50, x2: 300, y2: 50, rotation: 0 },
-          },
-          {
-            type: 'shape',
-            shapeType: 'arrow',
-            position: { rowStart: 5, colStart: 2, colSpan: 2, rowSpan: 1 },
-            styles: { stroke: '#000', fill: 'transparent',x1: 10, y1: 50, x2: 50, y2: 50, rotation: 60 }
-          },
-          {
-            type: 'shape',
-            shapeType: 'circle',
-            position: { rowStart: 2, colStart: 1, colSpan: 1, rowSpan: 1 },
-            styles: { fill: '#3498db'}
-          },
-          {
-            type: 'shape',
-            shapeType: 'rectangle', // Can be 'line', 'arrow', 'rectangle', 'triangle', 'circle'
-            position: { rowStart: 3, colStart: 1, colSpan: 2, rowSpan: 2 },
-            styles: { fill: 'transparent', stroke: '#000', width: 100, height: 50 }
+            type: 'text',
+            content: 'The following table contains more details:',
+            position: { rowStart: 1, colStart: 1, colSpan: 2, rowSpan: 1 },
+            styles: { fontFamily: 'Arial' , fontSize: '14px', color: '#000', fontWeight: 'normal' },
           },
           {
             type: 'table',
-            position: { rowStart: 6, colStart: 1, colSpan: 3, rowSpan: 2 },
+            position: { rowStart: 2, colStart: 1, colSpan: 3, rowSpan: 4 },
             content: {
-              headers: ['Year', 'Architect', 'Style'],
+              headers: ['Feature', 'Description'],
               rows: [
-                ['1930', 'Pierre', 'Art Deco'],
-                ['1950', 'Ali', 'Modernist'],
-                ['2000', 'Zaha Hadid', 'Futuristic']
+                ['Locaion', 'Casbah of Algiers, Algeria'],
+                ['Start Date', 'March 2023'],
+                ['Responsible Authority', 'Ministry of Culture and Arts'],
+                ['Funding Sources', '	Algerian Government, UNESCO, and International Donors'],
+                ['Current Phase', 'Phase 2 - Structural Rehabilitation'],
+                ['Projected Completion', 'Late 2026'],
+                ['Cultural Significance', '	UNESCO World Heritage Site (since 1992)']
               ]
             },
-            styles: { border: '1px solid #000000', fontSize: '14px', textAlign: 'center' }
-          }       
+            styles: { border: '1px solid #000000', fontSize: '14px', textAlign: 'left' }
+          }
         ]
-      }
+      },
     ],
     references: [
-      { title: '"The Architectural Heritage of Algiers" - A. Benyamina, 2021',             
+      { title: 'National Institute of Urban Studies -', link: "https://www.nius-architecture.org" ,
         styles: { fontFamily: 'Arial' , fontSize: '14px', color: '#000', fontWeight: 'normal' },
       },
-      { title: 'National Institute of Urban Studies -', link: "https://www.nius-architecture.org" ,
+      { title: '"The Architectural Heritage of Algiers" - A. Benyamina, 2021',             
         styles: { fontFamily: 'Arial' , fontSize: '14px', color: '#000', fontWeight: 'normal' },
       },
     ],
@@ -146,8 +140,9 @@ const Projects = [
 
 const OpenedProjectPage = () => {
   const token = localStorage.getItem("token");
-  const currentUser = token ? JSON.parse(atob(token.split(".")[1])) : null;
-  const isOwner = Projects[0].author.id === currentUser?.id; 
+  const currentUser = token ? JSON.parse(atob(token.split(".")[1])) : null;  // get the current user from data saved from the login
+  // const isOwner = Projects[0].author.id === currentUser?.id; 
+  const isOwner = true; // test
   const isProfessional = true;   // test, should be replaced by currentUser.isProfessional
 
   return (

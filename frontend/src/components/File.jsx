@@ -19,7 +19,7 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
     <div className='w-full max-w-[800px] bg-white shadow-md h-fit rounded-md '>
         {/* cover picture section */}
         <div className='w-full h-56 overflow-hidden rounded-t-md'>
-            <img src={bg} alt="cover-picture" className='w-full h-full object-cover object-center cursor-pointer'
+            <img src={project.coverPhoto} alt="cover-picture" className='w-full h-full object-cover object-center cursor-pointer'
             onClick={ () => setSelectedCoverPicure(project.coverPhoto)}
             />
         {selectedCoverPicture && (
@@ -80,7 +80,11 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
                       gridRowEnd: `span ${element.position.rowSpan}`
                     }}>
                       { element.type === 'text' && (
-                        <p style={element.styles}>{ element.content }</p>
+                        <p style={element.styles}>
+                          {element.content.split('\n').map((line, index) => (
+                          <span key={index}>{line}<br /></span>
+                        ))}
+                        </p>
                       )}
                       { element.type === 'image' && (
                         <img src={element.content} alt="image" className='w-full h-full object-cover'/>
@@ -89,7 +93,7 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
                         <video controls src={element.content}></video>
                       )}
                       { element.type === 'link' && (
-                        <a href={ element.url } style={element.styles}> 
+                        <a href={ element.url } style={element.styles} target='_blank'> 
                           { element.content }
                         </a>
                       )}       

@@ -8,16 +8,16 @@ const annotationsData = [
   {
     _id: "66123abcde4567f890423456",
     user: "660f12ab34cd56ef78901234",
-    name: "Dahmane",
-    surname: "Lharachi",
+    name: "Mohammed",
+    surname: "Amine",
     profilePicture: ba,
     content: "From the intricate Moorish palaces of the Casbah to the striking modernist facades, Algiers' architecture is a blend of history and innovation.",
     project: "661987abcdef123456789012", 
     section:{
       id: "sec1",
       authorID : "660f12ab34cd56ef78901235", 
-      name: "Amina",
-      surname: "Bouzid",
+      name: "Amine",
+      surname: "Mohammed",
       profilePicture: ba,
     } , 
     dimension: "architecture",
@@ -26,16 +26,16 @@ const annotationsData = [
   {
     _id: "66123abcde4567f890123456",
     user: "660f12ab34cd56ef78901224",
-    name: "Dahmane",
-    surname: "Lharachi",
+    name: "Hanachi",
+    surname: "Ibrahim",
     profilePicture: ba,
     content: "From the intricate Moorish palaces of the Casbah to the striking modernist facades, Algiers' architecture is a blend of history and innovation.",
     project: "661987abcdef123456789012",
     section:{
       id: "sec2",
       authorID : "660f12ab34cd56ef78901235", 
-      name: "Amina",
-      surname: "Bouzid",
+      name: "Ali",
+      surname: "Hamach",
       profilePicture: ba,
      } , 
     dimension: "history",
@@ -44,16 +44,16 @@ const annotationsData = [
   {
     _id: "66123abcde4567f890123457",
     user: "660f12ab34cd56ef78901234",
-    name: "Dahmane",
-    surname: "Lharachi",
+    name: "Mohammed",
+    surname: "Amine",
     profilePicture: ba,
     content: "From the intricate Moorish palaces of the Casbah to the striking modernist facades, Algiers' architecture is a blend of history and innovation.",
     project: "661987abcdef123456789012", 
     section:{
       id: "sec3",
       authorID : "660f12ab34cd56ef78901235", 
-      name: "Amina",
-      surname: "Bouzid",
+      name: "Sidahmad",
+      surname: "Zaouch",
       profilePicture: ba,
      } ,
     dimension: "archeology",
@@ -62,16 +62,16 @@ const annotationsData = [
   {
     _id: "66123abcde4567f890113457",
     user: "660f12ab34cd56ef78901235",
-    name: "Amina",
-    surname: "Bouzid",
+    name: "Sidahmad",
+    surname: "Zaouch",
     profilePicture: ba,
     content: "The fusion of Ottoman, French colonial, and contemporary styles creates a unique architectural identity in Algiers.",
     project: "661987abcdef123456789013",
     section:{
       id: "sec3",
       authorID : "660f12ab34cd56ef78901235", 
-      name: "Amina",
-      surname: "Bouzid",
+      name: "Sidahmad",
+      surname: "Zaouch",
       profilePicture: ba,
     },
     dimension: "archeology",
@@ -92,7 +92,7 @@ const Annotations = ({ setClickedAnnotation, currentUser, isOwner}) => {
           <div className='pt-3 px-3 flex flex-row gap-2'>
             <img src={ba} alt="User profile picture" className='rounded-full h-6 w-6'/>
             <div className='flex flex-col items-start text-xs '>
-              <p className='hover:underline whitespace-nowrap cursor-pointer ]'>{`${annotation.name} ${annotation.surname}`}</p>
+              <p className='hover:underline whitespace-nowrap cursor-pointer ]'>{`${annotation.surname} ${annotation.name}`}</p>
               <span className='text-gray-500 text-[10px]'>
                 {new Date(annotation.createdAt).toLocaleDateString()}
               </span>
