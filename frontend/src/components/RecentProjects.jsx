@@ -1,9 +1,11 @@
 import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import RecentIcon from "../assets/images/recent.png";
 
 const RecentProjects = ({ projects }) => {
   const scrollRef = useRef(null);
+  const navigate = useNavigate();
 
   const scrollLeft = () => {
     if (scrollRef.current) {
@@ -16,6 +18,7 @@ const RecentProjects = ({ projects }) => {
       scrollRef.current.scrollBy({ left: 300, behavior: "smooth" });
     }
   };
+  console.log("Projects data:", projects);
 
   return (
     
@@ -45,14 +48,19 @@ const RecentProjects = ({ projects }) => {
                 key={project.id}
                 className="flex-shrink-0 w-80 bg-white rounded-lg shadow-lg overflow-hidden flex flex-col"
               >
-                <img src={project.image} alt={project.title} className="w-full h-40 object-cover" />
+                <img src={project.coverPhoto} alt='cover picture of the project' className="w-full h-40 object-cover" />
                 <div className="p-4 flex flex-col flex-grow justify-between">
                   <div>
-                    <h3 className="text-lg font-semibold">{project.title}</h3>
-                    <p className="text-sm text-gray-700">{project.description}</p>
+                    <h3 className="text-lg font-semibold">{project.title.content}</h3>
+                    <p className='text-gray-500 text-[10px] font-montserral pb-1'>
+                      {new Date(project.dateOfPublish).toLocaleDateString()} {project.author?.name}
+                    </p>
+                    <p className="text-sm text-gray-700">{project.description.content}</p>
                   </div>
                   <div className="flex justify-end">
-                    <button className="mt-2 bg-[#213824CF] text-white w-[125px] h-[40px] rounded-full text-sm font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824]">
+                    <button className="mt-2 bg-[#213824CF] text-white w-[125px] h-[40px] rounded-full text-sm font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824]"
+                            onClick={() => navigate(`/projects/${project.id}`)}
+                    >
                       View Project
                     </button>
                   </div>

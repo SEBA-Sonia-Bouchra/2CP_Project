@@ -29,20 +29,20 @@ const Mycontributionscomponents = ({ projects, loading, error, onDeleteProject }
               className="bg-white rounded-xl shadow-lg flex overflow-hidden border border-gray-200"
             >
               <img
-                src={project.image}
-                alt={project.title}
+                src={project.coverPhoto}
+                alt='project cover picture'
                 className="w-1/3 object-cover"
               />
               <div className="p-6 flex flex-col justify-between w-2/3">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 font-playfair">
-                    {project.title}
+                    {project.title.content}
                   </h3>
                   <p className="text-xs text-gray-500 mb-2">
-                    {project.date} {project.author}
+                    {new Date(project.dateOfPublish).toLocaleDateString()} {project.author.name}
                   </p>
                   <p className="text-sm text-gray-700 line-clamp-2">
-                    {project.description}
+                    {project.description.content}
                   </p>
                 </div>
                 <div className="flex gap-3 mt-4 overflow-hidden justify-end">
