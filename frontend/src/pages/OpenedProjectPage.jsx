@@ -142,7 +142,7 @@ const OpenedProjectPage = () => {
   const token = localStorage.getItem("token");
   const currentUser = token ? JSON.parse(atob(token.split(".")[1])) : null;  // get the current user from data saved from the login
   // const isOwner = Projects[0].author.id === currentUser?.id; 
-  const isOwner = false; // test
+  const isOwner = true; // test
   const isProfessional = true;   // test, should be replaced by currentUser.isProfessional
 
   return (

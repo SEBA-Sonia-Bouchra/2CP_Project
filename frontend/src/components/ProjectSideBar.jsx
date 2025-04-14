@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import options from '../assets/images/more-vertical.svg';
 import users from '../assets/images/users.svg';
-import edit from '../assets/images/edit.svg';
+import edit from '../assets/images/Edit.svg';
 import sections from '../assets/images/thumbtack.svg';
 import annotations from '../assets/images/quote.svg';
 import Options from './SideBar/Options';
