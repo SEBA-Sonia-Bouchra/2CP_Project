@@ -21,6 +21,7 @@ import VerifyCode from './pages/verifycode.jsx'
 import ForgotPassword from './pages/ForgotPassword.jsx'
 import SetNewPassword from './pages/setnewpassword.jsx'
 import Signinpage from './pages/signinpage.jsx'
+import OpenedProjectPage from './pages/OpenedProjectPage.jsx'
 import MainLayout from './layouts/MainLayout.jsx'
 import EditorToolbar from './components/EditorToolbar.jsx'
 import EditProject from './components/EditProject.jsx'
@@ -48,6 +49,7 @@ const router = createBrowserRouter(
         <Route path="/home_page" element={<Home_page />} />
         <Route path="/My_contributions" element={<Mycontributions />} />
         <Route path='/accounts' element={<AccountsPage/>} />
+        <Route path="/" element={<OpenedProjectPage />} />
       </Route>*/}
   </>
   )

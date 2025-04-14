@@ -6,6 +6,7 @@
     * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
 }
 
@@ -30,7 +31,7 @@
 
 ::-webkit-scrollbar-track {
   background: #F3ECD6;
-  /*Backgroundofthescrollbartrack*/border-radius: 8px;
+  Backgroundofthescrollbartrackborder-radius: 8px;
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
   -ms-border-radius: 8px;
@@ -44,6 +45,54 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.25); /* Darker color when hovered */
+}
+
+.hidden-div div .hidden-span {
+  opacity: 0;
+  width: 0; 
+  overflow: hidden;
+  white-space: nowrap;
+  display: inline-block; 
+  transition: width 400ms ease-in-out, opacity 400ms ease-in-out;
+}
+
+.hidden-div:hover div .hidden-span {
+  opacity: 1;
+  width: 200px;
+}
+
+div:hover > .hidden-span,
+div.selected span {
+  color: #F3ECD6 !important;
+}
+
+div:hover > .hidden-img,
+div.selected img {
+  filter: brightness(0) saturate(100%) invert(94%) sepia(6%) saturate(716%) hue-rotate(314deg) brightness(107%) contrast(101%) !important;
+  -webkit-filter: brightness(0) saturate(100%) invert(94%) sepia(6%) saturate(716%) hue-rotate(314deg) brightness(107%) contrast(101%) !important;
+}
+
+.clamped-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.green-filter {
+  filter: invert(47%) sepia(100%) saturate(471%) hue-rotate(90deg) brightness(94%) contrast(95%);
+}
+
+.pink-filter {
+  filter: invert(57%) sepia(52%) saturate(420%) hue-rotate(290deg) brightness(90%) contrast(85%);
+}
+
+.red-filter {
+  filter: brightness(0) saturate(100%) invert(16%) sepia(99%) saturate(7452%) hue-rotate(359deg) brightness(106%) contrast(118%);
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 /* added a class for the ul in navbar */
