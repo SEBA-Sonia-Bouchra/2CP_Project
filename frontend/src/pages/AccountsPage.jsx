@@ -2,6 +2,9 @@ import React, {useState, useEffect } from 'react';
 import FileTickIcon from '../assets/images/file-tick.svg'
 import NoAccounts from '../components/NoAccounts';
 import Background from '../assets/images/background.png'
+import NavbarProfessional from '../components/NavbarProfessional';
+import Footer from '../components/Footer';
+import NavbarAdmin from '../components/NavbarAdmin.jsx'
 
 const AccountsData = [
     {
@@ -163,7 +166,7 @@ const AccountsPage = () => {
       )}
 
       {selectedFile && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center overflow-y-auto">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center overflow-y-auto mt-20 pt-4 z-40">
           <div className="p-5 rounded-lg w-full flex justify-center relative">
             <button className="absolute left-4 top-4 p-[9px] rounded-full flex items-center justify-center hover:bg-[#00000033]" onClick={() => setSelectedFile(null)}>
               <svg
@@ -180,7 +183,7 @@ const AccountsPage = () => {
               </svg>
             </button>
             <object data={selectedFile}
-            type='application/pdf' className='w-3/4 h-[500px]'/>
+            type='application/pdf' className='w-3/4 h-screen z-50'/>
     
           </div>
         </div>

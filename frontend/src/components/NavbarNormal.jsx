@@ -9,7 +9,8 @@ export default function NavbarNormal() {
 
   return (
     <>
-      <div className='bg-[#8C9480] font-montserral grid items-center h-[80px] md:h-[110px] grid-cols-2 w-contain'>
+      <div className='bg-[#8C9480] font-montserral grid items-center h-[80px] md:h-[110px] grid-cols-2 drop-shadow-lg
+       fixed top-0 left-0 w-full z-50'>
         <div className='flex gap-2 self-center justify-self-start md:px-14 col-span-1 px-4'>
             <img src={logo} alt="logo" className='w-8' />
             <img src={title} alt="logo-title" className='w-20'/>
@@ -19,9 +20,9 @@ export default function NavbarNormal() {
             <img src={search} alt="search-icon" className='self-center w-4 h-4' />
             <p className='self-center text-xl'>Search</p>
           </button>
-          <button className=' w-14 h-14 ' >
+          <Link to='/profile-modification' className=' w-14 h-14 ' >
             <img src={icon} alt="icon" className='rounded-full'/>
-          </button>
+          </Link>
         </div>
       </div>
     </>

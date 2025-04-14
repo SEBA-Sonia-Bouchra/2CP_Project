@@ -5,7 +5,8 @@ import logo from '../assets/images/LOGO.svg'
 export default function Footer() {
   return (
     <>
-      <div className='grid grid-cols-1 sm:grid-cols-3 bg-[#8C9480] text-[#FFFFFF] font-montserral py-10 drop-shadow gap-6 sm:gap-4 text-center sm:text-left'>
+      <div className={`grid grid-cols-1 sm:grid-cols-3 bg-[#8C9480] text-[#FFFFFF] font-montserral py-10
+       drop-shadow gap-6 sm:gap-4 text-center sm:text-left`}>
         <div className='flex flex-col gap-6 items-center sm:items-start sm:justify-self-center'>
             <div className='flex gap-2 justify-center sm:justify-start'>
                 <img src={logo} alt="binaa-logo" className='w-8' />

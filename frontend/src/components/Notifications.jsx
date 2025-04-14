@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import xicon from "../assets/images/x.svg"
 import NoNotifications from "./NoNotifications";
 
@@ -43,7 +43,7 @@ const notificationsData = [
   },
 ];
 
-const NotificationBox = () => {
+const NotificationBox = ({toggleNotifications}) => {
   const [notifications, setNotifications] = useState(notificationsData);
 
   const handleDelete = (id) => {
@@ -52,7 +52,14 @@ const NotificationBox = () => {
 
   return (
     <>
-    <div className="flex items-center justify-center h-screen bg-black bg-opacity-25 font-montserral">
+    <div className="flex items-center justify-center min-h-screen bg-black bg-opacity-25 font-montserral relative">
+      <button className="absolute left-4 top-20 p-[9px] rounded-full flex items-center justify-center mt-7 mr-2
+       hover:bg-[#00000033]" onClick={toggleNotifications}>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="w-7 h-7">
+          <path fillRule="evenodd" d="M6.225 4.811a1 1 0 0 1 1.414 0L12 9.172l4.361-4.36a1 1 0 1 1 1.414 1.414L13.415 10.586l4.36 4.361a1 1 0 0
+           1-1.414 1.414L12 12l-4.361 4.361a1 1 0 0 1-1.414-1.414l4.36-4.36-4.36-4.36a1 1 0 0 1 0-1.415z" clipRule="evenodd"/>
+      </svg>
+      </button>
       {notifications.length > 0 ? (
       <div className="w-3/4 h-80 overflow-y-auto bg-[#F3ECD6] rounded-lg shadow-lg ">
         {notifications.map((notification) => (
