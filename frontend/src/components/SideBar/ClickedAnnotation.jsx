@@ -21,11 +21,11 @@ const ClickedAnnotation = ({setClickedAnnotation, clickedAnnotation}) => {
                 {new Date(clickedAnnotation.createdAt).toLocaleDateString()}
               </span>
             </div>
-            { clickedAnnotation.sectionId === 'sec1' ? (
+            { clickedAnnotation.section.id === 'sec1' ? (
                 <span style={{ color: colors[0] }} className='text-xs capitalize ml-auto'>{clickedAnnotation.dimension}</span>
-            ) : clickedAnnotation.sectionId === 'sec2' ? (
+            ) : clickedAnnotation.section.id === 'sec2' ? (
                 <span style={{ color: colors[1] }} className='text-xs capitalize ml-auto'>{clickedAnnotation.dimension}</span>
-            ) : clickedAnnotation.sectionId === 'sec3' ? (
+            ) : clickedAnnotation.section.id === 'sec3' ? (
                 <span style={{ color: colors[2] }} className='text-xs capitalize ml-auto'>{clickedAnnotation.dimension}</span>
             ) : (
                 <span style={{ color: colors[3] }} className='text-xs capitalize ml-auto'>{clickedAnnotation.dimension}</span>
@@ -34,11 +34,11 @@ const ClickedAnnotation = ({setClickedAnnotation, clickedAnnotation}) => {
           <div className='px-3 pb-3 pt-2 w-full flex items-start'>
             <p className='overflow-hidden break-words clamped-text cursor-pointer'>
                 <span>
-                    { clickedAnnotation.sectionId === 'sec1' ? (
+                    { clickedAnnotation.section.id === 'sec1' ? (
                     <img src={filledQuote} alt="quote icon" className='w-3 h-3 inline mr-2'/>
-                    ) : clickedAnnotation.sectionId === 'sec2' ? (
+                    ) : clickedAnnotation.section.id === 'sec2' ? (
                     <img src={filledQuote} alt="quote icon" className='w-3 h-3 inline mr-2 green-filter'/>
-                    ) : clickedAnnotation.sectionId === 'sec3' ? (
+                    ) : clickedAnnotation.section.id === 'sec3' ? (
                     <img src={filledQuote} alt="quote icon" className='w-3 h-3 inline mr-2 pink-filter'/>
                     ) : (
                     <img src={filledQuote} alt="quote icon" className='w-3 h-3 inline mr-2 red-filter'/>
