@@ -29,7 +29,7 @@ const SectionDropDown = ({color, section, isOwner, currentUser}) => {
          )}
       </div>
       { addAnnotation && (
-        <AddAnnotation section={section} setAddAnnotation={setAddAnnotation}/>
+        <AddAnnotation color={color} section={section} setAddAnnotation={setAddAnnotation}/>
       )}
       { deleteSection && (
         <DeleteSection setDeleteSection={setDeleteSection}/>
