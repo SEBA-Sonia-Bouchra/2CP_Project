@@ -6,9 +6,7 @@ import ModificationNormal from '../components/ModificationNormal'
 export default function ProfileModification() {
   return (
     <>
-      <NavbarNormal/>
       <ModificationNormal/>
-      <Footer/>
     </>
   )
 }

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import icon from '../assets/images/icon-placeholder.png';
-import Accept from '../assets/images/Accept.svg';
-import Reject from '../assets/images/Reject.svg';
+import icon from '../../assets/images/icon-placeholder.png';
+import Accept from '../../assets/images/Accept.svg';
+import Reject from '../../assets/images/Reject.svg';
 
 const initialEditRequests = [
-   { id: 'req1', name: 'John', surname: 'Doe', profilePicture: icon }, 
-   { id: 'req2', name: 'Joe', surname: 'Smith', profilePicture: icon },
+   { id: 'req1', name: 'Salim', surname: 'Salah', profilePicture: icon }, 
+   { id: 'req2', name: 'Ibrahim', surname: 'Hanachi', profilePicture: icon },
 ];
 
 const EditRequests = () => {

@@ -48,7 +48,7 @@ const SetNewPassword = () => {
     if (Object.keys(errors).length === 0) {
       console.log("Password successfully set!");
       // Redirect to login page after setting the password
-      navigate("/");
+      navigate("/signin");
     }
   };
 

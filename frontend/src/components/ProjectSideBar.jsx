@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import options from '../assets/images/more-vertical.svg';
 import users from '../assets/images/users.svg';
-import edit from '../assets/images/Edit.svg';
+import edit from '../assets/images/edit-request.svg';
 import sections from '../assets/images/thumbtack.svg';
 import annotations from '../assets/images/quote.svg';
 import Options from './SideBar/Options';
@@ -10,7 +10,7 @@ import Sections from './SideBar/Sections';
 import EditRequest from './SideBar/EditRequest';
 import Annotations from './SideBar/Annotations';
 import ClickedAnnotation from './SideBar/ClickedAnnotation'
-import EditRequests from './EditRequests';
+import EditRequests from './SideBar/EditRequests';
 
 const ProjectSideBar = ({ project, isOwner, currentUser, isProfessional }) => {
   const [selectedItem, setSelectedItem] = useState(null)
@@ -55,7 +55,7 @@ const ProjectSideBar = ({ project, isOwner, currentUser, isProfessional }) => {
   return (
     <>
     
-    <div className={`sticky top-3 h-fit ${isStatic ? 'w-[232px] lg:w-[300px]' : 'hover:lg:w-[300px] hidden-div'}`}> {/* Prevent hover effect when static' */}
+    <div className={`sticky top-32 h-fit ${isStatic ? 'w-[232px] lg:w-[300px]' : 'hover:lg:w-[300px] hidden-div'}`}> {/* Prevent hover effect when static' */}
       <div
         className={`z-10 flex flex-col items-start bg-white shadow-md h-fit border border-[#4f37267b] 
           rounded-md text-[#4f3726] overflow-hidden font-montserral`}>

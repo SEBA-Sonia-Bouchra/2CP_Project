@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
-import NavbarProfessional from "../components/NavbarProfessional";
-import Footer from "../components/Footer";
-
 import AnnotatedIcon from "../assets/images/annotated.png";
 import DiscoverIcon from "../assets/images/discover.png";
 import RecentProjects from "../components/RecentProjects";
 import AnnotatedProjects from "../components/AnnotatedProjects";
 import DiscoverProjects from "../components/DiscoverProjects";
+
 export default function Projects() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,8 +36,8 @@ export default function Projects() {
       <RecentProjects projects={projects} loading={loading} error={error}/>
 
       {/* Annotated Section */}
-
       <AnnotatedProjects projects={projects} loading={loading} error={error} />
+      
       {/* Discover Section */}
       <DiscoverProjects projects={projects} loading={loading} error={error} />
       

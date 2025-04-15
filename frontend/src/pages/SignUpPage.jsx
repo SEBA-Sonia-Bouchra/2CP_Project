@@ -1,7 +1,7 @@
 import React from 'react'
 import image from '../assets/images/background.png'
 import { useState , useEffect} from 'react'
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom'
 import fileTick from '../assets/images/file-tick.png'
 
@@ -13,6 +13,7 @@ export default function SignUpPage() {
   const [isSubmit,setIsSubmit]=useState(false)
   const [selectedFile, setSelectedFile] = useState(null); // for file attachement
   const navigate=useNavigate() // to navigate to the email verification page when clicking create account button
+
   const handleChange = (e) => { // update form fields(when entering input)
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
