@@ -5,8 +5,8 @@ import SectionDropDown from './SectionDropDown';
 const File = ({ project, isOwner, currentUser, isProfessional }) => {
     const [selectedCoverPicture, setSelectedCoverPicure] = useState(null);
     const [sectionDropDown, setSectionDropDown] = useState(null);
-    const colors = ["#5D9AD0", "#3CC435", "#D662C4", "#D05D5F"];
 
+    // todo
     useEffect(() => {
       const originalOverflow = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
@@ -14,6 +14,21 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
         document.body.style.overflow = originalOverflow;
       };
     }, []);
+
+    const getColorByDimension = (dimension) => {
+      switch (dimension.toLowerCase()) {
+        case "architecture":
+          return "#5D9AD0";
+        case "history":
+          return "#3CC435";
+        case "archeology":
+          return "#D662C4";
+        default:
+          return "#D05D5F"; // for "other" or anything else
+      }
+    };
+    
+    const color = getColorByDimension(section.dimension);
     
   return (
     <div className='w-full max-w-[800px] bg-white shadow-md h-fit rounded-md '>
@@ -50,12 +65,15 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
                 <div className='h-[1.5px] rounded-full bg-[#4f3726] mb-2'></div>
                 <p style={project.description.styles}>{ project.description.content }</p>
               </div>
-            }
+            }    
+
             {/* sections */}
-            { project.sections.map((section, index) => (
+            { project.sections.map((section) => (
               <div key={index} id={`${section.id}`} className='my-3 w-full'>
                 <div className='w-full flex flex-row justify-between mb-1'>
-                  <h2 style={{ color: colors[index], fontFamily: project.title.styles.fontFamily}} className='capitalize self-center text-[16px] '>{ section.dimension }</h2>
+                  <h2 style={{ color: color, fontFamily: project.title.styles.fontFamily}} className='capitalize self-center text-[16px] '>
+                    { section.dimension }
+                  </h2>
                   <div className='relative flex flex-col'>
                     { isProfessional && (
                       <button className='rounded-full p-2 hover:bg-[#00000023] self-center' onClick={() => (setSectionDropDown(sectionDropDown === index ? null : index))}> 
@@ -69,7 +87,7 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
                     {sectionDropDown === index && <SectionDropDown color={colors[index]} section={section} isOwner={isOwner} currentUser={currentUser}/>}
                   </div>
                 </div>
-                <div style={{ backgroundColor: colors[index] }} className={`h-[1.5px] rounded-full mb-2`}></div>
+                <div style={{ backgroundColor: color }} className={`h-[1.5px] rounded-full mb-2`}></div>
                 {/* section content */}
                 <div className='grid grid-cols-3 gap-4 w-full border-gray-300'>
                 { section.elements.map((element, index) => (

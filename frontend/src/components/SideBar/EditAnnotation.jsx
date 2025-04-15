@@ -4,7 +4,7 @@ import filledQuote from '../../assets/images/filled-quote.svg'
 const EditAnnotation = ({setEditAnnotation, onSaveAnnotation, annotation}) => {
   const colors = ["#5D9AD0", "#3CC435", "#D662C4", "#D05D5F"];
   const [annotationText, setAnnotationText] = useState('');
-
+// todo
   // Handle saving the annotation
   const handleSave = async () => {
     if (annotationText.trim() === '') {

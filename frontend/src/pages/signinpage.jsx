@@ -44,6 +44,9 @@ const LoginPage = () => {
         localStorage.setItem("savedEmails", JSON.stringify(updatedEmails));
       }
       console.log("Form submitted!");
+
+      // Redirect to home after successful sign-in
+    navigate('/home_page');
     }
   };
 

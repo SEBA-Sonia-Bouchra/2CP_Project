@@ -1,5 +1,5 @@
 import React from 'react'
-
+// todo
 const Sections = ({project}) => {
   const colors = ["#5D9AD0", "#3CC435", "#D662C4", "#D05D5F"];
   const scrollToSection = (id) => {

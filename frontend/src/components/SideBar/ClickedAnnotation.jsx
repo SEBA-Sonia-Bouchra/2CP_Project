@@ -1,6 +1,6 @@
 import React from 'react'
 import filledQuote from '../../assets/images/filled-quote.svg'
-
+// todo
 const ClickedAnnotation = ({setClickedAnnotation, clickedAnnotation}) => {
     const colors = ["#5D9AD0", "#3CC435", "#D662C4", "#D05D5F"];
 

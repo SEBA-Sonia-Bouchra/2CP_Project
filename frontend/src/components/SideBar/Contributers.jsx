@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ModifyPermissions from './ModifyPermissions';
-
+// todo
 const Contributers = ({ project, isOwner }) => {
   const [showModifyPermissions, setShowModifyPermissions] = useState(false);
   const colors = ["#5D9AD0", "#3CC435", "#D662C4", "#D05D5F"];

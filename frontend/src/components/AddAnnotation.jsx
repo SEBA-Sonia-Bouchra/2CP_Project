@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import filledQuote from '../assets/images/filled-quote.svg'
-
+// todo
 const AddAnnotation = ({section, setAddAnnotation, onSaveAnnotation}) => {
   const colors = ["#5D9AD0", "#3CC435", "#D662C4", "#D05D5F"];
   const [annotationText, setAnnotationText] = useState('');

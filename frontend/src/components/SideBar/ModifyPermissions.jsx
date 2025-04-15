@@ -2,7 +2,7 @@ import React from 'react'
 
 const ModifyPermissions = ({ project, setShowModifyPermissions }) => {
   const colors = ["#5D9AD0", "#3CC435", "#D662C4", "#D05D5F"];
-
+// todo
   return (
     <div className='fixed left-0 top-0 w-full flex flex-col items-center justify-center h-screen bg-black bg-opacity-25 z-30 p-4'>
       {/* Close Button */}
