@@ -38,7 +38,7 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
             onClick={ () => setSelectedCoverPicure(project.coverPhoto)}
             />
         {selectedCoverPicture && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center overflow-y-auto z-20">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center overflow-y-auto top-0 z-50">
             <div className="p-5 rounded-lg w-full flex justify-center relative">
               <button className="absolute left-4 top-4 p-[9px] rounded-full flex items-center justify-center hover:bg-[#00000033]" onClick={() => setSelectedCoverPicure(null)}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="w-6 h-6">

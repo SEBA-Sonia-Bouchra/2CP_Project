@@ -6,9 +6,7 @@ import Footer from '../components/Footer'
 export default function ProfileModificationProfessional() {
   return (
     <>
-      <NavbarProfessional/>
       <ModificationProfessional/>
-      <Footer/>
     </>
   )
 }

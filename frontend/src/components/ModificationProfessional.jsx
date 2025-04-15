@@ -50,7 +50,8 @@ export default function ModificationProfessional() {
                 <div className='flex flex-col gap-2 flex-wrap '>
                    <label htmlFor="first-name" className='text-lg md:text-xl drop-shadow ml-2'>Description</label>
                    {isEditing ? (<><textarea type='text' className='appearance-none outline-none rounded-[5px]
-                    w-80 h-48 bg-[#DFD8C8] resize-none p-2' maxLength={400} name='description' value={formValues.description} onChange={handleChange} rows={3}/>
+                    w-80 h-48 bg-[#DFD8C8] resize-none p-2' maxLength={400} name='description' value={formValues.description} 
+                    onChange={handleChange} rows={3}/>
                     <p className="text-sm text-gray-700">{400 - formValues.description.length} characters left</p></>)
                     : (<div className={` rounded-[5px] p-2 bg-[#DFD8C8] break-words overflow-y-auto w-80 min-h-48 `}>
                       {formValues.description}

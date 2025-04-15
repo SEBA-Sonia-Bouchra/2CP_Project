@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import filledQuote from '../assets/images/filled-quote.svg'
 // todo
-const AddAnnotation = ({section, setAddAnnotation, onSaveAnnotation}) => {
+const AddAnnotation = ({color, section, setAddAnnotation, onSaveAnnotation}) => {
   const colors = ["#5D9AD0", "#3CC435", "#D662C4", "#D05D5F"];
   const [annotationText, setAnnotationText] = useState('');
 
@@ -63,22 +63,22 @@ const AddAnnotation = ({section, setAddAnnotation, onSaveAnnotation}) => {
         <div className=' bg-white rounded-md lg:w-1/2 max-w-lg min-w-96 p-2'>
             <div className='pt-3 px-3 flex flex-row gap-2 items-start w-full'>
                 <span>
-                    { section.id === 'sec1' ? (
+                    { color === '#5D9AD0' ? (
                     <img src={filledQuote} alt="quote icon" className='w-4 h-4 inline mr-2'/>
-                    ) : section.id === 'sec2' ? (
+                    ) : color === '#3CC435' ? (
                     <img src={filledQuote} alt="quote icon" className='w-4 h-4 inline mr-2 green-filter'/>
-                    ) : section.id === 'sec3' ? (
+                    ) : color === '#D662C4' ? (
                     <img src={filledQuote} alt="quote icon" className='w-4 h-4 inline mr-2 pink-filter'/>
                     ) : (
                     <img src={filledQuote} alt="quote icon" className='w-4 h-4 inline mr-2 red-filter'/>
                     )}
                 </span>               
                 <h3 >Add annotation</h3>
-                { section.id === 'sec1' ? (
+                { color === '#5D9AD0' ? (
                     <span style={{ color: colors[0] }} className='text-xs capitalize ml-auto self-center'>{section.dimension}</span>
-                ) : section.id === 'sec2' ? (
+                ) : color === '#3CC435' ? (
                     <span style={{ color: colors[1] }} className='text-xs capitalize ml-auto self-center'>{section.dimension}</span>
-                ) : section.id === 'sec3' ? (
+                ) : color === '#D662C4' ? (
                     <span style={{ color: colors[2] }} className='text-xs capitalize ml-auto self-center'>{section.dimension}</span>
                 ) : (
                     <span style={{ color: colors[3] }} className='text-xs capitalize ml-auto self-center'>{section.dimension}</span>

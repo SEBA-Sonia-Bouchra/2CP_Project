@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"; 
 import Background from "../assets/images/Backgroundgreen.png";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -8,6 +9,7 @@ const LoginPage = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [savedEmails, setSavedEmails] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedEmails = JSON.parse(localStorage.getItem("savedEmails")) || [];
@@ -48,6 +50,9 @@ const LoginPage = () => {
       // Redirect to home after successful sign-in
     navigate('/home_page');
     }
+
+    // Redirect to home after successful sign-in
+    navigate('/home_page');
   };
 
   return (
@@ -123,7 +128,7 @@ const LoginPage = () => {
 
           {/* Sign-up Link */}
           <p className="mt-4 text-[#FFF8E3] text-sm text-center">
-            Don’t have an account? <Link to="/signup" className="underline text-[#232A27]">Sign up here</Link>
+            Don't have an account? <Link to="/signup" className="underline text-[#232A27]">Sign up here</Link>
           </p>
         </form>
       </div>

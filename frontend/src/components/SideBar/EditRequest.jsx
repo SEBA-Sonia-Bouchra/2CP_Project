@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 const EditRequest = () => {
-    const [editRequest, setEditREquest] = useState('noRequest')
+    const [editRequest, setEditRequest] = useState('noRequest')
     const [waitingMessage, setWaitingMessage] = useState(false)
 
   return (
