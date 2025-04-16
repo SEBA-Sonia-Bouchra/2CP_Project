@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react"; 
 import Background from "../assets/images/Backgroundgreen.png";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -8,6 +10,7 @@ const LoginPage = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [savedEmails, setSavedEmails] = useState([]);
+  const navigate=useNavigate();
 
   useEffect(() => {
     const storedEmails = JSON.parse(localStorage.getItem("savedEmails")) || [];
@@ -19,7 +22,7 @@ const LoginPage = () => {
     return emailRegex.test(email);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let valid = true;
 
@@ -37,13 +40,23 @@ const LoginPage = () => {
       setPasswordError("");
     }
 
-    if (valid) {
-      if (!savedEmails.includes(email)) {
-        const updatedEmails = [...savedEmails, email];
-        setSavedEmails(updatedEmails);
-        localStorage.setItem("savedEmails", JSON.stringify(updatedEmails));
+    if (!valid) return;
+    try {
+      const response = await axios.post("http://localhost:5000/api/user/login", {
+        email,
+        password,
+      });
+      // Save token to localStorage or context if needed
+      localStorage.setItem("token", response.data.token);
+      console.log(response.data.message); // "Login successful!"
+      navigate("/home_page")
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || "Login failed";
+      if (errorMessage.includes("credentials")) {
+        setPasswordError(errorMessage);
+      } else {
+        setEmailError(errorMessage);
       }
-      console.log("Form submitted!");
     }
   };
 

@@ -26,7 +26,7 @@ const LandingPage = () => {
           </h1>
 
           {/* Subtitle */}
-          <p className="text-sm text-white font-playfairdisplay mt-2">
+          <p className="text-sm text-white font-montserral mt-2">
             A collaborative platform for historians, architects, and archaeologists to document and enrich Algeria’s built heritage.
           </p>
 

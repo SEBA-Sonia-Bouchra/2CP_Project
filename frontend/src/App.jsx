@@ -37,17 +37,18 @@ const router = createBrowserRouter(
       {<Route path='/signup' element={<SignUpPage/>}></Route>}
       {<Route path='/signin' element={<Signinpage/>}></Route>}
       {<Route path='/forgot-password' element={<ForgotPassword/>}></Route>}
+      {<Route path='/verify-code' element={<VerifyCode/>}></Route>}
       {<Route path='/email-verification' element={<EmailVerification/>}></Route>}
       {<Route path='/email-approval' element={<EmailVerificationApproval/>}></Route>}
+      {<Route path='/set-new-password' element={<SetNewPassword/>}></Route>}
       {<Route path='/request-review' element={<AccountRequest/>}></Route>}
       {<Route path='/request-rejected' element={<RejectRequest/>}></Route>}
-      {<Route path='/request-rejected' element={<RejectRequest/>}></Route>}
-     {/* <Route path="/" element={<MainLayout/>}>
-        <Route index element={<Home_page/>} />
+      {/*<Route path="/" element={<MainLayout/>}>
         <Route path="/My_Projects" element={<Myprojects />} />
         <Route path="/home_page" element={<Home_page />} />
         <Route path="/My_contributions" element={<Mycontributions />} />
         <Route path='/accounts' element={<AccountsPage/>} />
+        <Route index element={<EditProject/>}/>
       </Route>*/}
   </>
   )

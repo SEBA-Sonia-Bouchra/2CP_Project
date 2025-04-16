@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import Background from "../assets/images/Backgroundgreen.png";
+import axios from "axios"
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -12,7 +13,7 @@ const ForgotPassword = () => {
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Email validation
@@ -25,12 +26,18 @@ const ForgotPassword = () => {
     }
 
     setEmailError("");
-    setSuccessMessage("A verification code has been sent to your email.");
+    try {
 
-    // Simulate an API request (this is where you would send the email)
-    setTimeout(() => {
-      navigate("/verify-code", { state: { email } }); // Redirect to Verify Code page
-    }, 1000);
+      const response = await axios.post("http://localhost:5000/api/user/forgot-password", { email });
+      localStorage.setItem("signupEmail", email);
+  
+      setSuccessMessage("A verification code has been sent to your email.");
+      navigate("/verify-code");
+  
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || "Something went wrong";
+      setEmailError(errorMessage);
+    }
   };
 
   return (
@@ -77,9 +84,6 @@ const ForgotPassword = () => {
                 {emailError && <p className="text-red-700 text-sm">{emailError}</p>}
               </div>
             </div>
-
-            {/* Success Message */}
-            {successMessage && <p className="text-green-500 text-sm mb-4">{successMessage}</p>}
 
             {/* Send Button */}
             <button type="submit" className="w-60 bg-[#FFF8E3] text-[#272A23] p-3 rounded-full text-lg shadow-md  place-self-center mt-3 mb-3">
