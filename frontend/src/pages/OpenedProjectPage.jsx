@@ -45,7 +45,7 @@ const OpenedProjectPage = () => {
   const isOwner = true;    // tesssssssst
 
   return (
-    <div className='pt-32 flex flex-row gap-[1%] justify-center bg-[#FFFFF1] w-full min-h-screen pb-20'>
+    <div className='sm:pt-28 lg:pt-32 flex flex-row gap-[1%] justify-center bg-[#FFFFF1] w-full min-h-screen pb-20'>
       <File project={project} isOwner={isOwner} currentUser={currentUser} isProfessional={isProfessional} />
       <ProjectSideBar project={project} isOwner={isOwner} currentUser={currentUser} isProfessional={isProfessional} />
     </div>

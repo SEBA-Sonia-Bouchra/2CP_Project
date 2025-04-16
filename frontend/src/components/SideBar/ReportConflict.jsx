@@ -2,7 +2,7 @@ import React from 'react';
 
 const ReportConflict = ({ setReportConflict, annotation, isOwner }) => {
   return (
-    <div className='fixed inset-0 flex items-center justify-center h-screen bg-black bg-opacity-25 z-30'>
+    <div className='fixed left-0 top-0 w-full flex items-center justify-center h-screen bg-black bg-opacity-25 z-30'>
       <div className='bg-white rounded-md lg:w-1/2 max-w-lg p-4'>
         <h3 className='text-center mb-6 text-lg font-medium'>Conflict Resolution</h3>
 

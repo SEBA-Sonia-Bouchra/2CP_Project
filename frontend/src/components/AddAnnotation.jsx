@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import filledQuote from '../assets/images/filled-quote.svg'
-// todo
+
 const AddAnnotation = ({color, section, setAddAnnotation, onSaveAnnotation}) => {
-  const colors = ["#5D9AD0", "#3CC435", "#D662C4", "#D05D5F"];
   const [annotationText, setAnnotationText] = useState('');
 
   // Handle saving the annotation
@@ -74,15 +73,7 @@ const AddAnnotation = ({color, section, setAddAnnotation, onSaveAnnotation}) => 
                     )}
                 </span>               
                 <h3 >Add annotation</h3>
-                { color === '#5D9AD0' ? (
-                    <span style={{ color: colors[0] }} className='text-xs capitalize ml-auto self-center'>{section.dimension}</span>
-                ) : color === '#3CC435' ? (
-                    <span style={{ color: colors[1] }} className='text-xs capitalize ml-auto self-center'>{section.dimension}</span>
-                ) : color === '#D662C4' ? (
-                    <span style={{ color: colors[2] }} className='text-xs capitalize ml-auto self-center'>{section.dimension}</span>
-                ) : (
-                    <span style={{ color: colors[3] }} className='text-xs capitalize ml-auto self-center'>{section.dimension}</span>
-                )}
+                    <span style={{ color: color }} className='text-xs capitalize ml-auto self-center'>{section.dimension}</span>
             </div>
             <textarea 
                 placeholder='Add text here' 

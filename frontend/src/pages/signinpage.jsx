@@ -50,9 +50,6 @@ const LoginPage = () => {
       // Redirect to home after successful sign-in
     navigate('/home_page');
     }
-
-    // Redirect to home after successful sign-in
-    navigate('/home_page');
   };
 
   return (

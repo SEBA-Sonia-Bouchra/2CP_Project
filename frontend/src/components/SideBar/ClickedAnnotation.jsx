@@ -1,9 +1,9 @@
 import React from 'react'
+import { getColorByDimension } from '../../utils/helpers';
 import filledQuote from '../../assets/images/filled-quote.svg'
-// todo
-const ClickedAnnotation = ({setClickedAnnotation, clickedAnnotation}) => {
-    const colors = ["#5D9AD0", "#3CC435", "#D662C4", "#D05D5F"];
 
+const ClickedAnnotation = ({setClickedAnnotation, clickedAnnotation}) => {
+  const color = getColorByDimension(clickedAnnotation.section.dimension);
   return (
     <div className='fixed top-0 w-full flex items-center justify-center h-screen bg-black bg-opacity-25 z-30'>
         <button className="absolute left-4 top-28 p-2 rounded-full flex items-center justify-center hover:bg-[#00000033]" onClick={() => setClickedAnnotation(null)}>
@@ -21,24 +21,16 @@ const ClickedAnnotation = ({setClickedAnnotation, clickedAnnotation}) => {
                 {new Date(clickedAnnotation.createdAt).toLocaleDateString()}
               </span>
             </div>
-            { clickedAnnotation.section.id === 'sec1' ? (
-                <span style={{ color: colors[0] }} className='text-xs capitalize ml-auto'>{clickedAnnotation.dimension}</span>
-            ) : clickedAnnotation.section.id === 'sec2' ? (
-                <span style={{ color: colors[1] }} className='text-xs capitalize ml-auto'>{clickedAnnotation.dimension}</span>
-            ) : clickedAnnotation.section.id === 'sec3' ? (
-                <span style={{ color: colors[2] }} className='text-xs capitalize ml-auto'>{clickedAnnotation.dimension}</span>
-            ) : (
-                <span style={{ color: colors[3] }} className='text-xs capitalize ml-auto'>{clickedAnnotation.dimension}</span>
-            )}               
+                <span style={{ color: color }} className='text-xs capitalize ml-auto'>{clickedAnnotation.dimension}</span>              
           </div>
           <div className='px-3 pb-3 pt-2 w-full flex items-start'>
             <p className='overflow-hidden break-words clamped-text cursor-pointer'>
                 <span>
-                    { clickedAnnotation.section.id === 'sec1' ? (
+                    { clickedAnnotation.section.dimension === 'architecture' ? (
                     <img src={filledQuote} alt="quote icon" className='w-3 h-3 inline mr-2'/>
-                    ) : clickedAnnotation.section.id === 'sec2' ? (
+                    ) : clickedAnnotation.section.dimension === 'history' ? (
                     <img src={filledQuote} alt="quote icon" className='w-3 h-3 inline mr-2 green-filter'/>
-                    ) : clickedAnnotation.section.id === 'sec3' ? (
+                    ) : clickedAnnotation.section.dimension === 'archeology' ? (
                     <img src={filledQuote} alt="quote icon" className='w-3 h-3 inline mr-2 pink-filter'/>
                     ) : (
                     <img src={filledQuote} alt="quote icon" className='w-3 h-3 inline mr-2 red-filter'/>

@@ -1,8 +1,8 @@
 import React from 'react'
+import { getColorByDimension } from '../../utils/helpers'; 
 
 const ModifyPermissions = ({ project, setShowModifyPermissions }) => {
-  const colors = ["#5D9AD0", "#3CC435", "#D662C4", "#D05D5F"];
-// todo
+
   return (
     <div className='fixed left-0 top-0 w-full flex flex-col items-center justify-center h-screen bg-black bg-opacity-25 z-30 p-4'>
       {/* Close Button */}
@@ -29,22 +29,26 @@ const ModifyPermissions = ({ project, setShowModifyPermissions }) => {
         </div>
 
         {/* Contributors List */}
-        {project?.sections?.map((section, index) => (
-          <div key={section.id} className='p-2 flex flex-row justify-between items-center'>
+        {project?.sections?.map((section, index) => {
+            const color = getColorByDimension(section.dimension);
+
+          return(
+            <div key={section.id} className='p-2 flex flex-row justify-between items-center'>
             <div className='flex flex-row items-center'>
               <img src={section.author.profilePicture} alt="User profile picture" className='rounded-full h-6 w-6' />
               <span className='pl-1 pr-5 hover:underline cursor-pointer truncate max-w-[150px]'>
                 {section?.author?.name || "Unknown"}
               </span>
             </div>
-            <span style={{ color: colors[index] }} className='ml-auto capitalize'>
+            <span style={{ color: color}} className='ml-auto capitalize'>
               {section?.dimension || "N/A"}
             </span>
             <button className="hover:bg-[#4F3726] hover:text-white border-[#4F3726] border px-4 py-2 ml-3 rounded-full w-fit self-center whitespace-nowrap">
               Restrict Editing
             </button>
-          </div>
-        ))}
+          </div>        
+          )
+        })}
 
       </div>
     </div>

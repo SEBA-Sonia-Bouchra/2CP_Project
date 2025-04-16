@@ -11,7 +11,7 @@ const SectionDropDown = ({color, section, isOwner, currentUser}) => {
 
   return (
     <>
-      <div className='flex flex-col items-center rounded-lg absolute right-0 top-full mt-2 z-10 bg-white shadow-md whitespace-nowrap'style={{ border: `1px solid ${color}` }} >
+      <div className='flex z-10 flex-col items-center rounded-lg absolute right-0 top-full mt-2 bg-white shadow-md whitespace-nowrap'style={{ border: `1px solid ${color}` }} >
         {/* <button className='py-2 px-4 text-sm'>See annotations</button> 
         <span className='h-[0.1px] w-full' style={{backgroundColor: `${color}`}}></span> */}
         <button className='py-2 px-4 text-sm' onClick={() => (setAddAnnotation(true))}>Add annotation</button>

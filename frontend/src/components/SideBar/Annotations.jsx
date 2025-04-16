@@ -14,13 +14,13 @@ const annotationsData = [
     content: "From the intricate Moorish palaces of the Casbah to the striking modernist facades, Algiers' architecture is a blend of history and innovation.",
     project: "661987abcdef123456789012", 
     section:{
-      id: "sec1",
+      id: "1",
       authorID : "660f12ab34cd56ef78901235", 
       name: "Amine",
       surname: "Mohammed",
       profilePicture: ba,
+      dimension: "architecture",
     } , 
-    dimension: "architecture",
     createdAt: "2026-02-24T10:30:00Z",
   },
   {
@@ -32,13 +32,13 @@ const annotationsData = [
     content: "From the intricate Moorish palaces of the Casbah to the striking modernist facades, Algiers' architecture is a blend of history and innovation.",
     project: "661987abcdef123456789012",
     section:{
-      id: "sec2",
+      id: "2",
       authorID : "660f12ab34cd56ef78901235", 
       name: "Ali",
       surname: "Hamach",
       profilePicture: ba,
+      dimension: "history",
      } , 
-    dimension: "history",
     createdAt: "2026-02-24T10:30:00Z",
   },
   {
@@ -50,13 +50,13 @@ const annotationsData = [
     content: "From the intricate Moorish palaces of the Casbah to the striking modernist facades, Algiers' architecture is a blend of history and innovation.",
     project: "661987abcdef123456789012", 
     section:{
-      id: "sec3",
+      id: "3",
       authorID : "660f12ab34cd56ef78901235", 
       name: "Sidahmad",
       surname: "Zaouch",
       profilePicture: ba,
+      dimension: "archeology",
      } ,
-    dimension: "archeology",
     createdAt: "2026-02-24T10:30:00Z",
   },
   {
@@ -68,13 +68,13 @@ const annotationsData = [
     content: "The fusion of Ottoman, French colonial, and contemporary styles creates a unique architectural identity in Algiers.",
     project: "661987abcdef123456789013",
     section:{
-      id: "sec3",
+      id: "3",
       authorID : "660f12ab34cd56ef78901235", 
       name: "Sidahmad",
       surname: "Zaouch",
       profilePicture: ba,
+      dimension: "archeology",
     },
-    dimension: "archeology",
     createdAt: "2026-03-10T15:45:00Z",
   },
 ];
@@ -114,13 +114,13 @@ const Annotations = ({ setClickedAnnotation, currentUser, isOwner}) => {
             <p className='text-xs overflow-hidden break-words clamped-text cursor-pointer'
               onClick={() => setClickedAnnotation(annotation)}>
               <span>
-                { annotation.section.id === 'sec1' ? (
+                { annotation.section.dimension === 'architecture' ? (
                   <img src={filledQuote} alt="quote icon" className='w-3 h-3 inline mr-2'/>
-                ) : annotation.section.id === 'sec2' ? (
+                ) : annotation.section.dimension === 'history' ? (
                   <img src={filledQuote} alt="quote icon" className='w-3 h-3 inline mr-2 green-filter'/>
-                ) : annotation.section.id === 'sec3' ? (
+                ) : annotation.section.dimension === 'archeology' ? (
                   <img src={filledQuote} alt="quote icon" className='w-3 h-3 inline mr-2 pink-filter'/>
-                ) : annotation.section.id === 'sec4' ?(
+                ) : annotation.section.dimension === 'other' ?(
                   <img src={filledQuote} alt="quote icon" className='w-3 h-3 inline mr-2 red-filter'/>
                 ) : (
                   	<p>{annotation.section.id}</p>

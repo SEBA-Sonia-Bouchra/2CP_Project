@@ -55,7 +55,7 @@ const ProjectSideBar = ({ project, isOwner, currentUser, isProfessional }) => {
   return (
     <>
     
-    <div className={`sticky top-32 h-fit ${isStatic ? 'w-[232px] lg:w-[300px]' : 'hover:lg:w-[300px] hidden-div'}`}> {/* Prevent hover effect when static' */}
+    <div className={`sticky sm:top-28 lg:top-32 h-fit ${isStatic ? 'w-[232px] lg:w-[300px]' : 'hover:lg:w-[300px] hidden-div'}`}> {/* Prevent hover effect when static' */}
       <div
         className={`z-10 flex flex-col items-start bg-white shadow-md h-fit border border-[#4f37267b] 
           rounded-md text-[#4f3726] overflow-hidden font-montserral`}>

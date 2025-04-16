@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import bg from '../assets/images/background.png';
+import { getColorByDimension } from '../utils/helpers';
 import SectionDropDown from './SectionDropDown';
 
 const File = ({ project, isOwner, currentUser, isProfessional }) => {
     const [selectedCoverPicture, setSelectedCoverPicure] = useState(null);
     const [sectionDropDown, setSectionDropDown] = useState(null);
 
-    // todo
     useEffect(() => {
       const originalOverflow = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
@@ -14,22 +13,7 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
         document.body.style.overflow = originalOverflow;
       };
     }, []);
-
-    const getColorByDimension = (dimension) => {
-      switch (dimension.toLowerCase()) {
-        case "architecture":
-          return "#5D9AD0";
-        case "history":
-          return "#3CC435";
-        case "archeology":
-          return "#D662C4";
-        default:
-          return "#D05D5F"; // for "other" or anything else
-      }
-    };
-    
-    const color = getColorByDimension(section.dimension);
-    
+        
   return (
     <div className='w-full max-w-[800px] bg-white shadow-md h-fit rounded-md '>
         {/* cover picture section */}
@@ -68,7 +52,10 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
             }    
 
             {/* sections */}
-            { project.sections.map((section) => (
+            { project.sections.map((section, index) => {
+              const color = getColorByDimension(section.dimension);
+
+              return(
               <div key={index} id={`${section.id}`} className='my-3 w-full'>
                 <div className='w-full flex flex-row justify-between mb-1'>
                   <h2 style={{ color: color, fontFamily: project.title.styles.fontFamily}} className='capitalize self-center text-[16px] '>
@@ -77,14 +64,14 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
                   <div className='relative flex flex-col'>
                     { isProfessional && (
                       <button className='rounded-full p-2 hover:bg-[#00000023] self-center' onClick={() => (setSectionDropDown(sectionDropDown === index ? null : index))}> 
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4" style={{ color: colors[index] }}>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4" style={{ color: color }}>
                           <circle cx="12" cy="5" r="2" />
                           <circle cx="12" cy="12" r="2" />
                           <circle cx="12" cy="19" r="2" />
                         </svg> 
                       </button>
                     )}
-                    {sectionDropDown === index && <SectionDropDown color={colors[index]} section={section} isOwner={isOwner} currentUser={currentUser}/>}
+                    {sectionDropDown === index && <SectionDropDown color={color} section={section} isOwner={isOwner} currentUser={currentUser}/>}
                   </div>
                 </div>
                 <div style={{ backgroundColor: color }} className={`h-[1.5px] rounded-full mb-2`}></div>
@@ -193,7 +180,8 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
                   ))} 
                   </div>  
               </div>
-            ))}
+              );
+            })}
             {/* refrences */}
               <div id='references' className='my-3 w-full'>
                 <h2 className='font-playfairdisplay mb-2'>References</h2>

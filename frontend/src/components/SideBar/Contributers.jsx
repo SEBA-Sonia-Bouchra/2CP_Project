@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import ModifyPermissions from './ModifyPermissions';
-// todo
+import { getColorByDimension } from '../../utils/helpers';
+
 const Contributers = ({ project, isOwner }) => {
   const [showModifyPermissions, setShowModifyPermissions] = useState(false);
-  const colors = ["#5D9AD0", "#3CC435", "#D662C4", "#D05D5F"];
 
   return (
     <div className='flex flex-col text-xs w-[232px] lg:w-[300px]'>
@@ -19,19 +19,23 @@ const Contributers = ({ project, isOwner }) => {
       </div>
 
       {/* Contributors List */}
-      {project?.sections?.map((section, index) => (
-        <div key={section.id} className='p-2 flex flex-row justify-between'>
+      {project?.sections?.map((section, index) => {
+        const color = getColorByDimension(section.dimension);
+
+        return(
+          <div key={section.id} className='p-2 flex flex-row justify-between'>
           <div className='flex flex-row items-center'>
             <img src={section.author.profilePicture} alt="User profile picture" className='rounded-full h-6 w-6' />
             <span className='pl-1 pr-5 hover:underline cursor-pointer truncate max-w-[150px]'>
               {section?.author?.name || "Unknown"}
             </span>
           </div>
-          <span style={{ color: colors[index] }} className='self-center capitalize'>
+          <span style={{ color: color }} className='self-center capitalize'>
             {section?.dimension || "N/A"}
           </span>
         </div>
-      ))}
+        );
+      })}
 
       {/* Modify Permissions Button */}
       {isOwner && (

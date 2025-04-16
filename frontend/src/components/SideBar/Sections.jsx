@@ -1,11 +1,13 @@
 import React from 'react'
-// todo
+import { getColorByDimension } from '../../utils/helpers';
+
 const Sections = ({project}) => {
-  const colors = ["#5D9AD0", "#3CC435", "#D662C4", "#D05D5F"];
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
+    const yOffset = -110; // height of your fixed navbar
     if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
     }
   };
 
@@ -17,11 +19,14 @@ const Sections = ({project}) => {
             description
           </button>
         )}
-        { project.sections.map((section, index) => (
-          <button key={section.id}  onClick={() => scrollToSection(`${section.id}`)} style={{ color: colors[index]}} className='capitalize hover:underline mb-1'>
+        { project.sections.map((section, index) => {
+          const color = getColorByDimension(section.dimension);
+          return(
+            <button key={section.id}  onClick={() => scrollToSection(`${section.id}`)} style={{ color: color}} className='capitalize hover:underline mb-1'>
             {section.dimension}
           </button>
-        ) )}
+          )
+        })}
         { project.references && (
           <button onClick={() => scrollToSection("references")} className='capitalize hover:underline mb-1 text-gray-400'>
             references
