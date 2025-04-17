@@ -66,12 +66,12 @@ router.post("/signup", upload.single("certificate"), async (req, res) => {
 
         // Check if user already exists
         let user = await User.findOne({ email });
-        if (user) return res.status(400).json({ message: "User already exists!" });
+        if (user) return res.status(400).json({ message: "There's already an account with this email address" });
 
         if (password.length < 8) return res.status(400).json({ message: "Password too short!" });
 
         if (isProfessional === 'true' && !req.file) {
-            return res.status(400).json({ message: "Professionals must upload a certificate" });
+            return res.status(400).json({ message: "Professionals must upload a certificate." });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -199,15 +199,15 @@ router.post("/login", async (req, res) => {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
 
-        if (!user) return res.status(400).json({ message: "User not found!" });
-        if (!user.isVerified) return res.status(400).json({ message: "User not verified!" });
-        if (user.status !== "accepted") return res.status(400).json({ message: "Admin approval pending!" });
+        if (!user) return res.status(400).json({ message: "No account was found with the provided information." });
+        if (!user.isVerified) return res.status(400).json({ message: " Your account hasn’t been verified yet. Please check your email for a verification link." });
+        if (user.status == "pending") return res.status(400).json({ message: "Your registration is currently under admin review." });
 
         const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ message: "Invalid credentials!" });
+        if (!isMatch) return res.status(400).json({ message: "Email or password is incorrect. Please check and try again." });
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-        res.json({ message: "Login successful!", token });
+        res.json({ message: "Login successful!", token, status: user.status });
 
     } catch (error) {
         console.error(error);
@@ -222,7 +222,7 @@ router.post('/forgot-password', async (req, res) => {
         // Check if the user exists
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(404).json({ message: "User not found" });
+            return res.status(404).json({ message: "No account was found with the provided information." });
         }
 
         // Generate a 4-digit OTP
@@ -251,30 +251,24 @@ router.post('/forgot-password', async (req, res) => {
             text: `Your verification code for password reset is: ${otp}. It is valid for 10 minutes.`,
         });
 
-        res.status(200).json({ message: "OTP sent successfully!" });
+        res.status(200).json({ message: "verification code sent successfully!" });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Something went wrong" });
     }
 });
+ 
+// ✅  Route for Reset Password
+router.post("/reset-password", async (req, res) => {
+    const {email, newPassword, confirmPassword } = req.body;
 
-
-// ✅  Reset password 
-const resetPassword = async (req, res) => {
-    const { newPassword, confirmPassword } = req.body;
 
     try {
-        // Find the user by email
-        const user = await User.findOne({ email });
+        const user = await User.findOne({email}); 
         if (!user) {
-            return res.status(404).json({ message: "User not found" });
+          return res.status(404).json({ message: "User not found" });
         }
-
-        // Check if OTP is valid and not expired
-        if (user.resetOTP !== otp || Date.now() > user.otpExpires) {
-            return res.status(400).json({ message: "Invalid or expired OTP" });
-        }
-
+        
         // Ensure new password and confirmation match
         if (newPassword !== confirmPassword) {
             return res.status(400).json({ message: "Passwords do not match" });
@@ -284,18 +278,14 @@ const resetPassword = async (req, res) => {
         const hashedPassword = await bcrypt.hash(newPassword, 10);
         user.password = hashedPassword;
 
-        // Remove the OTP fields from the database
-        user.resetOTP = undefined;
-        user.otpExpires = undefined;
         await user.save();
 
         res.status(200).json({ message: "Password reset successful!" });
     } catch (error) {
         res.status(500).json({ message: "Something went wrong" });
     }
-}; 
-// ✅  Route for Reset Password
-router.post("/reset-password", resetPassword);
+}
+);
 
 router.post("/verify-reset-password", async (req, res) => {
     const { email, otp } = req.body;
@@ -305,15 +295,18 @@ router.post("/verify-reset-password", async (req, res) => {
   
     if (!user) return res.status(404).json({ message: "User not found" });
   
-    if (user.resetOTP !== otp || Date.now() > user.otpExpires) {
-      return res.status(400).json({ message: "Invalid or expired OTP" });
+    if (user.resetOTP !== otp) {
+        return res.status(400).json({ message: "The verification code you entered is invalid. Please check and try again." });
+    }
+    if(Date.now() > user.otpExpires) {
+        return res.status(400).json({ message: "This verification code has expired. Please request a new one to continue." });
     }
 
     user.resetOTP = undefined;
     user.otpExpires = undefined;
     await user.save();
   
-    res.status(200).json({ message: "OTP verified successfully" });
+    res.status(200).json({ message: "verification code verified successfully" });
   });
 
 // ✅ Admin Route: Get All Pending Users
@@ -326,6 +319,22 @@ router.get("/pending-users", async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 });
+
+// ✅ Get User Status by Email
+router.post("/check-status", async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        res.status(200).json({ status: user.status });
+    } catch (error) {
+        console.error("Error checking user status:", error);
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
   
 
 

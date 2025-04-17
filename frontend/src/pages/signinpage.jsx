@@ -48,11 +48,16 @@ const LoginPage = () => {
       });
       // Save token to localStorage or context if needed
       localStorage.setItem("token", response.data.token);
-      console.log(response.data.message); // "Login successful!"
-      navigate("/home_page")
+      console.log(response.data.message); // 
+      if(response.data.status=='rejected'){
+        navigate('/request-rejected')
+      }
+      else {
+        navigate("/home_page")
+      } 
     } catch (err) {
       const errorMessage = err.response?.data?.message || "Login failed";
-      if (errorMessage.includes("credentials")) {
+      if (errorMessage.includes("password")) {
         setPasswordError(errorMessage);
       } else {
         setEmailError(errorMessage);
