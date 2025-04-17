@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import clock from '../assets/images/clock.png'
 import image from '../assets/images/background.png'
+import { useNavigate } from 'react-router-dom';
+import RejectRequest from './RejectRequest'; 
 
-export default function AccountRequest() {
+const AccountRequest = () => {
+  
   return (
     <>
       <div className='sm:flex gap-8 sm:flex-col md:grid md:grid-cols-3 md:h-screen'>
@@ -21,3 +24,5 @@ export default function AccountRequest() {
     </>
   )
 }
+
+export default AccountRequest
