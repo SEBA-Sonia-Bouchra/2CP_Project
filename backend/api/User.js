@@ -8,7 +8,6 @@ const User = require("../models/User");
 const path = require("path");
 const fs = require("fs");
 const crypto = require("crypto");
-const authMiddleware = require('../middleware/authMiddleware.js'); 
 require("dotenv").config();
 
 // ✅ Ensure upload directories exist

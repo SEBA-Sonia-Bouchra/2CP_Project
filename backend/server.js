@@ -6,7 +6,7 @@ const app = express();
 
 // Middleware
 app.use(express.json()); // Parse JSON requests
-app.use(cors()); 
+app.use(cors()); // Enable CORS
 
 // Load environment variables
 const PORT = process.env.PORT || 5000;
