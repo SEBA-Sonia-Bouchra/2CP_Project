@@ -312,7 +312,7 @@ router.post("/verify-reset-password", async (req, res) => {
 // ✅ Admin Route: Get All Pending Users
 router.get("/pending-users", async (req, res) => {
     try {
-        const pendingUsers = await User.find({ status: "pending" });
+        const pendingUsers = await User.find({ status: "pending", isVerified: true });
         res.json(pendingUsers);
     } catch (error) {
         console.error("Error fetching pending users:", error);
