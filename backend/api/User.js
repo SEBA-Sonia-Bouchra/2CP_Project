@@ -8,6 +8,7 @@ const User = require("../models/User");
 const path = require("path");
 const fs = require("fs");
 const crypto = require("crypto");
+const authMiddleware = require('../middleware/authMiddleware.js'); 
 require("dotenv").config();
 
 // ✅ Ensure upload directories exist
@@ -121,9 +122,7 @@ router.post("/verify-otp", async (req, res) => {
             return res.status(400).json({ message: "Invalid or expired verification code!" });
         }
         user.isVerified = true;
-        // sonia remove this 
-        user.status="accepted"; 
-        // 
+
         await user.save();
         return res.status(200).json({ message: "code is verified successfully!" });
     } catch (error) {
@@ -153,7 +152,7 @@ router.post("/approve", async (req, res) => {
         } else if (action === "reject") {
             user.status = "rejected";
         } else {
-            return res.status(400).json({ message: "Invalid action! Use 'accept' or 'reject'." });
+            return res.status(400).json({ message: "Invalid action! Use 'accept' or 'reject'. Please log in." });
         }
 
         await user.save();
@@ -317,6 +316,17 @@ router.post("/verify-reset-password", async (req, res) => {
   
     res.status(200).json({ message: "OTP verified successfully" });
   });
+
+// ✅ Admin Route: Get All Pending Users
+router.get("/pending-users", async (req, res) => {
+    try {
+        const pendingUsers = await User.find({ status: "pending" });
+        res.json(pendingUsers);
+    } catch (error) {
+        console.error("Error fetching pending users:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
   
 
 

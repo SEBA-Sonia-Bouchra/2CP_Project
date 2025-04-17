@@ -28,7 +28,6 @@ import Home_page_opened_for_the_first_time from "./pages/home_page_opened_for_th
 import Home_page from "./pages/home_page.jsx";
 import Myprojects from "./pages/myprojects.jsx";
 import Mycontributions from "./pages/Mycontributions.jsx";
-import HomePageExample from './pages/home_page_example.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -43,13 +42,13 @@ const router = createBrowserRouter(
       {<Route path='/set-new-password' element={<SetNewPassword/>}></Route>}
       {<Route path='/request-review' element={<AccountRequest/>}></Route>}
       {<Route path='/request-rejected' element={<RejectRequest/>}></Route>}
-      {/*<Route path="/" element={<MainLayout/>}>
+      <Route path="/" element={<MainLayout/>}>
         <Route path="/My_Projects" element={<Myprojects />} />
+        <Route path="/profile-page" element={<ProfileModificationProfessional />} />
         <Route path="/home_page" element={<Home_page />} />
         <Route path="/My_contributions" element={<Mycontributions />} />
         <Route path='/accounts' element={<AccountsPage/>} />
-        <Route index element={<EditProject/>}/>
-      </Route>*/}
+      </Route>
   </>
   )
   );

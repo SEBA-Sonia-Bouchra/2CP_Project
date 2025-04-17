@@ -1,90 +1,60 @@
 import React, {useState, useEffect } from 'react';
 import FileTickIcon from '../assets/images/file-tick.svg'
 import NoAccounts from '../components/NoAccounts';
-import Background from '../assets/images/background.png'
-import NavbarProfessional from '../components/NavbarProfessional';
-import Footer from '../components/Footer';
-import NavbarAdmin from '../components/NavbarAdmin.jsx'
-
-const AccountsData = [
-    {
-      id: 1,
-      isProfessional: "false",
-      firstname: "Dahmane",
-      lastName: "Lharachi",
-      time: "02/03/2025",
-      email: "Foulanfoulani@gmail.com",
-      status : "pending",
-    },
-    {
-      id: 2,
-      isProfessional: "true",
-      firstname: "Dahmane",
-      lastName: "Lharachi",
-      time: "02/03/2025",
-      email: "Foulanfoulani@gmail.com",
-      status : "pending",
-      CertificateUrl: FileTickIcon,
-    },
-    {
-      id: 3,
-      isProfessional: "true",
-      firstname: "Dahmane",
-      lastName: "Lharachi",
-      time: "02/03/2025",
-      email: "Foulanfoulani@gmail.com",
-      status : "pending",
-      CertificateUrl: Background,
-    },
-    {
-      id: 4,
-      isProfessional: "false",
-      firstname: "Dahmane",
-      lastName: "Lharachi",
-      time: "02/03/2025",
-      email: "Foulanfoulani@gmail.com",
-      status : "pending",
-    },
-    {
-      id: 5,
-      isProfessional: "true",
-      firstname: "Dahmane",
-      lastName: "Lharachi",
-      time: "02/03/2025",
-      email: "Foulanfoulani@gmail.com",
-      status : "pending",
-      CertificateUrl: "/CERTIFICAT DE SCOLARITE.pdf",
-    },
-  ];
+import axios from 'axios';
 
 const AccountsPage = () => {
-    const [Accounts, setAccounts] = useState(AccountsData);
-    const [selectedFile, setSelectedFile] = useState(null);
-
-    const updateStatus = (id, newStatus) => {
-      setAccounts((prevAccounts) =>
-        prevAccounts.map((account) =>
-          account.id === id ? { ...account, status: newStatus } : account
-        )
-      );
-      console.log(`Account ${id} status updated to: ${newStatus}`);
-    };
-
-    const handleDelete = (id) => {
-      setAccounts(Accounts.filter(account => account.id !== id));
-    };
+    const [Accounts, setAccounts] = useState([]);
 
     useEffect(() => {
-      if (selectedFile) {
-        document.body.style.overflow = "hidden";
-      } else {
-        document.body.style.overflow = "auto"; 
-      }
+      const fetchAccountsAndCertificates = async () => {
+        try {
+          const res = await fetch('http://localhost:5000/api/User/pending-users');
+          const data = await res.json();
     
-      return () => {
-        document.body.style.overflow = "auto"; 
+          // Fetch certificates for expert users only
+          const accountsWithCertificates = await Promise.all(
+            data.map(async (account) => {
+              if (account.isProfessional) {
+                try {
+                  const res = await axios.post("http://localhost:5000/api/user/get-certificate", {
+                    userId: account._id,
+                  });
+                  return { ...account, certificateUrl: res.data.certificateUrl };
+                } catch (err) {
+                  console.warn(`No certificate for user ${account._id}`);
+                  return { ...account, certificateUrl: null };
+                }
+              } else {
+                return account;
+              }
+            })
+          );
+          
+          
+          setAccounts(accountsWithCertificates);
+        } catch (err) {
+          console.error("Failed to fetch accounts or certificates:", err);
+        }
       };
-    }, [selectedFile]);
+      
+      fetchAccountsAndCertificates();
+    }, []);
+
+    const updateStatus = (id, action) => {
+      fetch(`http://localhost:5000/api/User/approve`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: id, action }),
+      })
+        .then(res => {
+          if (!res.ok) throw new Error("Failed to update");
+          setAccounts(prev => prev.filter(account => account._id !== id));
+        })
+        .catch(err => console.error("Error updating status:", err));
+    };
 
   return (
     <>
@@ -93,15 +63,15 @@ const AccountsPage = () => {
       <div className="w-3/4">
         {Accounts.map((account) => (
           <div
-            key={account.id}
+            key={account._id}
             className='p-4 bg-[#FFF8E3] flex w-full flex-col mb-5 shadow-md rounded-lg' >
             <div className="flex flex-row justify-between items-end">
-                <p> <strong className='font-semibold'>{account.firstname} {account.lastName} </strong>wants to create an acount.</p>
+                <p> <strong className='font-semibold'>{account.firstname} {account.lastname} </strong>wants to create an acount.</p>
               
-              {account.isProfessional == 'false' &&
+              {account.isProfessional == false &&
                 <span className='text-gray-500 text-sm'>Normal user</span>
               }
-              {account.isProfessional == 'true' &&
+              {account.isProfessional == true &&
                 <span className='text-gray-500 text-sm'>Expert user</span>
               }
             </div>
@@ -109,49 +79,54 @@ const AccountsPage = () => {
             <a href={`mailto:${account.email}`} className='underline hover:text-blue-800'>
               {account.email}
             </a>
-            <p className="mt-1 text-xs text-gray-500">{account.time}</p>
+            <p className="mt-1 text-xs text-gray-500">{new Date(account.createdAt).toLocaleDateString()}</p>
                 
 
               {/* Buttons Section */}
               <div className="flex flex-col  items-end ">
 
               <div className="space-x-2">
-                {account.isProfessional === "false" && (
+                {account.isProfessional === false && (
                   <>
                     <button className="px-5 pt-1 pb-1 shadow-md bg-[#213824CC] text-[#FFF8E3] text-base rounded-full hover:bg-[#21382499]"
-                    onClick={() => {updateStatus(account.id, "rejected"); handleDelete(account.id);}}>
+                    onClick={() => {updateStatus(account._id, "reject"); }}>
                       Refuse
                     </button>
                     <button className="px-5 pt-1 pb-1 shadow-md bg-[#213824CC] text-[#FFF8E3] text-base rounded-full hover:bg-[#21382499]"
-                    onClick={() => {updateStatus(account.id, "accepted"); handleDelete(account.id);}}>
+                    onClick={() => {updateStatus(account._id, "accept");}}>
                       Accept
                     </button>
                   </>
                 )}
-                {account.isProfessional === "true" && (
+                {/* add this certificate file if the user is pro */}
+                {account.isProfessional === true && (
                   <>
-                    <button
-                      className="px-5 pt-1 pb-1 shadow-sm text-[#213824CC] text-base rounded-full hover:text-[#21382499] border border-[#213824CC] hover:border-[#21382499]"
-                      onClick={() => {
-                        if (account.CertificateUrl) {
-                          setSelectedFile(account.CertificateUrl);
-                        } else {
-                          alert("No certificate available!");
-                        }
-                      }}
-                    >
-                      <div className="flex gap-2 items-center">
-                        <img src={FileTickIcon} alt="file tick icon" />
-                        <span>See identification file</span>
-                      </div>
-                    </button>
+                    {account.certificateUrl ? (
+                      <a href={account.certificateUrl} target="_blank" rel="noopener noreferrer">
+                        <button
+                          className="px-5 pt-1 pb-1 shadow-sm text-[#213824CC] text-base rounded-full hover:text-[#21382499] border border-[#213824CC] hover:border-[#21382499]"
+                            onClick={() => {
+                              if (!account.certificateUrl) {
+                                alert("No certificate available!");
+                              }
+                            }}
+                        >
+                          <div className="flex gap-2 items-center">
+                            <img src={FileTickIcon} alt="file tick icon" />
+                            <span>See identification file</span>
+                          </div>
+                        </button>
+                      </a>
+                    ) : (
+                      <p>No certificate found.</p>
+                    )}
 
                     <button className="px-5 pt-1 pb-1 shadow-md bg-[#213824CC] text-[#FFF8E3] text-base rounded-full hover:bg-[#21382499]"
-                    onClick={() => {updateStatus(account.id, "rejected"); handleDelete(account.id);}}>
+                    onClick={() => {updateStatus(account._id, "reject"); }}>
                       Refuse
                     </button>
                     <button className="px-5 pt-1 pb-1 shadow-md bg-[#213824CC] text-[#FFF8E3] text-base rounded-full hover:bg-[#21382499]"
-                     onClick={() => {updateStatus(account.id, "accepted"); handleDelete(account.id);}}>
+                     onClick={() => {updateStatus(account._id, "accept"); }}>
                       Accept
                     </button>
                   </>
@@ -164,33 +139,10 @@ const AccountsPage = () => {
       ) : (
         <NoAccounts />
       )}
-
-      {selectedFile && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center overflow-y-auto mt-20 pt-4 z-40">
-          <div className="p-5 rounded-lg w-full flex justify-center relative">
-            <button className="absolute left-4 top-4 p-[9px] rounded-full flex items-center justify-center hover:bg-[#00000033]" onClick={() => setSelectedFile(null)}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="white"
-                className="w-6 h-6"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M6.225 4.811a1 1 0 0 1 1.414 0L12 9.172l4.361-4.36a1 1 0 1 1 1.414 1.414L13.415 10.586l4.36 4.361a1 1 0 0 1-1.414 1.414L12 12l-4.361 4.361a1 1 0 0 1-1.414-1.414l4.36-4.36-4.36-4.36a1 1 0 0 1 0-1.415z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
-            <object data={selectedFile}
-            type='application/pdf' className='w-3/4 h-screen z-50'/>
-    
-          </div>
-        </div>
-      )}
     </div>
     </>
   )
 }
+
 
 export default AccountsPage
