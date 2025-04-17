@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Background from "../assets/images/Backgroundgreen.png";
 import { Link, useNavigate } from "react-router-dom";
+import axios from 'axios'
 
 const SetNewPassword = () => {
   const [formValues, setFormValues] = useState({
@@ -25,7 +26,7 @@ const SetNewPassword = () => {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let errors = {};
 
@@ -46,9 +47,21 @@ const SetNewPassword = () => {
     setFormErrors(errors);
 
     if (Object.keys(errors).length === 0) {
-      console.log("Password successfully set!");
-      // Redirect to login page after setting the password
-      navigate("/");
+      try {
+        const response = await axios.post("http://localhost:5000/api/user/reset-password", {
+          newPassword: formValues.password,
+          confirmPassword: formValues.confirmPassword
+        });
+        alert("Your password has been reset successfully. You can now sign in with your new password")
+        navigate("/signin");
+      } catch (error) {
+        console.error("Password reset error:", error);
+        if (error.response && error.response.data.message) {
+          alert(error.response.data.message);
+        } else {
+          alert("Something went wrong. Please try again.");
+        }
+      }
     }
   };
 
@@ -108,7 +121,7 @@ const SetNewPassword = () => {
           {/* Back to Login */}
           <p className="mt-4 text-[#FFF8E3] text-sm text-center">
             Remember your password?{" "}
-            <span onClick={() => navigate("/")} className="underline text-[#232A27] cursor-pointer">
+            <span onClick={() => navigate("/signin")} className="underline text-[#232A27] cursor-pointer">
               Sign in 
             </span>
           </p>

@@ -43,13 +43,13 @@ const router = createBrowserRouter(
       {<Route path='/set-new-password' element={<SetNewPassword/>}></Route>}
       {<Route path='/request-review' element={<AccountRequest/>}></Route>}
       {<Route path='/request-rejected' element={<RejectRequest/>}></Route>}
-      {/*<Route path="/" element={<MainLayout/>}>
+      {<Route path="/" element={<MainLayout/>}>
         <Route path="/My_Projects" element={<Myprojects />} />
         <Route path="/home_page" element={<Home_page />} />
         <Route path="/My_contributions" element={<Mycontributions />} />
         <Route path='/accounts' element={<AccountsPage/>} />
-        <Route index element={<EditProject/>}/>
-      </Route>*/}
+       {/* <Route index element={<EditProject/>}/>*/}
+      </Route>}
   </>
   )
   );

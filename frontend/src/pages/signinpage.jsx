@@ -52,7 +52,7 @@ const LoginPage = () => {
       navigate("/home_page")
     } catch (err) {
       const errorMessage = err.response?.data?.message || "Login failed";
-      if (errorMessage.includes("credentials")) {
+      if (errorMessage.includes("password")) {
         setPasswordError(errorMessage);
       } else {
         setEmailError(errorMessage);
