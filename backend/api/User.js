@@ -8,7 +8,6 @@ const User = require("../models/User");
 const path = require("path");
 const fs = require("fs");
 const crypto = require("crypto");
-const authMiddleware = require('../middleware/authMiddleware.js'); 
 require("dotenv").config();
 
 // ✅ Ensure upload directories exist
@@ -67,12 +66,12 @@ router.post("/signup", upload.single("certificate"), async (req, res) => {
 
         // Check if user already exists
         let user = await User.findOne({ email });
-        if (user) return res.status(400).json({ message: "User already exists!" });
+        if (user) return res.status(400).json({ message: "There's already an account with this email address" });
 
         if (password.length < 8) return res.status(400).json({ message: "Password too short!" });
 
         if (isProfessional === 'true' && !req.file) {
-            return res.status(400).json({ message: "Professionals must upload a certificate" });
+            return res.status(400).json({ message: "Professionals must upload a certificate." });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -202,13 +201,13 @@ router.post("/login", async (req, res) => {
 
         if (!user) return res.status(400).json({ message: "No account was found with the provided information." });
         if (!user.isVerified) return res.status(400).json({ message: " Your account hasn’t been verified yet. Please check your email for a verification link." });
-        if (user.status !== "accepted") return res.status(400).json({ message: "Your registration is currently under review. Access will be granted upon admin approval." });
+        if (user.status == "pending") return res.status(400).json({ message: "Your registration is currently under admin review." });
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ message: "Email or password is incorrect. Please check and try again." });
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-        res.json({ message: "Login successful!", token });
+        res.json({ message: "Login successful!", token, status: user.status });
 
     } catch (error) {
         console.error(error);
@@ -261,11 +260,11 @@ router.post('/forgot-password', async (req, res) => {
  
 // ✅  Route for Reset Password
 router.post("/reset-password", async (req, res) => {
-    const {  newPassword, confirmPassword } = req.body;
+    const {email, newPassword, confirmPassword } = req.body;
 
 
     try {
-        const user = await User.findOne(); 
+        const user = await User.findOne({email}); 
         if (!user) {
           return res.status(404).json({ message: "User not found" });
         }
@@ -320,6 +319,22 @@ router.get("/pending-users", async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 });
+
+// ✅ Get User Status by Email
+router.post("/check-status", async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        res.status(200).json({ status: user.status });
+    } catch (error) {
+        console.error("Error checking user status:", error);
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
   
 
 
