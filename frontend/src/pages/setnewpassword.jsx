@@ -49,7 +49,7 @@ const SetNewPassword = () => {
     if (Object.keys(errors).length === 0) {
       try {
         const email = localStorage.getItem("signupEmail");
-        const response = await axios.post("http://localhost:5000/api/user/reset-password", {
+        const response = await axios.post("http://localhost:5000/api/auth/reset-password", {
           email,
           newPassword: formValues.password,
           confirmPassword: formValues.confirmPassword

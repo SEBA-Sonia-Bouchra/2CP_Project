@@ -42,7 +42,7 @@ export default function SignUpPage() {
       }
       try {
       // Make the POST request to backend
-        const response = await axios.post("http://localhost:5000/api/user/signup", formData, 
+        const response = await axios.post("http://localhost:5000/api/auth/signup", formData, 
         {
           headers: {
             "Content-Type": "multipart/form-data", // Important for file upload

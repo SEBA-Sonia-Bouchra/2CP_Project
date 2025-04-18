@@ -34,7 +34,7 @@ export default function EmailVerification() {
          setError("Email not found. Please sign up again.");
          return;
         }
-        const response = await axios.post("http://localhost:5000/api/user/verify-otp", {
+        const response = await axios.post("http://localhost:5000/api/auth/verify-otp", {
           email,
           otp: otpString,
         });
