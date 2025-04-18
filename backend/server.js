@@ -1,28 +1,55 @@
-require('dotenv').config(); // Load environment variables
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
+
+const authRoutes = require('./routes/authRoutes');
+const projectRoutes = require('./routes/projectRoutes');
+const annotationRoutes = require('./routes/annotationRoutes');
+const searchRoutes = require('./routes/searchRoutes');
+const filterSearchRoutes = require('./routes/filterSearch');
+
 const app = express();
 
+// Debug JWT_SECRET and Mongo URI
+console.log("🔹 JWT_SECRET:", process.env.JWT_SECRET);
+console.log("🔹 MONGO_URI:", process.env.MONGO_URI);
+
 // Middleware
-app.use(express.json()); // Parse JSON requests
-app.use(cors()); // Enable CORS
+app.use(cors());
+app.use(bodyParser.json());
+app.use(express.json());
+app.use(morgan('dev'));
 
-// Load environment variables
-const PORT = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGO_URI;
+// Register Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/projects', projectRoutes); // Ensure project routes are registered under '/api/projects'
+app.use('/api/annotations', annotationRoutes);
+app.use('/api/search', searchRoutes);
+app.use('/api/filter', filterSearchRoutes);
 
-// Connect to MongoDB
-mongoose.connect(MONGO_URI, {
+// Debugging: Show Registered Routes
+console.log("✅ Registered Routes:");
+app._router.stack.forEach((r) => {
+    if (r.route && r.route.path) {
+        console.log(`   🔹 ${Object.keys(r.route.methods)[0].toUpperCase()} ${r.route.path}`);
+    }
+});
+
+// MongoDB Connection
+mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
 })
-.then(() => console.log("✅ Connected to MongoDB: Projet_2CP"))
-.catch(err => console.error("❌ MongoDB Connection Error:", err));
+.then(() => console.log('✅ MongoDB Connected Successfully'))
+.catch(err => console.error('❌ MongoDB Connection Error:', err));
 
-// Import Routes
-const userRoutes = require('./api/User'); // Adjust if necessary
-app.use('/api/user', userRoutes);
+// Handle Undefined Routes (404)
+app.use((req, res) => {
+    res.status(404).json({ error: "❌ Route Not Found" });
+});
 
 // Test Route
 app.get('/', (req, res) => {
@@ -30,15 +57,5 @@ app.get('/', (req, res) => {
 });
 
 // Start Server
-app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
-});
-
-
-
-
-
-
-
-
-
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

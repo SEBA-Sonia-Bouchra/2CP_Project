@@ -9,7 +9,7 @@ const AccountsPage = () => {
     useEffect(() => {
       const fetchAccountsAndCertificates = async () => {
         try {
-          const res = await fetch('http://localhost:5000/api/User/pending-users');
+          const res = await fetch('http://localhost:5000/api/auth/pending-users');
           const data = await res.json();
     
           // Fetch certificates for expert users only
@@ -17,7 +17,7 @@ const AccountsPage = () => {
             data.map(async (account) => {
               if (account.isProfessional) {
                 try {
-                  const res = await axios.post("http://localhost:5000/api/user/get-certificate", {
+                  const res = await axios.post("http://localhost:5000/api/auth/get-certificate", {
                     userId: account._id,
                   });
                   return { ...account, certificateUrl: res.data.certificateUrl };
@@ -42,7 +42,7 @@ const AccountsPage = () => {
     }, []);
 
     const updateStatus = (id, action) => {
-      fetch(`http://localhost:5000/api/User/approve`, {
+      fetch(`http://localhost:5000/api/auth/approve`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

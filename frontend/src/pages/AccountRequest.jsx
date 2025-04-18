@@ -15,7 +15,7 @@ const AccountRequest = () => {
   
       const checkStatus = async () => {
         try {
-          const res = await axios.post("http://localhost:5000/api/user/check-status", { email });
+          const res = await axios.post("http://localhost:5000/api/auth/check-status", { email });
           setStatus(res.data.status);
         } catch (err) {
           console.error("Failed to check status:", err);

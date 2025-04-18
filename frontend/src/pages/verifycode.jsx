@@ -35,7 +35,7 @@ export default function VerifyCode() {
       setError("Email not found. Please sign up again.");
       return;
       }
-      const response = await axios.post("http://localhost:5000/api/user/verify-reset-password", {
+      const response = await axios.post("http://localhost:5000/api/auth/verify-reset-password", {
         email,
         otp: otpString,
       });
