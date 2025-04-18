@@ -182,7 +182,7 @@ router.post("/get-certificate", async (req, res) => {
         }
 
         // Construct the full URL to access the certificate
-        const certificateUrl = `http://localhost:5000/api/user/certificates/${user.certificateUrl}`;
+        const certificateUrl = `http://localhost:5000/api/auth/certificates/${user.certificateUrl}`;
 
         res.json({ certificateUrl });
 
