@@ -7,6 +7,8 @@ const UserSchema = new mongoose.Schema({
     password: { type: String, required: true },
     isProfessional: { type: Boolean, default: false },
     institution: { type: String },
+    isAdmin: { type: Boolean, default: false },
+    role : { type : String },
 
     // ✅ OTP for Signup Verification
     otp: { type: String },  
