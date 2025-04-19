@@ -10,7 +10,7 @@ const LoginPage = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [savedEmails, setSavedEmails] = useState([]);
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedEmails = JSON.parse(localStorage.getItem("savedEmails")) || [];

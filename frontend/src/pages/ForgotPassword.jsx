@@ -87,8 +87,8 @@ const ForgotPassword = () => {
 
             {/* Send Button */}
             <button type="submit" className="w-60 bg-[#FFF8E3] text-[#272A23] p-3 rounded-full text-lg shadow-md  place-self-center mt-3 mb-3">
-  Send
-</button>
+              Send
+            </button>
 
           </form>
         </div>

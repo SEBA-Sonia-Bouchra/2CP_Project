@@ -1,7 +1,7 @@
 import React from 'react'
 import image from '../assets/images/background.png'
 import { useState , useEffect} from 'react'
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom'
 import fileTick from '../assets/images/file-tick.png'
 import axios from "axios"
