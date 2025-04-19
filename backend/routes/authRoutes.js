@@ -55,7 +55,13 @@ const sendOtpEmail = (email, otp) => {
             <p style="font-style:italic;">"Preserve Algerian architectural heritage"</p>
         `,
     };
-    transporter.sendMail(mailOptions);
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error("Error sending OTP email:", error);
+        } else {
+          console.log("OTP email sent:", info.response);
+        }
+      });
 };
 
 
