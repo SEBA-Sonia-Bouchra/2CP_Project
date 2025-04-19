@@ -27,6 +27,7 @@ export default function MainLayout() {
       document.body.style.overflow = "auto"; 
     };
   }, [showNotifications]);
+  
   return (
     <>
       <div className="min-h-screen">
@@ -34,8 +35,13 @@ export default function MainLayout() {
         unreadCount={unreadCount} /> */}
         {user ? (
            user.isProfessional == true ? (
-            <NavbarProfessional toggleNotifications={toggleNotifications} showNotifications={showNotifications}
-            unreadCount={unreadCount} />
+            user.isAdmin == true ? (
+              <NavbarAdmin toggleNotifications={toggleNotifications} showNotifications={showNotifications}
+              unreadCount={unreadCount} />
+            ) : (
+              <NavbarProfessional toggleNotifications={toggleNotifications} showNotifications={showNotifications}
+              unreadCount={unreadCount} />
+            )
           ) : user.isProfessional == false ? (
             <NavbarNormal />
           ) : (

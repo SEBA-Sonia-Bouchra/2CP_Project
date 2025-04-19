@@ -53,7 +53,6 @@ const LoginPage = () => {
         navigate('/request-rejected')
       }
       else {
-        // navigate("/home_page")
         navigate("/home_page")
       } 
     } catch (err) {

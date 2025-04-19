@@ -34,7 +34,8 @@ const authenticateUser = async (req, res, next) => {
       firstname: user.firstname,
       lastname: user.lastname,
       email: user.email,
-      isProfessional: user.isProfessional
+      isProfessional: user.isProfessional,
+      isAdmin: user.isAdmin,
     };
 
     // Proceed to the next middleware or route handler

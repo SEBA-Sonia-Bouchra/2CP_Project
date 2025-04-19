@@ -4,12 +4,15 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const homepageRoutes = require('./routes/homepageRoutes');
+const profileRoutes = require('./routes/profileRoutes')
 
 const authRoutes = require('./routes/authRoutes');
 const projectRoutes = require('./routes/projectRoutes');
 const annotationRoutes = require('./routes/annotationRoutes');
 const searchRoutes = require('./routes/searchRoutes');
 const filterSearchRoutes = require('./routes/filterSearch');
+const seedAdmin = require("./utils/seedAdmin");
 
 const app = express();
 
@@ -29,6 +32,9 @@ app.use('/api/projects', projectRoutes); // Ensure project routes are registered
 app.use('/api/annotations', annotationRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/filter', filterSearchRoutes);
+app.use("/api/profile", profileRoutes);
+app.use("/uploads", express.static("uploads")); // Serve uploaded images
+app.use('/homepage', homepageRoutes);
 
 // Debugging: Show Registered Routes
 console.log("✅ Registered Routes:");
@@ -42,9 +48,16 @@ app._router.stack.forEach((r) => {
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 30000 // 30 seconds timeout
 })
-.then(() => console.log('✅ MongoDB Connected Successfully'))
-.catch(err => console.error('❌ MongoDB Connection Error:', err));
+.then(() => {
+    console.log('✅ MongoDB Connected Successfully');
+    seedAdmin()
+})
+.catch((error) => {
+    console.error('Error connecting to MongoDB:', error);
+    process.exit(1); // Exit the application if the connection fails
+  });
 
 // Handle Undefined Routes (404)
 app.use((req, res) => {
@@ -59,3 +72,5 @@ app.get('/', (req, res) => {
 // Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+
+

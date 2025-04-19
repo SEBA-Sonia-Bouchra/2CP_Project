@@ -65,6 +65,10 @@ router.post("/signup", upload.single("certificate"), async (req, res) => {
     try {
         const { firstname, lastname , email, password, isProfessional } = req.body;
 
+        if (email === process.env.EMAIL_USER) {
+            return res.status(400).json({ message: "You cannot sign up with this email address." });
+        }
+
         // Check if user already exists
         let user = await User.findOne({ email });
         if (user) return res.status(400).json({ message: "There's already an account with this email address" });
@@ -201,7 +205,7 @@ router.post("/login", async (req, res) => {
         const user = await User.findOne({ email });
 
         if (!user) return res.status(400).json({ message: "No account was found with the provided information." });
-        if (!user.isVerified) return res.status(400).json({ message: " Your account hasn’t been verified yet. Please check your email for a verification link." });
+        if (!user.isVerified) return res.status(400).json({ message: " Your account hasn't been verified yet. Please check your email for a verification link." });
         if (user.status == "pending") return res.status(400).json({ message: "Your registration is currently under admin review." });
 
         const isMatch = await bcrypt.compare(password, user.password);
@@ -341,8 +345,5 @@ router.post("/check-status", async (req, res) => {
 router.get('/me', authenticateUser, async (req, res) => {
     res.json(req.user); // Comes from middleware
   });
-  
-  module.exports = router; 
-
 
 module.exports = router;
