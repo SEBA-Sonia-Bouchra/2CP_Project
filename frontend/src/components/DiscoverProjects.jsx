@@ -30,8 +30,8 @@ const DiscoverProjects = ({ projects, loading, error }) => {
               className="bg-white rounded-lg shadow-lg flex overflow-hidden"
             >
               <img
-                src={project.image}
-                alt={project.title}
+                src={project.coverPhoto}
+                alt='project cover picture'
                 className="w-1/3 object-cover"
               />
               <div className="p-6 flex flex-col justify-between w-2/3">
@@ -40,10 +40,13 @@ const DiscoverProjects = ({ projects, loading, error }) => {
                     className="text-xl font-serif font-semibold text-gray-900"
                     style={{ fontFamily: "Playfair Display" }}
                   >
-                    {project.title}
+                    {project.title.content}
                   </h3>
+                  <p className='text-gray-500 text-[10px] font-montserral pb-1'>
+                      {new Date(project.dateOfPublish).toLocaleDateString()} {project.author?.name}
+                    </p>
                   <p className="text-sm text-gray-700 mt-1">
-                    {project.description}
+                    {project.description.content}
                   </p>
                 </div>
                 <div className="flex justify-end">
