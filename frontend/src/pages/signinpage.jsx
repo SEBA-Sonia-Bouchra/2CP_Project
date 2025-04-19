@@ -48,11 +48,12 @@ const LoginPage = () => {
       });
       // Save token to localStorage or context if needed
       localStorage.setItem("token", response.data.token);
-      console.log(response.data.message); // 
+      console.log(response.data.message); //
       if(response.data.status=='rejected'){
         navigate('/request-rejected')
       }
       else {
+        // navigate("/home_page")
         navigate("/home_page")
       } 
     } catch (err) {
@@ -66,7 +67,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="sm:flex sm:flex-col md:grid md:grid-cols-3 md:h-screen bg-[#FFF8E3]">
+    <div className="sm:flex sm:flex-col md:grid md:grid-cols-3 min-h-screen bg-[#FFF8E3] pb-10 ">
       
       {/* Left Side (Image Section) */}
       <div className="col-span-1">
@@ -78,7 +79,7 @@ const LoginPage = () => {
       </div>
 
       {/* Right Side (Form Section) */}
-      <div className="bg-[#6E7C67] rounded-[70px] place-self-center text-[#79856F] shadow-lg mt-10 md:col-span-2 px-12 py-14 mb-10  overflow-hidden  w-[400px] ">
+      <div className="bg-[#6E7C67] rounded-[70px] place-self-center text-[#79856F] shadow-lg mt-10 md:col-span-2 px-12 py-14   overflow-hidden  w-[400px] ">
         <form onSubmit={handleSubmit} className="font-montserral grid place-content-center gap-4" noValidate>
           
           {/* Heading */}
@@ -138,7 +139,7 @@ const LoginPage = () => {
 
           {/* Sign-up Link */}
           <p className="mt-4 text-[#FFF8E3] text-sm text-center">
-            Don’t have an account? <Link to="/signup" className="underline text-[#232A27]">Sign up here</Link>
+            Don't have an account? <Link to="/signup" className="underline text-[#232A27]">Sign up here</Link>
           </p>
         </form>
       </div>

@@ -36,9 +36,7 @@ export default function Projects() {
 
       {/* Recent Projects Section with Scrollable Feature */}
       <RecentProjects projects={projects} loading={loading} error={error}/>
-
       {/* Annotated Section */}
-
       <AnnotatedProjects projects={projects} loading={loading} error={error} />
       {/* Discover Section */}
       <DiscoverProjects projects={projects} loading={loading} error={error} />

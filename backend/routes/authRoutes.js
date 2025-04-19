@@ -8,6 +8,7 @@ const User = require("../models/User");
 const path = require("path");
 const fs = require("fs");
 const crypto = require("crypto");
+const authenticateUser = require('../middleware/authUser');
 require("dotenv").config();
 
 // ✅ Ensure upload directories exist
@@ -335,7 +336,13 @@ router.post("/check-status", async (req, res) => {
     }
 });
 
+ 
+// GET /me - return logged in user info
+router.get('/me', authenticateUser, async (req, res) => {
+    res.json(req.user); // Comes from middleware
+  });
   
+  module.exports = router; 
 
 
 module.exports = router;

@@ -5,8 +5,10 @@ import { Outlet } from 'react-router-dom'
 import NavbarProfessional from '../components/NavbarProfessional';
 import Notifications from '../components/Notifications.jsx'
 import NavbarAdmin from '../components/NavbarAdmin.jsx'
+import useCurrentUser from '../../utils/useCurrentUser.js'
 
 export default function MainLayout() {
+  const user = useCurrentUser();
   const [showNotifications, setShowNotifications] = useState(false);
   const [unreadCount, setUnreadCount] = useState(3);
   const toggleNotifications= () => {
@@ -28,9 +30,21 @@ export default function MainLayout() {
   return (
     <>
       <div className="min-h-screen">
-        <NavbarAdmin toggleNotifications={toggleNotifications} showNotifications={showNotifications}
-        unreadCount={unreadCount} />
-        {showNotifications && (
+        {/* <NavbarAdmin toggleNotifications={toggleNotifications} showNotifications={showNotifications}
+        unreadCount={unreadCount} /> */}
+        {user ? (
+           user.isProfessional == true ? (
+            <NavbarProfessional toggleNotifications={toggleNotifications} showNotifications={showNotifications}
+            unreadCount={unreadCount} />
+          ) : user.isProfessional == false ? (
+            <NavbarNormal />
+          ) : (
+            <p>error loading navbar</p>
+          )
+        ) : (
+          <p>Loading user info...</p>
+        )}
+          {showNotifications && (
               <div className='w-screen fixed top-0 z-50'>
                 <Notifications toggleNotifications={() => setShowNotifications(false)} />
               </div>

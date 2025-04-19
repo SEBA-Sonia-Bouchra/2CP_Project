@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import search from '../assets/images/search.png'
 import icon from '../assets/images/icon-placeholder.png'
 import logo from '../assets/images/logo.svg'
@@ -6,6 +6,16 @@ import title from '../assets/images/BinaA.svg'
 import { Link } from 'react-router-dom'
 
 export default function NavbarNormal() {
+  const [page, setPage] = useState("/profile-page");
+
+  const togglePage = (page) => {
+    if (page == "/profile-page"){
+      setPage("/home_page");
+    }
+    if (page == "/home_page"){
+      setPage("/profile-page");
+    }
+  };
 
   return (
     <>
@@ -20,7 +30,8 @@ export default function NavbarNormal() {
             <img src={search} alt="search-icon" className='self-center w-4 h-4' />
             <p className='self-center text-xl'>Search</p>
           </button>
-          <Link to='/profile-modification' className=' w-14 h-14 ' >
+          <Link to={ page } className=' w-14 h-14 ' 
+            onClick={() => (togglePage(page))}>
             <img src={icon} alt="icon" className='rounded-full'/>
           </Link>
         </div>
