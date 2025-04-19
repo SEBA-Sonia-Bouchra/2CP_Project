@@ -40,21 +40,23 @@ const router = createBrowserRouter(
       {<Route path='/set_new_password' element={<SetNewPassword/>}></Route>}
       {<Route path='/email-verification' element={<EmailVerification/>}></Route>}
       {<Route path='/email-approval' element={<EmailVerificationApproval/>}></Route>}
+      {<Route path='/set-new-password' element={<SetNewPassword/>}></Route>}
       {<Route path='/request-review' element={<AccountRequest/>}></Route>}
       {<Route path='/request-rejected' element={<RejectRequest/>}></Route>}
-      {<Route path='/request-rejected' element={<RejectRequest/>}></Route>}
-      <Route path="/" element={<MainLayout/>}>
-        <Route path="/My_Projects" element={<Myprojects />} />
-        <Route path="/profile-page" element={<ProfileModificationProfessional />} />
+      {<Route path="/" element={<MainLayout/>}>
         <Route path="/home_page" element={<Home_page />} />
-        <Route path="/My_contributions" element={<Mycontributions />} />
-        <Route path='/accounts' element={<AccountsPage/>} />
+        <Route path='/accounts' element={<AccountsPage/>} /> 
+        <Route path="/My_Projects" element={<Myprojects />} />
+        <Route path="/My_contributions" element={<Mycontributions />} /> 
+        <Route path="/profile-page" element={<ProfileModification />} />
+        <Route path="/profile-page-professional" element={<ProfileModificationProfessional />} />
         <Route path="/projects/:id" element={<OpenedProjectPage />} />
-      </Route>
+       <Route index element={<EditProject/>}/>
+      </Route>}
   </>
   )
 );
 
 export default function App() {
-  return <RouterProvider router={router} />;
+  return <RouterProvider router={router}/>;
 }

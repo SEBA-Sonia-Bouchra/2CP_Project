@@ -25,27 +25,28 @@
 }
 
 /* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px; /* Width of the scrollbar */
-}
+/* ::-webkit-scrollbar {
+  width: 8px; Width of the scrollbar
+} */
 
-::-webkit-scrollbar-track {
+/* ::-webkit-scrollbar-track {
   background: #F3ECD6;
-  Backgroundofthescrollbartrackborder-radius: 8px;
+  border-radius: 8px;
+  -webkit-border-radius: 8px; Backgroundofthescrollbartrack
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
   -ms-border-radius: 8px;
   -o-border-radius: 8px;
-}
+} */
 
-::-webkit-scrollbar-thumb {
-  background: #F3ECD6; /* Color of the scrollbar */
-  border-radius: 10px;
-}
+/* ::-webkit-scrollbar-thumb { */
+  /* background: #F3ECD6; Color of the scrollbar */
+  /* border-radius: 10px; */
+/* } */
 
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.25); /* Darker color when hovered */
-}
+/* ::-webkit-scrollbar-thumb:hover { */
+  /* background: rgba(0, 0, 0, 0.25); Darker color when hovered */
+/* } */
 
 .hidden-div div .hidden-span {
   opacity: 0;
@@ -105,4 +106,8 @@ div.selected img {
 .relative:hover .hidden-ul {
   opacity: 1;
   visibility: visible;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }

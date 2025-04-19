@@ -1,8 +1,42 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import clock from '../assets/images/clock.png'
 import image from '../assets/images/background.png'
+import { useNavigate } from 'react-router-dom';
+import RejectRequest from './RejectRequest'; 
+import axios from "axios"
 
-export default function AccountRequest() {
+const AccountRequest = () => {
+    const [status, setStatus] = useState("pending");
+    const navigate = useNavigate();
+  
+    useEffect(() => {
+      const email = localStorage.getItem("signupEmail"); // assuming you saved it after signup
+      if (!email) return;
+  
+      const checkStatus = async () => {
+        try {
+          const res = await axios.post("http://localhost:5000/api/auth/check-status", { email });
+          setStatus(res.data.status);
+        } catch (err) {
+          console.error("Failed to check status:", err);
+        }
+      };
+  
+      checkStatus();
+  
+      // Optional: poll every 30 seconds
+      const interval = setInterval(checkStatus, 30000);
+      return () => clearInterval(interval);
+    }, []);  
+    useEffect(() => {
+      if (status === "rejected") {
+        alert("Your account creation request was reviewed.");
+        navigate('/request-rejected');
+      } else if (status === "accepted") {
+        alert("Your account creation request was reviewed.");
+        navigate('/signin');
+      }
+    }, [status, navigate]);
   return (
     <>
       <div className='sm:flex gap-8 sm:flex-col md:grid md:grid-cols-3 md:h-screen'>
@@ -21,3 +55,5 @@ export default function AccountRequest() {
     </>
   )
 }
+
+export default AccountRequest

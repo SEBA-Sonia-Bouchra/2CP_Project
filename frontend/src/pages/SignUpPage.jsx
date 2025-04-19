@@ -4,6 +4,7 @@ import { useState , useEffect} from 'react'
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom'
 import fileTick from '../assets/images/file-tick.png'
+import axios from "axios"
 
 export default function SignUpPage() {
   const [isChecked,setIsChecked]=useState(false); // professional checkbox
@@ -23,15 +24,41 @@ export default function SignUpPage() {
       return newErrors;
     });
   };
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault(); // prevents submit
     const validationErrors = validate(formValues);
     setFormErrors(validationErrors); // treat errors
     if (Object.keys(validationErrors).length === 0) {
       setIsSubmit(true); // Allow submission only if no errors
-      navigate("/email-verification"); // Navigate to email verification
+      const formData = new FormData();
+      formData.append("firstname", formValues.firstName);
+      formData.append("lastname", formValues.lastName);
+      formData.append("email", formValues.email);
+      formData.append("password", formValues.password);
+      formData.append("isProfessional", isChecked.toString());
+      if (isChecked && selectedFile) {
+        formData.append("certificate", selectedFile);
+      }
+      try {
+      // Make the POST request to backend
+        const response = await axios.post("http://localhost:5000/api/auth/signup", formData, 
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Important for file upload
+          },
+        }
+      );
+      localStorage.setItem("signupEmail", formData.get("email")); 
+      console.log("Signup success:", response.data);
+      navigate("/email-verification"); 
+    } catch (error) {
+      console.error("Signup error:", error.response?.data || error.message);
+      alert(error.response?.data?.message || "Signup failed.");
+    }
     }
   };
+
   useEffect(() => {
     console.log(formErrors);
     if (Object.keys(formErrors).length === 0 && isSubmit) {
@@ -73,6 +100,7 @@ export default function SignUpPage() {
     }
     return errors;
   };
+  
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);

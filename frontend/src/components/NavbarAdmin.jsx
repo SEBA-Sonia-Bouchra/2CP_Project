@@ -57,7 +57,7 @@ export default function NavbarProfessional({toggleNotifications , showNotificati
                cursor-pointer ${showNotifications ? 'bg-[#FFF8E3]' : 'bg-[#DFD8C8]'}`} />
                 {(unreadCount != 0) && ( <span className="absolute top-0 right-0 1200:right-3 bg-[#AC1D1B] w-4 h-4 rounded-full drop-shadow"></span>)}
              </div>
-             <Link to='/profile-page' className='w-14 h-14' >
+             <Link to='/profile-page-professional' className='w-14 h-14' >
                <img src={icon} alt="icon" className='rounded-full '/>
              </Link>
             </div>

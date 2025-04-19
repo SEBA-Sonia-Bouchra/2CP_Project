@@ -14,7 +14,7 @@ export default function RejectRequest() {
         shadow-lg mt-10 md:col-span-2 px-20 py-32 mb-10 md:mr-24 flex-1 overflow-hidden place-content-center'>
           <div className='font-montserral grid place-content-center gap-4'> 
             <img src={xcircle} alt="clock" className='place-self-center w-[100px]' />
-            <p className='text-center max-w-[300px] text-center'>Sorry, your request was rejected.</p>
+            <p className='text-center max-w-[300px]'>Sorry, your account creation request was rejected.</p>
           </div>
         </div>
       </div>

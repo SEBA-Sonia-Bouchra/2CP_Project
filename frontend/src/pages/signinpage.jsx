@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"; 
 import Background from "../assets/images/Backgroundgreen.png";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
@@ -21,7 +22,7 @@ const LoginPage = () => {
     return emailRegex.test(email);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let valid = true;
 
@@ -39,21 +40,33 @@ const LoginPage = () => {
       setPasswordError("");
     }
 
-    if (valid) {
-      if (!savedEmails.includes(email)) {
-        const updatedEmails = [...savedEmails, email];
-        setSavedEmails(updatedEmails);
-        localStorage.setItem("savedEmails", JSON.stringify(updatedEmails));
+    if (!valid) return;
+    try {
+      const response = await axios.post("http://localhost:5000/api/auth/login", {
+        email,
+        password,
+      });
+      // Save token to localStorage or context if needed
+      localStorage.setItem("token", response.data.token);
+      console.log(response.data.message); //
+      if(response.data.status=='rejected'){
+        navigate('/request-rejected')
       }
-      console.log("Form submitted!");
-
-      // Redirect to home after successful sign-in
-    navigate('/home_page');
+      else {
+        navigate("/home_page")
+      } 
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || "Login failed";
+      if (errorMessage.includes("password")) {
+        setPasswordError(errorMessage);
+      } else {
+        setEmailError(errorMessage);
+      }
     }
   };
 
   return (
-    <div className="sm:flex sm:flex-col md:grid md:grid-cols-3 md:h-screen bg-[#FFF8E3]">
+    <div className="sm:flex sm:flex-col md:grid md:grid-cols-3 min-h-screen bg-[#FFF8E3] pb-10 ">
       
       {/* Left Side (Image Section) */}
       <div className="col-span-1">
@@ -65,7 +78,7 @@ const LoginPage = () => {
       </div>
 
       {/* Right Side (Form Section) */}
-      <div className="bg-[#6E7C67] rounded-[70px] place-self-center text-[#79856F] shadow-lg mt-10 md:col-span-2 px-12 py-14 mb-10  overflow-hidden  w-[400px] ">
+      <div className="bg-[#6E7C67] rounded-[70px] place-self-center text-[#79856F] shadow-lg mt-10 md:col-span-2 px-12 py-14   overflow-hidden  w-[400px] ">
         <form onSubmit={handleSubmit} className="font-montserral grid place-content-center gap-4" noValidate>
           
           {/* Heading */}
