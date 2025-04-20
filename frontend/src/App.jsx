@@ -51,7 +51,6 @@ const router = createBrowserRouter(
         <Route path="/profile-page" element={<ProfileModification />} />
         <Route path="/profile-page-professional" element={<ProfileModificationProfessional />} />
         <Route path="/projects/:id" element={<OpenedProjectPage />} />
-       <Route index element={<EditProject/>}/>
       </Route>}
   </>
   )
