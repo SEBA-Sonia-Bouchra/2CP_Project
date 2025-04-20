@@ -69,6 +69,7 @@ export default function SignUpPage() {
       console.log("Submitting form:", formValues);
     }
   }, [formErrors, isSubmit]);
+  
   const validate = (values) => { // checks for errors and return them
     const errors = {};
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;

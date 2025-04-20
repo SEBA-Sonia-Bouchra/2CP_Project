@@ -38,6 +38,9 @@ const authenticateUser = async (req, res, next) => {
       isAdmin: user.isAdmin,
       institution: user.isProfessional? user.institution : null,
       role: user.isProfessional? user.role : null,
+      levelOfExpertise: user.isProfessional && user.levelOfExpertise? user.levelOfExpertise : undefined,
+      description: user.isProfessional && user.description ? user.description : undefined,
+      profilePicture: user.profilePicture ? user.profilePicture : undefined,
     };
 
     // Proceed to the next middleware or route handler

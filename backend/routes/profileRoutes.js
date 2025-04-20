@@ -7,7 +7,7 @@ const User = require("../models/User");
 // Configure Multer for file storage
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, "uploads/"); // Save images in "uploads" folder
+        cb(null, path.join(__dirname, "..", "uploads", "profile")); // Save images in "uploads" folder
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + path.extname(file.originalname)); // Rename file with timestamp
@@ -40,7 +40,7 @@ router.put("/modify-profile", upload.single("profilePicture"), async (req, res) 
 
         // Handle profile picture upload
         if (req.file) {
-            updateFields.profilePicture = `/uploads/${req.file.filename}`; // Save file path
+            updateFields.profilePicture = `/uploads/profile/${req.file.filename}`;
         }
 
         // If the user is professional, allow additional updates
