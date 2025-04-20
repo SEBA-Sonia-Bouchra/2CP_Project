@@ -7,8 +7,13 @@ const UserSchema = new mongoose.Schema({
     password: { type: String, required: true },
     isProfessional: { type: Boolean, default: false },
     institution: { type: String },
-    isAdmin: { type: Boolean, default: false },
     role : { type : String },
+    isAdmin: { type: Boolean, default: false },
+
+    // for profile
+    description: { type : String },
+    levelOfExpertise: { type : String },
+    profilePicture: { type : String }, // Store local file path
 
     // ✅ OTP for Signup Verification
     otp: { type: String },  

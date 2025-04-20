@@ -38,7 +38,7 @@ const AnnotatedProjects = ({ projects }) => {
 
         <div
           ref={scrollRef}
-          className="flex space-x-4 overflow-x-auto scrollbar-hide scroll-smooth"
+          className="flex space-x-4 overflow-x-auto hide-scrollbar scroll-smooth"
         >
           {projects.slice(0, 6).map((project) => (
             <div

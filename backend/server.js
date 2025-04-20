@@ -4,8 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const homepageRoutes = require('./routes/homepageRoutes');
-const profileRoutes = require('./routes/profileRoutes')
+const path = require("path");
 
 const authRoutes = require('./routes/authRoutes');
 const projectRoutes = require('./routes/projectRoutes');
@@ -13,6 +12,8 @@ const annotationRoutes = require('./routes/annotationRoutes');
 const searchRoutes = require('./routes/searchRoutes');
 const filterSearchRoutes = require('./routes/filterSearch');
 const seedAdmin = require("./utils/seedAdmin");
+const homepageRoutes = require('./routes/homepageRoutes');
+const profileRoutes = require('./routes/profileRoutes');
 
 const app = express();
 
@@ -33,8 +34,9 @@ app.use('/api/annotations', annotationRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/filter', filterSearchRoutes);
 app.use("/api/profile", profileRoutes);
-app.use("/uploads", express.static("uploads")); // Serve uploaded images
+// app.use("/uploads", express.static("uploads")); // Serve uploaded images
 app.use('/homepage', homepageRoutes);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Debugging: Show Registered Routes
 console.log("✅ Registered Routes:");
