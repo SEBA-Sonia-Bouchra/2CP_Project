@@ -15,7 +15,7 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
     }, []);
         
   return (
-    <div className='w-full max-w-[800px] bg-white shadow-md h-fit rounded-md '>
+    <div className='w-full max-w-[800px] bg-white shadow-md h-fit rounded-md'>
         {/* cover picture section */}
         <div className='w-full h-56 overflow-hidden rounded-t-md'>
             <img src={project.coverPhoto} alt="cover-picture" className='w-full h-full object-cover object-center cursor-pointer'

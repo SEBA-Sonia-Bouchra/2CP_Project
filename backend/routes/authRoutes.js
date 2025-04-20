@@ -69,7 +69,7 @@ const sendOtpEmail = (email, otp) => {
 // ✅ Signup Route
 router.post("/signup", upload.single("certificate"), async (req, res) => {
     try {
-        const { firstname, lastname , email, password, isProfessional } = req.body;
+        const { firstname, lastname , email, password, isProfessional, institution, role } = req.body;
 
         if (email === process.env.EMAIL_USER) {
             return res.status(400).json({ message: "You cannot sign up with this email address." });
@@ -81,8 +81,13 @@ router.post("/signup", upload.single("certificate"), async (req, res) => {
 
         if (password.length < 8) return res.status(400).json({ message: "Password too short!" });
 
-        if (isProfessional === 'true' && !req.file) {
-            return res.status(400).json({ message: "Professionals must upload a certificate." });
+        if (isProfessional === 'true') {
+            if (!req.file) {
+                return res.status(400).json({ message: "Professionals must upload a certificate." });
+            }
+            if (!institution || !role) {
+                return res.status(400).json({ message: "Professionals must provide their institution and role." });
+            }
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -96,6 +101,8 @@ router.post("/signup", upload.single("certificate"), async (req, res) => {
             password: hashedPassword,
             isProfessional: isProfessional === 'true',
             certificateUrl: req.file ? req.file.filename : null,
+            institution: isProfessional? institution : null,
+            role: isProfessional? role : null,
             otp,
             otpExpires,
             isVerified: false,

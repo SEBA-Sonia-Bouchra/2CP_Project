@@ -36,6 +36,8 @@ const authenticateUser = async (req, res, next) => {
       email: user.email,
       isProfessional: user.isProfessional,
       isAdmin: user.isAdmin,
+      institution: user.isProfessional? user.institution : null,
+      role: user.isProfessional? user.role : null,
     };
 
     // Proceed to the next middleware or route handler

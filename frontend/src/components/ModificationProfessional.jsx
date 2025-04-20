@@ -2,8 +2,10 @@ import React from 'react'
 import icon from '../assets/images/icon-placeholder.png'
 import edit from '../assets/images/edit.svg'
 import { useState } from 'react';
+import useCurrentUser from '../utils/useCurrentUser'
 
 export default function ModificationProfessional() {
+  const user = useCurrentUser();
   const [isEditing,setIsEditing]=useState(false);
   const initialValues={firstName:"",lastName:"",email:"",description:"",role:"",institution:"",expertiseLevel:""}; // input fields
   const [formValues,setFormValues]=useState(initialValues);
@@ -38,55 +40,69 @@ export default function ModificationProfessional() {
             <form action="" className='bg-[#213824] bg-opacity-[40%] flex flex-col rounded-bl-[20px] rounded-tr-[20px] py-10
              rounded-br-[70px] rounded-tl-[70px] items-center self-center drop-shadow-xl gap-14 text-[#213824] px-10 md:px-0'>
               <div className='grid md:grid-cols-2 gap-20 md:gap-40'>
+                {/* image */}
                <div className='place-content-center pt-10 md:pt-0 grid md:pl-40 gap-6 '>
                 <div className="relative">
                   <img src={image || icon} alt="icon" className='w-[192px] h-[192px] rounded-[50%] justify-self-center'/>
                   {isEditing && <input type="file" accept="image/*" className="hidden" id="imageUpload" onChange={handleImageChange}/>}
-                  <label htmlFor="imageUpload" className={`absolute bottom-3 right-16 p-1 rounded-full ${isEditing && 'cursor-pointer'} shadow-md
-                   bg-[#213824] flex items-center justify-center w-12 h-12`}>
-                    <img src={edit} alt="update-image" className="w-6 h-6 flex-none " />
-                  </label>
+                    { isEditing && 
+                      <label htmlFor="imageUpload" className={`absolute bottom-3 right-16 p-1 rounded-full ${isEditing && 'cursor-pointer'} shadow-md bg-[#213824] flex items-center justify-center w-12 h-12`}>
+                      <img src={edit} alt="update-image" className="w-6 h-6 flex-none" />
+                      </label>
+                    }
                 </div>
+                  {/* descreption */}
                 <div className='flex flex-col gap-2 flex-wrap '>
                    <label htmlFor="first-name" className='text-lg md:text-xl drop-shadow ml-2'>Description</label>
-                   {isEditing ? (<><textarea type='text' className='appearance-none outline-none rounded-[5px]
-                    w-80 h-48 bg-[#DFD8C8] resize-none p-2' maxLength={400} name='description' value={formValues.description} 
-                    onChange={handleChange} rows={3}/>
-                    <p className="text-sm text-gray-700">{400 - formValues.description.length} characters left</p></>)
-                    : (<div className={` rounded-[5px] p-2 bg-[#DFD8C8] break-words overflow-y-auto w-80 min-h-48 `}>
+                   {isEditing ? (
+                     <>
+                        <textarea type='text' className='appearance-none outline-none rounded-[5px] w-80 h-48 bg-[#DFD8C8] resize-none p-2' 
+                        maxLength={400} name='description' value={formValues.description} onChange={handleChange} rows={3}/>
+                        <p className="text-sm text-gray-700">{400 - formValues.description.length} characters left</p>
+                      </>
+                    ) : (<div className={` rounded-[5px] p-2 bg-[#DFD8C8] break-words overflow-y-auto w-80 min-h-48 `}>
                       {formValues.description}
                       </div>)}
                 </div>
               </div>
               <div className='grid grid-cols-2 gap-10 md:flex md:flex-col items-start md:gap-2'>
+                  {/* first name */}
                   <div className='flex flex-col'>
                     <label htmlFor="first-name" className='text-lg md:text-xl'>First name</label>
-                    {isEditing ? (<input type='text' className='appearance-none outline-none rounded-[5px] md:w-64
-                    py-2 px-2 bg-[#DFD8C8]' maxLength={30} name='firstName' value={formValues.firstName} onChange={handleChange}/>)
-                    : (<p className={`rounded-[5px] py-2 px-2 bg-[#DFD8C8] h-10 md:w-64 truncate`}>{formValues.firstName}</p>)}
+                    {isEditing ? (
+                      <input type='text' className='appearance-none outline-none rounded-[5px] md:w-64 py-2 px-2 bg-[#DFD8C8]' 
+                      maxLength={30} name='firstName' value={formValues.firstName} onChange={handleChange}/>
+                    ) : (
+                      <p className={`rounded-[5px] py-2 px-2 bg-[#DFD8C8] h-10 md:w-64 truncate`}>{user?.firstname}</p>
+                    )}
                   </div>
+                    {/* last name */}
                   <div className='flex flex-col '>
                     <label htmlFor="last-name" className='text-lg md:text-xl'>Last name</label>
                     {isEditing ? (<input type='text' className='appearance-none outline-none rounded-[5px] md:w-64
                     py-2 px-2 bg-[#DFD8C8]' maxLength={30} name='lastName' value={formValues.lastName} onChange={handleChange}/>)
                     : (<p className={`rounded-[5px] py-2 px-2 h-10 md:w-64 bg-[#DFD8C8] truncate`}>
-                      {formValues.lastName}</p>)}
+                      {user?.lastname}</p>)}
                   </div>
+                  {/* email */}
                   <div className='flex flex-col '>
                     <label htmlFor="email" className='text-lg md:text-xl'>Email address</label>
                     <p className={`rounded-[5px] py-2 px-2 bg-[#DFD8C8] h-10 md:w-64 truncate ${isEditing && 'bg-[#DFD8C8] bg-opacity-[60%]'}`}>
-                    {formValues.email}</p>
+                    {user?.email}</p>
                   </div>
+                  {/* role */}
                   <div className='flex flex-col '>
                     <label htmlFor="role" className='text-lg md:text-xl'>Role</label>
                     <p className={`rounded-[5px] py-2 px-2 bg-[#DFD8C8] h-10 md:w-64 truncate ${isEditing && 'bg-[#DFD8C8] bg-opacity-[60%]'}`}>
-                    {formValues.role}</p>
+                    {user?.role}</p>
                   </div>
+                  {/* institution */}
                   <div className='flex flex-col '>
                     <label htmlFor="institution" className='text-lg md:text-xl'>Institution</label>
                     <p className={`rounded-[5px] px-2 py-2 bg-[#DFD8C8] h-10 md:w-64 truncate ${isEditing && 'bg-[#DFD8C8] bg-opacity-[60%]'}`}>
-                    {formValues.institution}</p>
+                    {user?.institution}</p>
                   </div>
+                  {/* level of expertize */}
                   <div className={`flex flex-col ${isEditing ? 'pt-6' : 'pt-0'}`}>
                     {!isEditing ? (<label htmlFor="institution" className='text-lg md:text-xl'>Level of expertise</label>) : ''}
                     {isEditing ? (
@@ -107,6 +123,7 @@ export default function ModificationProfessional() {
                     : (<p className='rounded-[5px] py-2 px-2 bg-[#DFD8C8] text-lg text-center h-10 md:w-64'>
                       {formValues.expertiseLevel}</p>)}
                   </div>
+
               </div>
               </div>
               <div className={`flex gap-4 ${!isEditing ? 'ml-20 md:self-end md:mr-[162px]' : ''} `}>

@@ -5,7 +5,7 @@ import { Outlet } from 'react-router-dom'
 import NavbarProfessional from '../components/NavbarProfessional';
 import Notifications from '../components/Notifications.jsx'
 import NavbarAdmin from '../components/NavbarAdmin.jsx'
-import useCurrentUser from '../../utils/useCurrentUser.js'
+import useCurrentUser from '../utils/useCurrentUser.js'
 
 export default function MainLayout() {
   const user = useCurrentUser();

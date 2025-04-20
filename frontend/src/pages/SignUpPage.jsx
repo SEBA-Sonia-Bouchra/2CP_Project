@@ -40,6 +40,10 @@ export default function SignUpPage() {
       if (isChecked && selectedFile) {
         formData.append("certificate", selectedFile);
       }
+      if (isChecked) {
+        formData.append("institution", formValues.institution);
+        formData.append("role", formValues.role);
+      }
       try {
       // Make the POST request to backend
         const response = await axios.post("http://localhost:5000/api/auth/signup", formData, 
