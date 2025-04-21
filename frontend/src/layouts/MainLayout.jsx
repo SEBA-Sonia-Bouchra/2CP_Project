@@ -58,6 +58,7 @@ export default function MainLayout() {
   
   return (
     <>
+      <ScrollToTop />
       <div className="min-h-screen">
         {user ? (
            user.isProfessional == true ? (
