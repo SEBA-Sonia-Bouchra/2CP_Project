@@ -6,6 +6,7 @@ import NavbarProfessional from '../components/NavbarProfessional';
 import Notifications from '../components/Notifications.jsx'
 import NavbarAdmin from '../components/NavbarAdmin.jsx'
 import useCurrentUser from '../utils/useCurrentUser.js'
+import ScrollToTop from "../components/ScrollToTop";
 
 export default function MainLayout() {
   const user = useCurrentUser();
@@ -30,6 +31,7 @@ export default function MainLayout() {
   
   return (
     <>
+      <ScrollToTop />
       <div className="min-h-screen">
         {user ? (
            user.isProfessional == true ? (

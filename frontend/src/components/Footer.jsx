@@ -1,6 +1,7 @@
 import React from 'react'
 import title from '../assets/images/BinaA.svg'
 import logo from '../assets/images/LOGO.svg'
+import { Link } from 'react-router-dom'
 
 export default function Footer() {
   return (
@@ -22,7 +23,9 @@ export default function Footer() {
             </div>
             <p className='text-xl'>About us</p>
             <p className='text-xl'>Help</p>
-            <p className='text-xl'>Terms & privacy policy</p>
+            <Link to="/terms">
+              <button className='text-xl'>Terms & privacy policy</button>
+            </Link>
         </div>
       </div>
     </>

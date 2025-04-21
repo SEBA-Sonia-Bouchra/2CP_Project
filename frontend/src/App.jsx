@@ -27,6 +27,7 @@ import EditProject from './components/EditProject.jsx';
 import Home_page from "./pages/home_page.jsx";
 import Myprojects from "./pages/myprojects.jsx";
 import Mycontributions from "./pages/Mycontributions.jsx";
+import TermsPage from "./pages/termsandpolicypage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -50,6 +51,7 @@ const router = createBrowserRouter(
         <Route path="/profile-page" element={<ProfileModification />} />
         <Route path="/profile-page-professional" element={<ProfileModificationProfessional />} />
         <Route path="/projects/:id" element={<OpenedProjectPage />} />
+        <Route path="/terms" element={<TermsPage />} />
       </Route>}
   </>
   )
