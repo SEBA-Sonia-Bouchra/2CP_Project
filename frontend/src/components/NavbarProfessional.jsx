@@ -6,12 +6,20 @@ import title from '../assets/images/BinaA.svg'
 import notifications from '../assets/images/notifications.svg'
 import down from '../assets/images/down.svg'
 import { Link } from 'react-router-dom'
-import Notifications from './Notifications.jsx'
 import burger from '../assets/images/hamburger-icon.svg'
 import close from '../assets/images/x.svg'
+import useCurrentUser from '../utils/useCurrentUser'
 
-export default function NavbarProfessional({toggleNotifications , showNotifications, unreadCount}) {
+export default function NavbarProfessional({toggleNotifications , showNotifications, unreadCount, onSearchClick }) {
+  const user = useCurrentUser();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [image, setImage] = useState("");
+
+  useEffect(() => {
+    if (user?.profilePicture){
+      setImage(`http://localhost:5000${user.profilePicture}`);
+    }
+  }, [user])
 
   return (
     <>
@@ -47,7 +55,8 @@ export default function NavbarProfessional({toggleNotifications , showNotificati
             </div>
            <div className='1200:grid flex 1200:grid-cols-4 gap-2 1200:gap-4 justify-center 1200:justify-end'>
              <button className='bg-[#DFD8C8] flex rounded-[70px] py-1 px-3 1200:py-2 1200:px-8 gap-2 place-content-center justify-self-end
-              drop-shadow hover:bg-[#FFF8E3] 1200:col-span-2'>
+              drop-shadow hover:bg-[#FFF8E3] 1200:col-span-2'
+              onClick={onSearchClick}>
                <img src={search} alt="search-icon" className='self-center w-4 h-4' />
                <p className='self-center text-lg 1200:text-xl'>Search</p>
              </button>
@@ -57,7 +66,7 @@ export default function NavbarProfessional({toggleNotifications , showNotificati
                 {(unreadCount != 0) && ( <span className="absolute top-0 right-0 1200:right-3 bg-[#AC1D1B] w-4 h-4 rounded-full drop-shadow"></span>)}
              </div>
              <Link to='/profile-page-professional' className='w-14 h-14' >
-               <img src={icon} alt="icon" className='rounded-full '/>
+               <img src={image || icon} alt="icon" className='rounded-full w-full h-full object-cover object-center'/>
              </Link>
             </div>
 

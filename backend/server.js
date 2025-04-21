@@ -34,7 +34,6 @@ app.use('/api/annotations', annotationRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/filter', filterSearchRoutes);
 app.use("/api/profile", profileRoutes);
-// app.use("/uploads", express.static("uploads")); // Serve uploaded images
 app.use('/homepage', homepageRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 

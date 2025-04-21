@@ -86,7 +86,7 @@ export default function ModificationProfessional() {
 
   return (
     <>
-          <div className='bg-[#FFFFFF] min-h-screen flex place-content-center overflow-x-hidden font-montserral pt-40 mb-14 md:mb-28
+          <div className='bg-[#FFFFFF] min-h-screen flex place-content-center overflow-x-hidden font-montserral pt-16 mb-14 md:mb-28
           min-w-screen'>
             <form action="" className='bg-[#213824] bg-opacity-[40%] flex flex-col rounded-bl-[20px] rounded-tr-[20px] py-10
              rounded-br-[70px] rounded-tl-[70px] items-center self-center drop-shadow-xl gap-14 text-[#213824] px-10 md:px-0'>
@@ -94,7 +94,7 @@ export default function ModificationProfessional() {
                 {/* image */}
                <div className='place-content-center pt-10 md:pt-0 grid md:pl-40 gap-6 '>
                 <div className="relative">
-                  <img src={image || icon} alt="icon" className='w-[192px] h-[192px] rounded-[50%] justify-self-center'/>
+                  <img src={image || icon} alt="icon" className='w-[192px] h-[192px] rounded-[50%] justify-self-center object-cover object-center'/>
                   {isEditing && (
                     <>
                       <input type="file" accept="image/*" className="hidden" id="imageUpload" onChange={handleImageChange}/>

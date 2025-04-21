@@ -24,7 +24,6 @@ import OpenedProjectPage from './pages/OpenedProjectPage.jsx';
 import MainLayout from './layouts/MainLayout.jsx';
 import EditorToolbar from './components/EditorToolbar.jsx';
 import EditProject from './components/EditProject.jsx';
-import Home_page_opened_for_the_first_time from "./pages/home_page_opened_for_the_first_time.jsx";
 import Home_page from "./pages/home_page.jsx";
 import Myprojects from "./pages/myprojects.jsx";
 import Mycontributions from "./pages/Mycontributions.jsx";
