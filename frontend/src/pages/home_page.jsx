@@ -30,28 +30,38 @@ export default function Projects() {
     fetchProjects();
   }, []);
 
-  if (loading) return <p className="text-center">Loading projects...</p>;
-  if (error) return <p className="text-center">Error: {error}</p>;
 
   return (
-    <div className="bg-[#f5f5dc] min-h-screen flex flex-col pt-32"> 
+    <div className="bg-[#f5f5dc] min-h-screen flex flex-col"> 
       {/* Recent Projects Section with Scrollable Feature */}
       {projects.length > 0 ? (
         <RecentProjects projects={projects} loading={loading} error={error} />
-      ) : (
+      ) : loading ? (
+        <p className="text-center">Loading projects...</p>
+      ) : error ? (
+        <p className="text-center">Error: {error}</p>
+      ) : ( 
         <></>
       )}
 
       {/* Annotated Section */}
       {projects.length > 0  ? (
         <AnnotatedProjects projects={projects} loading={loading} error={error} /> 
-      ) : ( 
+      ) : loading ? (
+        <p className="text-center">Loading projects...</p>
+      ) : error ? (
+        <p className="text-center">Error: {error}</p>
+      ) : (
         <></>
       )}
 
       {/* Discover Section */}
       {projects.length > 0  ? (
         <DiscoverProjects projects={projects} loading={loading} error={error} /> 
+      ) : loading ? (
+        <p className="text-center">Loading projects...</p>
+      ) : error ? (
+        <p className="text-center">Error: {error}</p>
       ) : ( 
         <p className="text-center">No projects available.</p>
       )}

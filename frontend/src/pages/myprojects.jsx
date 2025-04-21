@@ -31,8 +31,6 @@ export default function Projects() {
   return (
     <div className="bg-[#f5f5dc] min-h-screen flex flex-col">
 
-      <div className="h-28 flex-grow"></div>
-
       {/* MyProjects Section */}
         <MyProjectsComponent projects={projects} loading={loading} error={error} />
 

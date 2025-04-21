@@ -24,7 +24,7 @@ const AnnotatedProjects = ({ projects }) => {
       {/* Title */}
       <h2 className="text-2xl font-semibold mb-4 flex items-center space-x-3">
         <img src={AnnotatedIcon} alt="Vector Icon" className="w-6 h-6" />
-        <span>Annotated</span>
+        <span className="font-playfairdisplay">Annotated</span>
       </h2>
 
       {/* Scrollable Container */}

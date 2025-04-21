@@ -12,7 +12,7 @@ const annotationRoutes = require('./routes/annotationRoutes');
 const searchRoutes = require('./routes/searchRoutes');
 const filterSearchRoutes = require('./routes/filterSearch');
 const seedAdmin = require("./utils/seedAdmin");
-const projectspageRoutes = require('./routes/ProjectsRoutes');
+const homepageRoutes = require('./routes/homepageRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 
 const app = express();
@@ -34,7 +34,7 @@ app.use('/api/annotations', annotationRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/filter', filterSearchRoutes);
 app.use("/api/profile", profileRoutes);
-app.use('/projects', projectspageRoutes);
+app.use('/homepage', homepageRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Debugging: Show Registered Routes
