@@ -75,7 +75,7 @@ export default function ModificationNormal() {
          rounded-tl-[70px] items-center self-center drop-shadow px-20 py-6  md:px-0 gap-14 md:py-14'>
         <div className='grid md:grid-cols-2 gap-14 md:gap-28'>
           <div className='justify-center items-center pt-10 md:pt-0 flex md:pl-40 relative'>
-            <img src={image || icon} alt="icon" className='w-48 h-48 md:min-w-[220px] md:min-h-[220px] rounded-[50%]'/>
+            <img src={image || icon} alt="icon" className='w-48 h-48 md:min-w-[220px] md:min-h-[220px] rounded-[50%] object-cover object-center'/>
             {isEditing && (
               <>
                 <input type="file" accept="image/*" className="hidden" id="imageUpload" onChange={handleImageChange}/>

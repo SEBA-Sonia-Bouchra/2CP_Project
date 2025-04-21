@@ -1,11 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import search from '../assets/images/search.png'
 import icon from '../assets/images/icon-placeholder.png'
 import logo from '../assets/images/logo.svg'
 import title from '../assets/images/BinaA.svg'
 import { Link } from 'react-router-dom'
+import useCurrentUser from '../utils/useCurrentUser'
 
 export default function NavbarNormal() {
+  const user = useCurrentUser();
+  const [image, setImage] = useState("");
   const [page, setPage] = useState("/profile-page");
 
   const togglePage = (page) => {
@@ -16,6 +19,12 @@ export default function NavbarNormal() {
       setPage("/profile-page");
     }
   };
+
+  useEffect(() => {
+    if (user?.profilePicture){
+      setImage(`http://localhost:5000${user.profilePicture}`);
+    }
+  }, [user])
 
   return (
     <>
@@ -32,7 +41,7 @@ export default function NavbarNormal() {
           </button>
           <Link to={ page } className=' w-14 h-14 ' 
             onClick={() => (togglePage(page))}>
-            <img src={icon} alt="icon" className='rounded-full'/>
+            <img src={image || icon} alt="icon" className='rounded-full w-full h-full object-cover object-center'/>
           </Link>
         </div>
       </div>

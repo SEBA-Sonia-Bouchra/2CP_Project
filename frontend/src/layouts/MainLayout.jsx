@@ -40,7 +40,7 @@ export default function MainLayout() {
               unreadCount={unreadCount} />
             ) : (
               <NavbarProfessional toggleNotifications={toggleNotifications} showNotifications={showNotifications}
-              unreadCount={unreadCount} />
+              unreadCount={unreadCount}/>
             )
           ) : user.isProfessional == false ? (
             <NavbarNormal />

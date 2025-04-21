@@ -94,7 +94,7 @@ export default function ModificationProfessional() {
                 {/* image */}
                <div className='place-content-center pt-10 md:pt-0 grid md:pl-40 gap-6 '>
                 <div className="relative">
-                  <img src={image || icon} alt="icon" className='w-[192px] h-[192px] rounded-[50%] justify-self-center'/>
+                  <img src={image || icon} alt="icon" className='w-[192px] h-[192px] rounded-[50%] justify-self-center object-cover object-center'/>
                   {isEditing && (
                     <>
                       <input type="file" accept="image/*" className="hidden" id="imageUpload" onChange={handleImageChange}/>
