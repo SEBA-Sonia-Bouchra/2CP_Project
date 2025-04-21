@@ -31,8 +31,6 @@ export default function MainLayout() {
   return (
     <>
       <div className="min-h-screen">
-        {/* <NavbarAdmin toggleNotifications={toggleNotifications} showNotifications={showNotifications}
-        unreadCount={unreadCount} /> */}
         {user ? (
            user.isProfessional == true ? (
             user.isAdmin == true ? (
