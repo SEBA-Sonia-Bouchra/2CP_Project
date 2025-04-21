@@ -9,7 +9,7 @@ const Mycontributionscomponents = ({ projects, loading, error, onDeleteProject }
       {/* Title */}
       <div className="w-full max-w-4xl flex items-center space-x-3 mb-6">
         <img src={DiscoverIcon} alt="Vector Icon" className="w-6 h-6" />
-        <h2 className="text-2xl font-semibold text-gray-900 font-playfair">
+        <h2 className="text-2xl font-semibold text-gray-900 font-playfairdisplay">
           My Contributions
         </h2>
       </div>
