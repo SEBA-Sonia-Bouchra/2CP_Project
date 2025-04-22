@@ -9,11 +9,13 @@ import { Link } from 'react-router-dom'
 import burger from '../assets/images/hamburger-icon.svg'
 import close from '../assets/images/x.svg'
 import useCurrentUser from '../utils/useCurrentUser'
+import { useNavigate } from 'react-router-dom';
 
 export default function NavbarProfessional({toggleNotifications , showNotifications, unreadCount, onSearchClick }) {
   const user = useCurrentUser();
   const [menuOpen, setMenuOpen] = useState(false);
   const [image, setImage] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user?.profilePicture){
@@ -56,7 +58,7 @@ export default function NavbarProfessional({toggleNotifications , showNotificati
            <div className='1200:grid flex 1200:grid-cols-4 gap-2 1200:gap-4 justify-center 1200:justify-end'>
              <button className='bg-[#DFD8C8] flex rounded-[70px] py-1 px-3 1200:py-2 1200:px-8 gap-2 place-content-center justify-self-end
               drop-shadow hover:bg-[#FFF8E3] 1200:col-span-2'
-              onClick={onSearchClick}>
+              onClick={() => navigate('/search')}>
                <img src={search} alt="search-icon" className='self-center w-4 h-4' />
                <p className='self-center text-lg 1200:text-xl'>Search</p>
              </button>

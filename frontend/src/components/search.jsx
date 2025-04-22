@@ -15,7 +15,7 @@ const regions = [
   "Tissemsilt", "Tizi Ouzou", "Tlemcen", "Timimoun", "Touggourt"
 ];
 
-export default function Search({ projects, onFilter }) {
+export default function Search({ projects, setFilteredProjects }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState("");
   const [region, setRegion] = useState("");
@@ -32,11 +32,11 @@ export default function Search({ projects, onFilter }) {
       (category ? project.category === category : true) &&
       (region ? project.region === region : true)
     );
-    onFilter(filtered);
-  }, [searchQuery, category, region, projects, onFilter]);
+    setFilteredProjects(filtered);
+  }, [searchQuery, category, region, projects, setFilteredProjects]);
 
   return (
-    <div className="flex flex-col items-center pt-32 gap-6 bg-[#f5f5dc] w-full pb-6">
+    <div className="flex flex-col items-center gap-6 w-full pb-6">
       {/* Search bar */}
       <div className="flex items-center w-full max-w-2xl rounded-full overflow-hidden bg-white shadow-md">
         <div className="bg-[#213824] px-4 py-3 flex items-center justify-center">
