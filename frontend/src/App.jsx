@@ -28,6 +28,7 @@ import Home_page from "./pages/home_page.jsx";
 import Myprojects from "./pages/myprojects.jsx";
 import Mycontributions from "./pages/Mycontributions.jsx";
 import TermsPage from "./pages/termsandpolicypage.jsx";
+import SearchPage from './pages/searchpage.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -52,6 +53,7 @@ const router = createBrowserRouter(
         <Route path="/profile-page-professional" element={<ProfileModificationProfessional />} />
         <Route path="/projects/:id" element={<OpenedProjectPage />} />
         <Route path="/terms" element={<TermsPage />} />
+        <Route path="/search" element={<SearchPage />} />
       </Route>}
   </>
   )

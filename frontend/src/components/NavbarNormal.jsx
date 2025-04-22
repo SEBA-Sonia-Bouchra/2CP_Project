@@ -3,13 +3,14 @@ import search from '../assets/images/search.png'
 import icon from '../assets/images/icon-placeholder.png'
 import logo from '../assets/images/logo.svg'
 import title from '../assets/images/BinaA.svg'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import useCurrentUser from '../utils/useCurrentUser'
 
 export default function NavbarNormal() {
   const user = useCurrentUser();
   const [image, setImage] = useState("");
   const [page, setPage] = useState("/profile-page");
+  const navigate = useNavigate();
 
   const togglePage = (page) => {
     if (page == "/profile-page"){
@@ -35,7 +36,7 @@ export default function NavbarNormal() {
             <img src={title} alt="logo-title" className='w-20'/>
         </div>
         <div className='flex self-center gap-4 md:gap-6 justify-self-end md:px-10 px-6'>
-          <button className='bg-[#DFD8C8] flex rounded-[70px] py-2 px-8 gap-2 place-content-center drop-shadow hover:bg-[#FFF8E3]'>
+          <button className='bg-[#DFD8C8] flex rounded-[70px] py-2 px-8 gap-2 place-content-center drop-shadow hover:bg-[#FFF8E3]' onClick={() => navigate("/search")}>
             <img src={search} alt="search-icon" className='self-center w-4 h-4' />
             <p className='self-center text-xl'>Search</p>
           </button>
