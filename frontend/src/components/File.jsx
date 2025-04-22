@@ -15,7 +15,7 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
     }, []);
         
   return (
-    <div className='w-full max-w-[800px] bg-white shadow-md h-fit rounded-md'>
+    <div className='w-full max-w-[900px] bg-white shadow-md h-fit rounded-md'>
         {/* cover picture section */}
         <div className='w-full h-56 overflow-hidden rounded-t-md'>
             <img src={project.coverPhoto} alt="cover-picture" className='w-full h-full object-cover object-center cursor-pointer'
@@ -45,7 +45,7 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
             {/* description */}
             { project.description &&
               <div id='description' className='my-3 w-full'>
-                <h2 className='font-playfairdisplay mb-2'>Description</h2>
+                <h2 className='font-playfairdisplay mb-2 text-lg'>Description</h2>
                 <div className='h-[1.5px] rounded-full bg-[#4f3726] mb-2'></div>
                 <p style={project.description.styles}>{ project.description.content }</p>
               </div>
@@ -58,7 +58,7 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
               return(
               <div key={index} id={`${section.id}`} className='my-3 w-full'>
                 <div className='w-full flex flex-row justify-between mb-1'>
-                  <h2 style={{ color: color, fontFamily: project.title.styles.fontFamily}} className='capitalize self-center text-[16px] '>
+                  <h2 style={{ color: color, fontFamily: project.title.styles.fontFamily}} className='capitalize self-center text-lg '>
                     { section.dimension }
                   </h2>
                   <div className='relative flex flex-col'>
@@ -184,7 +184,7 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
             })}
             {/* refrences */}
               <div id='references' className='my-3 w-full'>
-                <h2 className='font-playfairdisplay mb-2'>References</h2>
+                <h2 className='font-playfairdisplay mb-2 text-lg'>References</h2>
                 <div className='h-[1.5px] rounded-full bg-gray-400 mb-2'></div>
                 <ol className='list-decimal list-inside font-montserral text-sm'>
                   {project.references.map((reference, index) => (
