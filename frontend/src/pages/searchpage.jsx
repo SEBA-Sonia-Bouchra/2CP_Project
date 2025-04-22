@@ -28,7 +28,7 @@ const searchpage = () => {
     
     return (
         <>
-            <div className="min-h-screen pt-28 bg-[#f5f5dc]">
+            <div className="min-h-screen pt-28 bg-[#FFFFF1]">
                 <Search projects={projects} setFilteredProjects={setFilteredProjects}/>
             </div>
         </>

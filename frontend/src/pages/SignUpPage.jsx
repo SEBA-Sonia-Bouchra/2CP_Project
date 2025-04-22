@@ -14,6 +14,13 @@ export default function SignUpPage() {
   const [isSubmit,setIsSubmit]=useState(false)
   const [selectedFile, setSelectedFile] = useState(null); // for file attachement
   const navigate=useNavigate() // to navigate to the email verification page when clicking create account button
+  const [isOpen, setIsOpen] = useState(false);
+  const roles = ["Architect", "Historian", "Archeologist"];
+
+  const handleSelect = (role) => {
+    setFormValues({ ...formValues, role });
+    setIsOpen(false);
+  };
 
   const handleChange = (e) => { // update form fields(when entering input)
     const { name, value } = e.target;
@@ -164,9 +171,32 @@ export default function SignUpPage() {
             {isChecked && (
              <>
               <div className='flex gap-2 mb-1'>
-                <input type="text" name='role' placeholder={formErrors.role ? formErrors.role : "Role"} className={`appearance-none outline-none
-                bg-transparent border-b border-solid w-full h-full ${formErrors.role ? "placeholder-red-700 border-red-700 " : "placeholder-[#b57d57] border-[#b57d57]"}`}
-                value={formValues.role} onChange={handleChange}/>
+              <div className="relative w-full">
+                <button
+                  type="button"
+                  onClick={() => setIsOpen(!isOpen)}
+                  className={`w-full border-b border-[#b57d57] text-[#b57d57] text-left transition-all ${
+                    formErrors.role ? "text-red-700 border-red-700" : ""
+                  }`}
+                >
+                  {formValues.role || (formErrors.role ? formErrors.role : "Role")}
+                </button>
+                {isOpen && (
+                  <ul className="overflow-hidden absolute w-full mt-1 bg-[#F2F2E1] text-[#b57d57] rounded-md shadow-md z-10">
+                    {roles.map((role) => (
+                      <li
+                        key={role}
+                        className="px-4 py-2 text-center hover:bg-[#b57d57] hover:text-[#F2F2E1] cursor-pointer"
+                        onClick={() => handleSelect(role)}
+                      >
+                        {role}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+
                 <input type="text" name='institution' placeholder={formErrors.institution ? formErrors.institution : "Institution"}
                 className={`appearance-none outline-none bg-transparent border-b border-solid w-full h-full ${formErrors.institution ?
                "placeholder-red-700 border-red-700 " : "placeholder-[#b57d57] border-[#b57d57]"}`} value={formValues.institution}

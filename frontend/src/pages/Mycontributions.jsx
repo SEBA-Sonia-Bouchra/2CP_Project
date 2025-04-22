@@ -29,7 +29,7 @@ export default function Projects() {
   }, []);
 
   return (
-    <div className="bg-[#f5f5dc] min-h-screen flex flex-col">
+    <div className="bg-[#FFFFF1] min-h-screen flex flex-col">
 
 
       {/* MyProjects Section */}
