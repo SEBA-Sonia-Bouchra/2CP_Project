@@ -4,6 +4,8 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   RouterProvider,
+  Routes,
+  Router
 } from 'react-router-dom'
 import LandingPage from './LandingPage.jsx'
 import SignUpPage from './pages/SignUpPage.jsx'
@@ -25,7 +27,6 @@ import EditProject from './components/EditProject.jsx';
 import Home_page from "./pages/home_page.jsx";
 import Myprojects from "./pages/myprojects.jsx";
 import Mycontributions from "./pages/Mycontributions.jsx";
-import SearchPage from './pages/searchpage.jsx'
 import TermsPage from "./pages/termsandpolicypage.jsx";
 
 const router = createBrowserRouter(
@@ -50,7 +51,6 @@ const router = createBrowserRouter(
         <Route path="/profile-page" element={<ProfileModification />} />
         <Route path="/profile-page-professional" element={<ProfileModificationProfessional />} />
         <Route path="/projects/:id" element={<OpenedProjectPage />} />
-        <Route path="/search" element={<SearchPage />} />
         <Route path="/terms" element={<TermsPage />} />
       </Route>}
   </>
