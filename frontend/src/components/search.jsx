@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { ChevronUpDownIcon } from '@heroicons/react/20/solid';
 import filterIcon from '../assets/images/filter-icon.png';
 
-const categories = ["Religious Sites", "Historical Monuments", "Cultural Spaces"];
+const categories = ["Architecture", "History", "Archeology"];
 
 const regions = [
   "Adrar", "Aïn Defla", "Aïn Témouchent", "Algiers", "Annaba", "Batna", "Béchar", "Béjaïa", "Béni Abbès",
