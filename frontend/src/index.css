@@ -24,6 +24,33 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Roboto';
+  src: url('./assets/fonts/Roboto-VariableFont_wdth,wght.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Helvetica Neue';
+  src: url('./assets/fonts/HelveticaNeueThin.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Futura';
+  src: url('./assets/fonts/futura medium bt.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Avenir';
+  src: url('./assets/fonts/AvenirLTStd-Medium.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
 /* Custom Scrollbar */
 /* ::-webkit-scrollbar {
   width: 8px; Width of the scrollbar
@@ -110,4 +137,19 @@ div.selected img {
 
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+/*added this because inline styles are not working on EditorContent*/
+@layer components { 
+  .editor .ProseMirror {
+    @apply border-none outline-none whitespace-pre-wrap font-timesnewroman text-lg;
+  }
+}
+
+.editor-initial-content::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #9ca3af;
+  pointer-events: none;
+  height: 0;
 }

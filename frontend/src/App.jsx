@@ -28,11 +28,12 @@ import Home_page_opened_for_the_first_time from "./pages/home_page_opened_for_th
 import Home_page from "./pages/home_page.jsx";
 import Myprojects from "./pages/myprojects.jsx";
 import Mycontributions from "./pages/Mycontributions.jsx";
+import EditorPage from "./pages/EditorPage.jsx"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
   <>
-      {<Route index element={<LandingPage/>}></Route>}
+      {/*<Route index element={<LandingPage/>}></Route>}
       {<Route path='/signup' element={<SignUpPage/>}></Route>}
       {<Route path='/signin' element={<Signinpage/>}></Route>}
       {<Route path='/forgot-password' element={<ForgotPassword/>}></Route>}
@@ -51,8 +52,8 @@ const router = createBrowserRouter(
         <Route path="/profile-page" element={<ProfileModification />} />
         <Route path="/profile-page-professional" element={<ProfileModificationProfessional />} />
         <Route path="/projects/:id" element={<OpenedProjectPage />} />
-       <Route index element={<EditProject/>}/>
-      </Route>}
+      </Route>*/}
+      {<Route index element={<EditorPage/>}/>}
   </>
   )
 );

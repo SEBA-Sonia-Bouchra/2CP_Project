@@ -1,7 +1,7 @@
 import React from 'react'
 import {Undo2 ,Redo2 ,Copy ,Clipboard ,ChevronDown ,Bold ,Italic ,Underline ,StrikethroughIcon ,List ,ListOrdered ,Link ,EllipsisVertical ,
-  ChevronUp ,AlignCenter ,AlignLeft ,AlignRight ,AlignJustify ,Plus ,Image ,Video ,Grid2X2 ,Triangle ,Play ,Square ,Circle ,MoveUpLeft} from 'lucide-react'
-    import * as LucideIcons from "lucide-react";
+ChevronUp ,AlignCenter ,AlignLeft ,AlignRight ,AlignJustify ,Plus ,Image ,Video ,Grid2X2 ,Triangle ,Play ,Square ,Circle ,MoveUpLeft} from 'lucide-react'
+import * as LucideIcons from "lucide-react";
 import { useState, useRef, useEffect } from 'react';
 import menuBar from '../assets/images/menu-bar.svg'
 import backgroundChanger from '../assets/images/backgroundChanger.svg'
@@ -10,7 +10,7 @@ import line from '../assets/images/line.svg'
 import { TwitterPicker } from "react-color";
 import TableGridSelector from './TableGridSelector.jsx'
 
-export default function EditorToolbar() {
+export default function EditorToolbar({ editor }) {
   const [textColor, setTextColor] = useState("#212529");
   const [backgroundColor, setBackgroundColor] = useState("#ffffff");
   const [showPickerText, setShowPickerText] = useState(false);
@@ -25,6 +25,9 @@ export default function EditorToolbar() {
   const [selectedSize, setSelectedSize]=useState("14");
   const [showInsert, setInsert]=useState(false);
   const IconComponent = LucideIcons[selectedAlign];
+  const [canUndo, setCanUndo] = useState(false);
+  const [canRedo, setCanRedo] = useState(false);
+
 
   const dropdownRefs = useRef({
     text: null,
@@ -87,6 +90,9 @@ export default function EditorToolbar() {
   const handleSelectFont = (value) => {
     setSelectedFont(value);
     setFont(false);
+    if (editor) {
+      editor.chain().focus().setFontFamily(value).run()
+    }
   };
   const handleSelectAlign = (value) => {
     setSelectedAlign(value);
@@ -96,20 +102,51 @@ export default function EditorToolbar() {
     setSelectedSize(value);
     setSize(false);
   }
+  useEffect(() => {
+    if (!editor) return;
+    const updateButtons = () => {
+      setCanUndo(editor.can().undo()); // takes true or false, true => undo possible / false => not possible
+      setCanRedo(editor.can().redo());
+    };
+    editor.on('transaction', updateButtons); // whenever anything changes in the editor this callback runs making undo and redo clickable
+    updateButtons(); 
+    return () => {
+      editor.off('transaction', updateButtons);
+    };
+  }, [editor]);
+
+  const handleCopy = () => {
+    const html = editor.getHTML(); // get the full editor content as HTML
+    const selection = window.getSelection();
+    if (selection && selection.toString()) {
+      // If user selected some text, just copy the selected text
+      navigator.clipboard.writeText(selection.toString());
+    } else {
+      //copies the whole text if nothing is selected
+      navigator.clipboard.writeText(editor.getText());
+    }
+  };
+  const handlePaste = async () => {
+    const text = await navigator.clipboard.readText();
+    editor.commands.insertContent(text); // Inserts plain text at the cursor
+  };  
+  if (!editor) return null;
   return (
     <>
-      <div className='flex items-center font-montserral gap-3 shadow-md opacity-80 py-3 px-2 w-fit'>
+      <div className='flex items-center font-montserral gap-3 shadow-md bg-white/80 py-3 px-2 w-fit'>
         <div className='flex'>
-           <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5'>
+           <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5' title='undo' onClick={() => editor.chain().focus().undo().run()}
+            disabled={!canUndo}>
             <Undo2 />
            </button>
-           <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5'>
+           <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5' title='redo' onClick={() => editor.chain().focus().redo().run()}
+            disabled={!canRedo}>
             <Redo2 />
            </button>
-           <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5'>
+           <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5' title='copy' onClick={handleCopy}>
             <Copy />
            </button>
-           <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5'>
+           <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5' title='paste' onClick={handlePaste}>
             <Clipboard />
            </button>
         </div>
@@ -130,24 +167,21 @@ export default function EditorToolbar() {
             onClick={() => {setInsert(false)}}>
             <Icon/> {LabelInsert[value]} {(value=="Grid2X2" || value=="Triangle") && <Play size={8} className='ml-auto'/>}
             {value=="Grid2X2" && ( <div className='absolute left-36 top-0 z-10 hidden group-hover:block'> <TableGridSelector/></div>)}
-            {value=="Triangle" && ( <ul className='absolute left-36 top-0 z-10 hidden group-hover:block w-36 text-lg'>
-              <li className='flex gap-1 hover:bg-[#4F3726] hover:bg-opacity-20 px-2 items-center'><Square/> Rectangle</li>
-              <li className='flex gap-1 hover:bg-[#4F3726] hover:bg-opacity-20 px-2 items-center'><Circle/> Circle</li>
-              <li className='flex gap-1 hover:bg-[#4F3726] hover:bg-opacity-20 px-2 items-center'><Triangle/> Triangle</li>
-              <li className='flex gap-1 hover:bg-[#4F3726] hover:bg-opacity-20 px-2 items-center'><img src={line} className='w-6 h-6'/>Line</li>
-              <li className='flex gap-1 hover:bg-[#4F3726] hover:bg-opacity-20 px-2 items-center'><MoveUpLeft/> Arrow</li>
+            {value=="Triangle" && ( <ul className='absolute left-36 top-0 rounded-md bg-white hidden group-hover:block w-36 text-lg'>
+              <li className='flex gap-1 hover:bg-[#4F3726] hover:bg-opacity-20 px-2 py-1.5 items-center'><Square/> Rectangle</li>
+              <li className='flex gap-1 hover:bg-[#4F3726] hover:bg-opacity-20 px-2 py-1.5 items-center'><Circle/> Circle</li>
+              <li className='flex gap-1 hover:bg-[#4F3726] hover:bg-opacity-20 px-2 py-1.5 items-center'><Triangle/> Triangle</li>
+              <li className='flex gap-1 hover:bg-[#4F3726] hover:bg-opacity-20 px-2 py-1.5 items-center'><img src={line} className='w-6 h-6'/>Line</li>
+              <li className='flex gap-1 hover:bg-[#4F3726] hover:bg-opacity-20 px-2 py-1.5 items-center'><MoveUpLeft/> Arrow</li>
             </ul>)} </li>})}
           </ul>)}
         </div>
-        <button>
-            import
-        </button>
         <div className='flex relative' ref={(el) => (dropdownRefs.current.zoom = el)}>
           <p onClick={() => setZoom(!showZoom)} className={`flex hover:bg-[#4F3726] hover:bg-opacity-20 py-2 px-2 rounded-md cursor-pointer
           ${showZoom && 'bg-[#4F3726] bg-opacity-20'}`}>{selectedZoom}
           {showZoom ? <ChevronUp/> : <ChevronDown/> }
           </p>
-          {showZoom && ( <ul className="absolute left-0 top-10 w-20 bg-white rounded shadow-lg">
+          {showZoom && ( <ul className="absolute left-0 top-10 w-20 bg-white rounded shadow-lg z-50">
             {["50%", "75%", "100%", "125%", "150%"].map((value) => (<li key={value} className="p-2 cursor-pointer hover:bg-[#4F3726] hover:bg-opacity-20
           text-center" onClick={() => handleSelectZoom(value)}> {value} </li>))}
         </ul>)}
@@ -157,10 +191,10 @@ export default function EditorToolbar() {
           ${showFont && 'bg-[#4F3726] bg-opacity-20'}`} style={{ fontFamily: selectedFont }}>{selectedFont}
           {showFont ? <ChevronUp/> : <ChevronDown/> }
           </p>
-          {showFont && ( <ul className="absolute left-0 top-10 w-48 bg-white rounded shadow-lg overflow-y-auto h-40">
+          {showFont && ( <ul className="absolute left-0 top-10 w-48 bg-white rounded shadow-lg overflow-y-auto h-40" >
           {["Times New Roman", "Roboto", "Arial", "Helvetica Neue", "Georgia", "Courier new" ,"Futura", "Avenir"].map((value) => 
-          (<li key={value} className={`p-2 cursor-pointer hover:bg-[#4F3726] hover:bg-opacity-20`} style={{ fontFamily: value }}
-          onClick={() => handleSelectFont(value)}> {value} </li> ))}
+          (<li key={value} className={`p-2 cursor-pointer hover:bg-[#4F3726] hover:bg-opacity-20 ${editor.isActive('textStyle', { fontFamily: value })
+            ? 'is-active' : ''}`} style={{ fontFamily: value }} onClick={() => handleSelectFont(value)}> {value} </li> ))}
           </ul>)}
         </div>
         <div className='flex relative' ref={(el) => (dropdownRefs.current.align = el)}>
@@ -194,22 +228,23 @@ export default function EditorToolbar() {
         </button>
         <div className='flex'>
             <button onClick={handleColorPickerText} className={`flex hover:bg-[#4F3726] hover:bg-opacity-20 py-2 px-2 rounded-md relative'
-            ${showPickerText && 'bg-[#4F3726] bg-opacity-20'}`}>
+            ${showPickerText && 'bg-[#4F3726] bg-opacity-20'}`}title='change text color'>
                 <div className={`p-3 rounded-md ${showPickerText && 'bg-[#FFFFFF]'}`} style={{backgroundColor:textColor}}></div>
                 {showPickerText ? <ChevronUp/> : <ChevronDown/>}
             </button>
             <button onClick={handleColorPickerBackground} className={`flex hover:bg-[#4F3726] hover:bg-opacity-20 py-2 px-2 rounded-md relative
-            ${showPickerBackground && 'bg-[#4F3726] bg-opacity-20'}`}>
+            ${showPickerBackground && 'bg-[#4F3726] bg-opacity-20'}`}title='highlight text'>
                 <img src={backgroundChanger} alt="change-background" />
                 {showPickerBackground ? <ChevronUp/> : <ChevronDown/>}
             </button>
-            {showPickerText && ( <div className="absolute top-14 left-50 z-10 shadow-lg" ref={(el) => (dropdownRefs.current.text = el)}>
+            {showPickerText && ( <div className="absolute top-14 left-50 z-10 shadow-lg" ref={(el) => (dropdownRefs.current.text = el)} >
                <TwitterPicker color={textColor} onChangeComplete={(c) => setTextColor(c.hex)} colors={[ "#212529", "#7950F2", "#339AF0", "#22B8CF",
                 "#40C057", "#FCC419", "#FA5252", "#E64980", "#CED4DA", "#5F3DC4", "#1864AB","#0B7285", "#2B8A3E" ,"#E67700" ,"#C92A2A", "#A61E4D"]}
                 width="330px"/>
                </div>
             )}
-            {showPickerBackground && ( <div className="absolute top-14 left-50 ml-16 z-10 shadow-lg" ref={(el) => (dropdownRefs.current.background = el)}>
+            {showPickerBackground && ( <div className="absolute top-14 left-50 ml-16 z-10 shadow-lg" ref={(el) => (dropdownRefs.current.background = el)}
+              >
                <TwitterPicker color={backgroundColor} onChangeComplete={(c) => setBackgroundColor(c.hex)} colors={[ "#212529", "#7950F2", "#339AF0", "#22B8CF",
                 "#40C057", "#FCC419", "#FA5252", "#E64980", "#CED4DA", "#5F3DC4", "#1864AB","#0B7285", "#2B8A3E" ,"#E67700" ,"#C92A2A", "#A61E4D"]}
                 width="330px"/>
@@ -217,39 +252,44 @@ export default function EditorToolbar() {
             )}
         </div>
         <div className='flex'>
-            <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5'>
+            <button className={`hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5`} title='set text to bold'
+             onClick={() =>{ editor.chain().focus().toggleBold().run()}}> {/* these are tiptap commands for formatting text */}
                 <Bold/>
             </button>
-            <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5'>
+            <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5' title='set text to italic' 
+            onClick={() => editor.chain().focus().toggleItalic().run()}>
                 <Italic/>
             </button>
-            <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5'>
+            <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5' title='underline text'
+            onClick={() => editor.chain().focus().toggleUnderline().run()}>
                 <Underline/>
             </button>
-            <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5'>
+            <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5' title='strikethrough text'
+            onClick={() => editor.chain().focus().toggleStrike().run()}>
                 <StrikethroughIcon/>
             </button>
         </div>
         <div className='flex'>
-            <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5'>
+            <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5' title='normal list'>
                 <List/>
             </button>
-            <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5'>
+            <button className={`hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5 ${editor.isActive('orderedList') ? 'active' : ''}`} title='ordered list'
+            onClick={() => editor.chain().focus().toggleOrderedList().run()}>
                 <ListOrdered/>
             </button>
         </div>
         <div className='flex'>
-            <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5'>
+            <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5' title='attach a link'>
                 <Link/>
             </button>
-            <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5'>
+            <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5' title='attach a reference'>
                 <img src={bookmark} alt="bookmark" className='w-5 h-5' />
             </button>
         </div>
         <button>
-            <EllipsisVertical/> {/*clear content ? edit cover ? change section color ?*/}
+            <EllipsisVertical/> {/*clear content ? edit cover ? */}
         </button>
       </div>
     </>
   )
-}
+} 
