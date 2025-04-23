@@ -29,14 +29,11 @@ export default function Projects() {
   }, []);
 
   return (
-    <div className="bg-[#f5f5dc] min-h-screen flex flex-col">
+    <div className="bg-[#FFFFF1] min-h-screen flex flex-col">
 
-      <div className="h-28"></div>
 
       {/* MyProjects Section */}
-      <div className="flex-grow">
       <Mycontributionscomponents projects={projects} loading={loading} error={error} />
-      </div>
 
     </div>
   );

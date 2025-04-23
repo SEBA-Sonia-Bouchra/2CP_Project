@@ -24,7 +24,7 @@ const AnnotatedProjects = ({ projects }) => {
       {/* Title */}
       <h2 className="text-2xl font-semibold mb-4 flex items-center space-x-3">
         <img src={AnnotatedIcon} alt="Vector Icon" className="w-6 h-6" />
-        <span>Annotated</span>
+        <span className="font-playfairdisplay">Annotated</span>
       </h2>
 
       {/* Scrollable Container */}
@@ -38,7 +38,7 @@ const AnnotatedProjects = ({ projects }) => {
 
         <div
           ref={scrollRef}
-          className="flex space-x-4 overflow-x-auto scrollbar-hide scroll-smooth"
+          className="flex space-x-4 overflow-x-auto hide-scrollbar scroll-smooth"
         >
           {projects.slice(0, 6).map((project) => (
             <div

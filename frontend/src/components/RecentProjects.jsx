@@ -22,16 +22,16 @@ const RecentProjects = ({ projects }) => {
 
   return (
     
-    <div className="bg-[#f5f5dc] flex flex-col mt-[150px] mb-0 pb-0">
-      <div className="w-full max-w-6xl mx-auto p-6 relative">
+    <div className=" flex flex-col mb-0 pb-0 pt-12">
+      <div className="w-full max-w-6xl mx-auto relative">
         {/* Title */}
         <h2 className="text-2xl font-semibold mb-4 flex items-center space-x-3">
           <img src={RecentIcon} alt="Recent Icon" className="w-6 h-6" />
-          <span>Recent</span>
+          <span className="font-playfairdisplay">Recent</span>
         </h2>
 
         {/* Scrollable Container */}
-        <div className="relative">
+        <div className="relative ">
           <button
             onClick={scrollLeft}
             className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-[#213824] p-2 rounded-full shadow-md hover:bg-[#1a2b1d]"
@@ -41,7 +41,7 @@ const RecentProjects = ({ projects }) => {
 
           <div
             ref={scrollRef}
-            className="flex space-x-4 overflow-x-auto scrollbar-hide scroll-smooth"
+            className="flex space-x-4 overflow-x-auto hide-scrollbar scroll-smooth"
           >
             {projects.map((project) => (
               <div

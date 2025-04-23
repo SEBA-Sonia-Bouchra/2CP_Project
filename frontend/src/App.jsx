@@ -24,11 +24,12 @@ import OpenedProjectPage from './pages/OpenedProjectPage.jsx';
 import MainLayout from './layouts/MainLayout.jsx';
 import EditorToolbar from './components/EditorToolbar.jsx';
 import EditProject from './components/EditProject.jsx';
-import Home_page_opened_for_the_first_time from "./pages/home_page_opened_for_the_first_time.jsx";
 import Home_page from "./pages/home_page.jsx";
 import Myprojects from "./pages/myprojects.jsx";
 import Mycontributions from "./pages/Mycontributions.jsx";
 import EditorPage from "./pages/EditorPage.jsx"
+import TermsPage from "./pages/termsandpolicypage.jsx";
+import SearchPage from './pages/searchpage.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -54,6 +55,9 @@ const router = createBrowserRouter(
         <Route path="/projects/:id" element={<OpenedProjectPage />} />
       </Route>*/}
       {<Route index element={<EditorPage/>}/>}
+       {/* <Route path="/terms" element={<TermsPage />} />
+        <Route path="/search" element={<SearchPage />} />
+      </Route>*/}
   </>
   )
 );

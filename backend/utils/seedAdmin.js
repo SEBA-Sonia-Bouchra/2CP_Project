@@ -15,12 +15,10 @@ async function seedAdmin() {
     const admin = new User({
       firstname: "Admin",
       lastname: "Binaa",
-      institution: "EPAU",
-      role: "Architect",
       email: "binaateam.dz@gmail.com",
       password: hashedPassword,
       isAdmin: true,
-      isProfessional: true,
+      isProfessional: false,
       isVerified: true,
       status: "accepted",
     });

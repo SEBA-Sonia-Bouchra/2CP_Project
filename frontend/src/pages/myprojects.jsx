@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import NavbarProfessional from "../components/NavbarProfessional";
-import Footer from "../components/Footer";
 import MyProjectsComponent from "../components/MyProjectsComponent";
+import useCurrentUser from "../utils/useCurrentUser";
 
 export default function Projects() {
+  const user = useCurrentUser();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -29,14 +29,10 @@ export default function Projects() {
   }, []);
 
   return (
-    <div className="bg-[#f5f5dc] min-h-screen flex flex-col">
-
-      <div className="h-28"></div>
+    <div className="bg-[#FFFFF1] min-h-screen flex flex-col">
 
       {/* MyProjects Section */}
-      <div className="flex-grow">
-      <MyProjectsComponent projects={projects} loading={loading} error={error} />
-      </div>
+        <MyProjectsComponent projects={projects} loading={loading} error={error} />
 
     </div>
   );
