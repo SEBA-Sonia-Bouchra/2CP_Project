@@ -24,10 +24,11 @@ export default function Projects() {
         setLoading(false);
       }
     };
-
+    
     fetchProjects();
   }, []);
-
+  
+  console.log(projects);
   return (
     <div className="bg-[#FFFFF1] min-h-screen flex flex-col">
 

@@ -34,7 +34,7 @@ import SearchPage from './pages/searchpage.jsx'
 const router = createBrowserRouter(
   createRoutesFromElements(
   <>
-      {/*<Route index element={<LandingPage/>}></Route>}
+      {<Route index element={<LandingPage/>}></Route>}
       {<Route path='/signup' element={<SignUpPage/>}></Route>}
       {<Route path='/signin' element={<Signinpage/>}></Route>}
       {<Route path='/forgot-password' element={<ForgotPassword/>}></Route>}
@@ -53,11 +53,9 @@ const router = createBrowserRouter(
         <Route path="/profile-page" element={<ProfileModification />} />
         <Route path="/profile-page-professional" element={<ProfileModificationProfessional />} />
         <Route path="/projects/:id" element={<OpenedProjectPage />} />
-      </Route>*/}
-      {<Route index element={<EditorPage/>}/>}
-       {/* <Route path="/terms" element={<TermsPage />} />
         <Route path="/search" element={<SearchPage />} />
-      </Route>*/}
+        <Route path="/terms" element={<TermsPage />} />
+      </Route>}
   </>
   )
 );
