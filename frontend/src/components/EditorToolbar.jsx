@@ -1,6 +1,6 @@
 import React from 'react'
 import {Undo2 ,Redo2 ,Copy ,Clipboard ,ChevronDown ,Bold ,Italic ,Underline ,StrikethroughIcon ,List ,ListOrdered ,Link ,EllipsisVertical ,
-ChevronUp ,AlignCenter ,AlignLeft ,AlignRight ,AlignJustify ,Plus ,Image ,Video ,Grid2X2 ,Triangle ,Play ,Square ,Circle ,MoveUpLeft} from 'lucide-react'
+ChevronUp ,AlignCenter ,AlignLeft ,AlignRight ,AlignJustify ,Plus ,Image ,Video ,Grid2X2 ,Triangle ,Play ,Square ,Circle ,MoveUpLeft ,X} from 'lucide-react'
 import * as LucideIcons from "lucide-react";
 import { useState, useRef, useEffect } from 'react';
 import menuBar from '../assets/images/menu-bar.svg'
@@ -8,21 +8,21 @@ import backgroundChanger from '../assets/images/backgroundChanger.svg'
 import bookmark from '../assets/images/bookmark.svg'
 import line from '../assets/images/line.svg'
 import { TwitterPicker } from "react-color";
+import {HexColorPicker} from 'react-colorful'
 import TableGridSelector from './TableGridSelector.jsx'
+// () Don't forget keyboard shortcuts for toolbar functionalities ) <= a message for myself
 
 export default function EditorToolbar({ editor }) {
   const [textColor, setTextColor] = useState("#212529");
   const [backgroundColor, setBackgroundColor] = useState("#ffffff");
   const [showPickerText, setShowPickerText] = useState(false);
   const [showPickerBackground, setShowPickerBackground] = useState(false);
-  const [showZoom, setZoom] = useState(false);
   const [showFont, setFont]=useState(false);
-  const [selectedZoom, setSelectedZoom] = useState("100%");
   const [selectedFont, setSelectedFont]=useState("Times New Roman");
   const [showAlign, setAlign]= useState(false);
   const [selectedAlign, setSelectedAlign]= useState("AlignLeft");
   const [showSize, setSize]=useState(false);
-  const [selectedSize, setSelectedSize]=useState("14");
+  const [selectedSize, setSelectedSize]=useState("18");
   const [showInsert, setInsert]=useState(false);
   const IconComponent = LucideIcons[selectedAlign];
   const [canUndo, setCanUndo] = useState(false);
@@ -32,7 +32,6 @@ export default function EditorToolbar({ editor }) {
   const dropdownRefs = useRef({
     text: null,
     background: null,
-    zoom: null,
     font: null,
     align: null,
     size:null,
@@ -49,9 +48,6 @@ export default function EditorToolbar({ editor }) {
               break;
             case "background":
               setShowPickerBackground(false);
-              break;
-            case "zoom":
-              setZoom(false);
               break;
             case "font":
               setFont(false);
@@ -82,10 +78,6 @@ export default function EditorToolbar({ editor }) {
   };
   const handleColorPickerBackground=()=>{
     setShowPickerBackground((prev) => !prev);
-  };
-  const handleSelectZoom = (value) => {
-    setSelectedZoom(value);
-    setZoom(false);
   };
   const handleSelectFont = (value) => {
     setSelectedFont(value);
@@ -176,16 +168,6 @@ export default function EditorToolbar({ editor }) {
             </ul>)} </li>})}
           </ul>)}
         </div>
-        <div className='flex relative' ref={(el) => (dropdownRefs.current.zoom = el)}>
-          <p onClick={() => setZoom(!showZoom)} className={`flex hover:bg-[#4F3726] hover:bg-opacity-20 py-2 px-2 rounded-md cursor-pointer
-          ${showZoom && 'bg-[#4F3726] bg-opacity-20'}`}>{selectedZoom}
-          {showZoom ? <ChevronUp/> : <ChevronDown/> }
-          </p>
-          {showZoom && ( <ul className="absolute left-0 top-10 w-20 bg-white rounded shadow-lg z-50">
-            {["50%", "75%", "100%", "125%", "150%"].map((value) => (<li key={value} className="p-2 cursor-pointer hover:bg-[#4F3726] hover:bg-opacity-20
-          text-center" onClick={() => handleSelectZoom(value)}> {value} </li>))}
-        </ul>)}
-        </div>
         <div className='flex relative' ref={(el) => (dropdownRefs.current.font = el)}>
           <p onClick={() => setFont(!showFont)} className={`flex hover:bg-[#4F3726] hover:bg-opacity-20 py-2 px-2 rounded-md cursor-pointer
           ${showFont && 'bg-[#4F3726] bg-opacity-20'}`} style={{ fontFamily: selectedFont }}>{selectedFont}
@@ -212,7 +194,9 @@ export default function EditorToolbar({ editor }) {
               AlignJustify: "justify",
             };
             return <li key={value} className={`flex gap-1 p-2 cursor-pointer hover:bg-[#4F3726] hover:bg-opacity-20 `}
-            onClick={()=>handleSelectAlign(value)}> <Icon/> {labelMap[value]}</li>; })}
+            onClick={()=>{handleSelectAlign(value)
+              editor.chain().focus().setTextAlign(labelMap[value]).run()
+            }}> <Icon/> {labelMap[value]}</li>; })}
             </ul>)} 
             </div>
         <button className='flex relative' ref={(el) => (dropdownRefs.current.size = el)}>
@@ -223,7 +207,8 @@ export default function EditorToolbar({ editor }) {
           {showSize && ( <ul className="absolute left-0 top-10 w-14 h-40 overflow-y-auto bg-white rounded shadow-lg">
           {["8","10","12","14","16","18","20","24","28","32","36"].map((value) => 
           (<li key={value} className={`p-2 cursor-pointer hover:bg-[#4F3726] hover:bg-opacity-20 text-center`}
-          onClick={() => handleSelectedSize(value)}> {value} </li> ))}
+          onClick={() => {handleSelectedSize(value)
+          editor.chain().focus().setFontSize(value).run() }}> {value} </li> ))}
           </ul>)}
         </button>
         <div className='flex'>
@@ -238,16 +223,24 @@ export default function EditorToolbar({ editor }) {
                 {showPickerBackground ? <ChevronUp/> : <ChevronDown/>}
             </button>
             {showPickerText && ( <div className="absolute top-14 left-50 z-10 shadow-lg" ref={(el) => (dropdownRefs.current.text = el)} >
-               <TwitterPicker color={textColor} onChangeComplete={(c) => setTextColor(c.hex)} colors={[ "#212529", "#7950F2", "#339AF0", "#22B8CF",
+               <TwitterPicker color={textColor} onChangeComplete={(c) =>{ setTextColor(c.hex)
+                editor.chain().focus().setColor(c.hex).run()
+               }} colors={[ "#212529", "#7950F2", "#339AF0", "#22B8CF",
                 "#40C057", "#FCC419", "#FA5252", "#E64980", "#CED4DA", "#5F3DC4", "#1864AB","#0B7285", "#2B8A3E" ,"#E67700" ,"#C92A2A", "#A61E4D"]}
                 width="330px"/>
                </div>
             )}
-            {showPickerBackground && ( <div className="absolute top-14 left-50 ml-16 z-10 shadow-lg" ref={(el) => (dropdownRefs.current.background = el)}
+            {showPickerBackground && ( <div className="absolute top-14 left-50 ml-16 z-10 " ref={(el) => (dropdownRefs.current.background = el)}
               >
-               <TwitterPicker color={backgroundColor} onChangeComplete={(c) => setBackgroundColor(c.hex)} colors={[ "#212529", "#7950F2", "#339AF0", "#22B8CF",
-                "#40C057", "#FCC419", "#FA5252", "#E64980", "#CED4DA", "#5F3DC4", "#1864AB","#0B7285", "#2B8A3E" ,"#E67700" ,"#C92A2A", "#A61E4D"]}
-                width="330px"/>
+               {<TwitterPicker color={backgroundColor} onChangeComplete={(c) => {setBackgroundColor(c.hex)
+               editor.chain().focus().setCustomHighlight(c.hex).run()}} colors={[ "#212529", "#7950F2", "#339AF0", "#22B8CF",
+                "#40C057", "#FCC419", "#FA5252", "#E64980", "transparent", "#5F3DC4", "#1864AB","#0B7285", "#2B8A3E" ,"#E67700" ,"#C92A2A", "#A61E4D"]}
+                width="330px"/>}
+                {/*<div className='bg-white px-6 rounded-md drop-shadow-md py-2'>
+                  <HexColorPicker onChange={(c)=>editor.chain().focus().setCustomHighlight(c).run()}/>
+                  <button className='text-sm flex items-center bg-gray-500 bg-opacity-10 mt-2'>No color<X/></button>
+                </div>*/}
+                
                </div>
             )}
         </div>
@@ -270,7 +263,8 @@ export default function EditorToolbar({ editor }) {
             </button>
         </div>
         <div className='flex'>
-            <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5' title='normal list'>
+            <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5' title='normal list'
+            onClick={()=> editor.chain().focus().toggleBulletList().run()}>
                 <List/>
             </button>
             <button className={`hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5 ${editor.isActive('orderedList') ? 'active' : ''}`} title='ordered list'
