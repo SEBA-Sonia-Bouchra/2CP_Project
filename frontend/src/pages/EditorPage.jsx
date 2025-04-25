@@ -6,9 +6,11 @@ export default function EditorPage() {
   const [activeEditor, setActiveEditor] = useState(null); 
   return (
     <>
-      <div className='fixed top-0 left-16 z-50 bg-white'>
+    <div className='flex justify-center'>
+      <div className='fixed top-0 z-50 bg-white'>
         <EditorToolbar editor={activeEditor}/>
-      </div>  
+      </div> 
+    </div> 
       <div className='mt-20'>
         <EditProject onEditorFocus={setActiveEditor}/>
       </div>
