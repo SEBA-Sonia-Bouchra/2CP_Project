@@ -45,6 +45,7 @@ const router = createBrowserRouter(
       {<Route path='/set-new-password' element={<SetNewPassword/>}></Route>}
       {<Route path='/request-review' element={<AccountRequest/>}></Route>}
       {<Route path='/request-rejected' element={<RejectRequest/>}></Route>}
+      {<Route path="/editor" element={<EditorPage />} />}
       {<Route path="/" element={<MainLayout/>}>
         <Route path="/home_page" element={<Home_page />} />
         <Route path='/accounts' element={<AccountsPage/>} /> 
