@@ -39,7 +39,7 @@ const MyProjectsComponent = ({ projects, loading, error, onDeleteProject }) => {
         ) : (
           projects.map((project) => (
             <div
-              key={project.id}
+              key={project._id}
               className="bg-white rounded-xl shadow-lg flex overflow-hidden border border-gray-200"
             >
               <img
