@@ -181,3 +181,12 @@ div.selected img {
   border-radius: 10px;
 }
 }
+.tiptap ol {
+  @apply list-decimal list-outside ml-5;
+}
+
+.tiptap ul {
+  @apply list-disc list-outside ml-5;
+}
+
+
