@@ -24,7 +24,7 @@ export default function EditProject({ onEditorFocus }) {
     { id: 'desc', type: 'Description', content: '', showContent: true  },
     { id: 'arch', type: 'Architecture', content: '', showContent: true },
     { id: 'hist', type: 'History', content: '', showContent: true },
-    { id: 'archaeo', type: 'Archeology', content: '', showContent: true },
+    { id: 'archaeo', type: 'Archaeology', content: '', showContent: true },
   ];
   const [sections, setSections] = useState(defaultSections); // To store sections
   const [showRemoveSection,setShowRemoveSection]=useState(false);

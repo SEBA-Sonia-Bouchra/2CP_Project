@@ -5,6 +5,7 @@ import SectionDropDown from './SectionDropDown';
 const File = ({ project, isOwner, currentUser, isProfessional }) => {
     const [selectedCoverPicture, setSelectedCoverPicure] = useState(null);
     const [sectionDropDown, setSectionDropDown] = useState(null);
+    const localhost = "http://localhost:5000/";
 
     useEffect(() => {
       const originalOverflow = document.body.style.overflow;
@@ -13,13 +14,15 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
         document.body.style.overflow = originalOverflow;
       };
     }, []);
+
+    console.log(project);
         
   return (
     <div className='w-full max-w-[900px] bg-white shadow-md h-fit rounded-md'>
         {/* cover picture section */}
         <div className='w-full h-56 overflow-hidden rounded-t-md'>
-            <img src={project.coverPhoto} alt="cover-picture" className='w-full h-full object-cover object-center cursor-pointer'
-            onClick={ () => setSelectedCoverPicure(project.coverPhoto)}
+            <img src={`${localhost}${project.coverPhoto}`} alt="cover-picture" className='w-full h-full object-cover object-center cursor-pointer'
+            onClick={ () => setSelectedCoverPicure(`${localhost}${project.coverPhoto}`)}
             />
         {selectedCoverPicture && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center overflow-y-auto top-0 z-50">
@@ -37,22 +40,22 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
 
         <div className='p-4'>
             {/* title */}
-            <h1 style={project.title.styles} className='pb-1'>{project.title.content}</h1>
+            <h1 className='pb-1'>{project.title}</h1>
             {/* date & author */}
             <p className='text-gray-500 text-[10px] font-montserral pb-1'>
-              {new Date(project.dateOfPublish).toLocaleDateString()} {project.author.name}
+              {new Date(project.dateOfPublish).toLocaleDateString()} - {project.author}
             </p>
             {/* description */}
             { project.description &&
               <div id='description' className='my-3 w-full'>
                 <h2 className='font-playfairdisplay mb-2 text-lg'>Description</h2>
                 <div className='h-[1.5px] rounded-full bg-[#4f3726] mb-2'></div>
-                <p style={project.description.styles}>{ project.description.content }</p>
+                <p dangerouslySetInnerHTML={{ __html: project.description }}/>
               </div>
             }    
 
             {/* sections */}
-            { project.sections.map((section, index) => {
+            {/* { project.sections.map((section, index) => {
               const color = getColorByDimension(section.dimension);
 
               return(
@@ -74,9 +77,9 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
                     {sectionDropDown === index && <SectionDropDown color={color} section={section} isOwner={isOwner} currentUser={currentUser}/>}
                   </div>
                 </div>
-                <div style={{ backgroundColor: color }} className={`h-[1.5px] rounded-full mb-2`}></div>
+                <div style={{ backgroundColor: color }} className={`h-[1.5px] rounded-full mb-2`}></div> */}
                 {/* section content */}
-                <div className='grid grid-cols-3 gap-4 w-full border-gray-300'>
+                {/* <div className='grid grid-cols-3 gap-4 w-full border-gray-300'>
                 { section.elements.map((element, index) => (
                     <div key={index} style={{
                       gridColumnStart: `${element.position.colStart}`,
@@ -103,15 +106,15 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
                         </a>
                       )}       
                       { element.type === 'shape' && (
-                        <svg className="w-full h-full">
+                        <svg className="w-full h-full"> */}
                           {/* Line */}
-                          { element.shapeType === 'line' && (
+                          {/* { element.shapeType === 'line' && (
                             <line   x1={element.styles.x1} y1={element.styles.y1} x2={element.styles.x2} y2={element.styles.y2} 
                               stroke={element.styles.stroke} strokeWidth={element.styles.strokeWidth} 
                               transform={`rotate(${element.styles.rotation || 0}, ${(element.styles.x1 + element.styles.x2) / 2}, ${(element.styles.y1 + element.styles.y2) / 2})`}                            />
-                          )}
+                          )} */}
                           {/* arrow */}
-                          {element.shapeType === 'arrow' && (
+                          {/* {element.shapeType === 'arrow' && (
                             <>
                               <line x1={element.styles.x1} y1={element.styles.y1} x2={element.styles.x2} y2={element.styles.y2} 
                                 stroke={element.styles.stroke} 
@@ -127,27 +130,27 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
                                 `}
                               />
                             </>
-                          )}
+                          )} */}
 
 
                           {/* Rectangle */}
-                          { element.shapeType === 'rectangle' && (
+                          {/* { element.shapeType === 'rectangle' && (
                             <rect x="20" y="20" width={element.styles.width || 50} height={element.styles.height || 30}
                               fill={element.styles.fill} stroke={element.styles.stroke} strokeWidth='1'
                               transform={`rotate(${element.styles.rotation || 0}, 45, 45)`} // Center rotation
                             />
-                          )}
+                          )} */}
 
                           {/* Circle */}
-                          { element.shapeType === 'circle' && (
+                          {/* { element.shapeType === 'circle' && (
                             <circle cx="50" cy="50" r="30" 
                               fill={element.styles.fill} stroke={element.styles.stroke} strokeWidth='1'
                               transform={`rotate(${element.styles.rotation || 0}, 50, 50)`} // Circles rotate around their center naturally
                             />
-                          )}
+                          )} */}
 
                           {/* Triangle */}
-                          { element.shapeType === 'triangle' && (
+                          {/* { element.shapeType === 'triangle' && (
                             <polygon points="50,10 10,80 90,80"
                               fill={element.styles.fill} stroke={element.styles.stroke} strokeWidth='1' 
                               transform={`rotate(${element.styles.rotation || 0}, 50, 50)`} // Rotate around center
@@ -181,9 +184,9 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
                   </div>  
               </div>
               );
-            })}
+            })} */}
             {/* refrences */}
-              <div id='references' className='my-3 w-full'>
+              {/* <div id='references' className='my-3 w-full'>
                 <h2 className='font-playfairdisplay mb-2 text-lg'>References</h2>
                 <div className='h-[1.5px] rounded-full bg-gray-400 mb-2'></div>
                 <ol className='list-decimal list-inside font-montserral text-sm'>
@@ -200,7 +203,7 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
                   </li>
                   ))}
                 </ol>
-              </div>
+              </div> */}
         </div>
     </div>
   )

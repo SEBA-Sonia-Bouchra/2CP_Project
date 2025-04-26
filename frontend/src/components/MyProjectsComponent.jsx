@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import DiscoverIcon from "../assets/images/discover.png";
 import ConfirmDeleteModal from "./ConfirmDeleteModal"; // Import the modal component
+import { Link } from "react-router-dom";
 
-const MyProjectsComponent = ({ projects, loading, error, onDeleteProject }) => {
+const MyProjectsComponent = ({ projects, loading, error, onDelete }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
 
@@ -13,7 +14,7 @@ const MyProjectsComponent = ({ projects, loading, error, onDeleteProject }) => {
 
   const handleConfirmDelete = () => {
     if (selectedProject) {
-      onDeleteProject(selectedProject.id); // Call delete function with project ID
+      onDelete(selectedProject._id); // Call delete function with project ID
     }
     setIsModalOpen(false);
   };
@@ -40,7 +41,7 @@ const MyProjectsComponent = ({ projects, loading, error, onDeleteProject }) => {
           projects.map((project) => (
             <div
               key={project._id}
-              className="bg-white rounded-xl shadow-lg flex overflow-hidden border border-gray-200"
+              className="bg-white rounded-xl shadow-lg flex overflow-hidden border border-gray-200 h-[220px]" 
             >
               <img
                 src={`http://localhost:5000/${project.coverPhoto}`}
@@ -56,17 +57,18 @@ const MyProjectsComponent = ({ projects, loading, error, onDeleteProject }) => {
                   <p className="text-xs text-gray-500 mb-2">
                     {new Date(project.dateOfPublish).toLocaleDateString()} - {project.author}
                   </p>
-                  <p className="text-sm text-gray-700 line-clamp-2">
-                    {project.description}
-                  </p>
+                  <p className="text-sm text-gray-700 line-clamp-2" dangerouslySetInnerHTML={{ __html: project.description }} />
                 </div>
                 <div className="flex gap-3 mt-4 overflow-hidden justify-end">
-                  <button className="mt-2 bg-[#213824CF] text-white w-[125px] h-[40px] rounded-full text-sm font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824]">
-                    Read
-                  </button>
-                  <button className="mt-2 bg-[#213824CF] text-white w-[125px] h-[40px] rounded-full text-sm font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824]">
-                    Edit
-                  </button>
+                <Link 
+                  to={`/projects/${project._id}`} 
+                  className="mt-2 bg-[#213824CF] text-white w-[125px] h-[40px] rounded-full text-sm font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824] flex items-center justify-center"
+                >
+                  Read
+                </Link>
+                  <Link to={"/editor"} className="mt-2 bg-[#213824CF] text-white w-[125px] h-[40px] rounded-full text-sm font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824] flex items-center justify-center">                
+                      Edit
+                  </Link>
                   <button
                     onClick={() => handleDeleteClick(project)}
                     className="mt-2 bg-[#213824CF] text-white w-[125px] h-[40px] rounded-full text-sm font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824]"
