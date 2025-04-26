@@ -13,11 +13,6 @@ export default function MainLayout() {
   const user = useCurrentUser();
   const [showNotifications, setShowNotifications] = useState(false);
   const [unreadCount, setUnreadCount] = useState(3);
-  const [filteredProjects, setFilteredProjects] = useState([]);
-  const [showSearch, setShowSearch] = useState(false);
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   const toggleNotifications= () => {
     setShowNotifications(!showNotifications);
@@ -36,26 +31,6 @@ export default function MainLayout() {
       document.body.style.overflow = "auto"; 
     };
   }, [showNotifications]);
-
-  useEffect(() => {
-    // Fetch projects from backend API
-    const fetchProjects = async () => {
-      try {
-        const response = await fetch("http://localhost:5001/projects"); // Replace with your API URL
-        if (!response.ok) {
-          throw new Error("Failed to fetch projects");
-        }
-        const data = await response.json();
-        setProjects(data);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProjects();
-  }, []);
   
   return (
     <>
@@ -64,33 +39,26 @@ export default function MainLayout() {
         {user ? (
            user.isProfessional == false ? (
             user.isAdmin == true ? (
-              <NavbarAdmin onSearchClick={() => setShowSearch((prev) => !prev)}  />
+              <NavbarAdmin />
             ) : (
               <NavbarNormal />
             )
           ) : user.isProfessional == true ? (
             <NavbarProfessional toggleNotifications={toggleNotifications} showNotifications={showNotifications}
-            unreadCount={unreadCount} onSearchClick={() => setShowSearch((prev) => !prev)} />
+            unreadCount={unreadCount} />
           ) : (
             <p>error loading navbar</p>
           )
         ) : (
           <p>Loading user info...</p>
         )}
-          {/* Search & Filter Section */}
-          {showSearch ? (
-            <Search projects={projects} onFilter={setFilteredProjects} />
-          ) : (
-            // Spacer with same height as search bar to maintain layout
-            <></>
-          )}
 
           {showNotifications && (
               <div className='w-screen fixed top-0 z-50'>
                 <Notifications toggleNotifications={() => setShowNotifications(false)} />
               </div>
             )}
-        <main className={`z-10 ${!showSearch ? 'sm:pt-20 ' : ''}`}>
+        <main className="z-10 sm:pt-20 ">
           <Outlet />
         </main>
         <Footer className='z-0'/>
