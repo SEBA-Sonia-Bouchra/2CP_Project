@@ -52,7 +52,7 @@ export default function NavbarProfessional({toggleNotifications , showNotificati
                         <Link to="/My_contributions" className="px-4 py-2 hover:bg-[#F5F5DC] hover:text-[#213824] cursor-pointer">My Contributions</Link>
                     </div>
                 </div>
-                <Link className='whitespace-nowrap'>Add Project</Link>
+                <Link to={"/editor"} className='whitespace-nowrap'>Add Project</Link>
             </div>
            <div className='1200:grid flex 1200:grid-cols-4 gap-2 1200:gap-4 justify-center 1200:justify-end'>
              <button className='bg-[#DFD8C8] flex rounded-[70px] py-1 px-3 1200:py-2 1200:px-8 gap-2 place-content-center justify-self-end
@@ -86,7 +86,7 @@ export default function NavbarProfessional({toggleNotifications , showNotificati
                         <Link to="/My_contributions" className="px-4 py-2 hover:bg-[#F5F5DC] hover:text-[#213824] cursor-pointer">My Contributions</Link>
                     </div>
                 </div>
-                <Link className="py-2 whitespace-nowrap border-[#F5F5DC]">Add Project</Link>
+                <Link to={"/editor"} className="py-2 whitespace-nowrap border-[#F5F5DC]">Add Project</Link>
                 <Link to="/accounts" className="py-2">Accounts</Link>
             </div>
         </div>
