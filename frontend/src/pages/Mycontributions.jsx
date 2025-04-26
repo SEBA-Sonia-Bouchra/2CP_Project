@@ -12,7 +12,21 @@ export default function Projects() {
     // Fetch projects from backend API
     const fetchProjects = async () => {
       try {
-        const response = await fetch("http://localhost:5001/projects"); // Replace with your API URL
+        const token = localStorage.getItem('token');  // Get JWT from localStorage
+
+      if (!token) {
+        throw new Error("No token found");
+                }
+        console.log("fetching projects");
+        const userId = "680a7a93196653d6f0000cfc";
+        const response = await fetch(`http://localhost:5000/homepage` // Replace with your API URL
+        , 
+        {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,  // Include the JWT in the Authorization header
+          }, 
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch projects");
         }
@@ -24,10 +38,11 @@ export default function Projects() {
         setLoading(false);
       }
     };
-
+    
     fetchProjects();
   }, []);
-
+  
+  console.log(projects);
   return (
     <div className="bg-[#FFFFF1] min-h-screen flex flex-col">
 

@@ -1,5 +1,6 @@
 const Project = require('../models/Project');
 const Annotation = require('../models/annotation');
+const jwt = require('jsonwebtoken');
 
 // Helper function to tag projects with the user's role
 const tagProjectsWithRole = (projects, userId) =>
@@ -9,38 +10,44 @@ const tagProjectsWithRole = (projects, userId) =>
   }));
 
 // Controller for getting homepage projects
+
+
 exports.getHomepageProjects = async (req, res) => {
-  const userId = req.params.userId;
-
   try {
-    // 🟢 1. Projects owned by the user
-    const ownedProjects = await Project.find({ owner: userId });
+    const token = req.headers.authorization?.split(' ')[1];
+    console.log("Token:", token); // Check if the token is being sent correctly
 
-    // 🟡 2. Projects where user is a contributor (but not owner)
+    if (!token) {
+      return res.status(401).json({ error: 'No token provided' });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userId;
+    // 1. Projects owned by the user
+    const ownedProjects = await Project.find({owner: userId });
+    console.log(ownedProjects);
+
+    // 2. Projects where user is a contributor (not owner)
     const contributedProjects = await Project.find({
       contributors: userId,
       owner: { $ne: userId }
     });
 
-    const recentProjects = tagProjectsWithRole([...ownedProjects, ...contributedProjects], userId);
-
-    // 🔵 3. Annotated sections (filter projects where user annotated a section)
-    const annotatedSectionProjectIds = await Annotation.distinct('project', { user: userId });
-
+    // 3. Projects where user has annotations (not owner)
+    const annotatedProjectIds = await Annotation.distinct('project', { user: userId });
     const annotatedProjects = await Project.find({
-      _id: { $in: annotatedSectionProjectIds },
+      _id: { $in: annotatedProjectIds },
       owner: { $ne: userId }
     });
 
-    const annotatedWithRole = tagProjectsWithRole(annotatedProjects, userId);
+    // ✅ Merge all into one flat array
+    const allProjects = [...ownedProjects, ...contributedProjects, ...annotatedProjects];
 
-    res.json({
-      recentProjects,
-      annotatedProjects: annotatedWithRole
-    });
+    // ✅ Send the flat array to frontend
+    res.status(200).json(allProjects);
 
   } catch (err) {
-    console.error(err);
+    console.error("❌ Error in getHomepageProjects:", err);
     res.status(500).json({ error: err.message });
   }
 };
