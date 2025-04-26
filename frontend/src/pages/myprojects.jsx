@@ -12,7 +12,16 @@ export default function Projects() {
     // Fetch projects from backend API
     const fetchProjects = async () => {
       try {
-        const response = await fetch("http://localhost:5001/projects"); // Replace with your API URL
+      console.log("fetching projects...");
+      const token = localStorage.getItem('token');
+
+      if (!token) throw new Error("No token found");
+        const response = await fetch("http://localhost:5000/homepage", {
+          method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },}); 
+        // Replace with your API URL
         if (!response.ok) {
           throw new Error("Failed to fetch projects");
         }
