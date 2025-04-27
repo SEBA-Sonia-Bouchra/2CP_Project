@@ -1,10 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DiscoverIcon from "../assets/images/discover.png";
 import ConfirmDeleteModal from "./ConfirmDeleteModal"; // Import the modal component
+import { Link } from "react-router-dom";
+import fetchName from "../utils/fetchName";
 
-const MyProjectsComponent = ({ projects, loading, error, onDeleteProject }) => {
+const MyProjectsComponent = ({ projects, loading, error, onDelete }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [authors, setAuthors] = useState({firstname:"", lastname:""});
+
+  useEffect(() => {
+    const fetchAuthors = async () => {
+      const authorNames = {};
+      for (let project of projects) {
+        if (project.author && !authorNames[project.author]) {
+          // Fetch name only if not already fetched
+          const authorName = await fetchName(project.author); // Assuming author is an ID
+          authorNames[project.author] = authorName;
+        }
+      }
+      setAuthors(authorNames);
+    };
+
+    if (projects.length > 0) {
+      fetchAuthors();
+    }
+  }, [projects]);
 
   const handleDeleteClick = (project) => {
     setSelectedProject(project);
@@ -13,7 +34,7 @@ const MyProjectsComponent = ({ projects, loading, error, onDeleteProject }) => {
 
   const handleConfirmDelete = () => {
     if (selectedProject) {
-      onDeleteProject(selectedProject.id); // Call delete function with project ID
+      onDelete(selectedProject._id); // Call delete function with project ID
     }
     setIsModalOpen(false);
   };
@@ -39,33 +60,34 @@ const MyProjectsComponent = ({ projects, loading, error, onDeleteProject }) => {
         ) : (
           projects.map((project) => (
             <div
-              key={project.id}
-              className="bg-white rounded-xl shadow-lg flex overflow-hidden border border-gray-200"
+              key={project._id}
+              className="bg-white rounded-xl shadow-lg flex overflow-hidden border border-gray-200 h-[220px]" 
             >
               <img
-                src={project.coverPhoto}
+                src={`http://localhost:5000/${project.coverPhoto}`}
                 alt='project cover picture'
                 className="w-1/3 object-cover"
               />
               <div className="p-6 flex flex-col justify-between w-2/3">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 font-playfair">
-                    {project.title.content}
+                    {project.title}
                   </h3>
                   <p className="text-xs text-gray-500 mb-2">
-                    {new Date(project.dateOfPublish).toLocaleDateString()} {project.author.name}
+                  {new Date(project.dateOfPublish).toLocaleDateString()} - {authors[project.author] ? `${authors[project.author].firstname} ${authors[project.author].lastname}` : "Loading..."}
                   </p>
-                  <p className="text-sm text-gray-700 line-clamp-2">
-                    {project.description.content}
-                  </p>
+                  <p className="text-sm text-gray-700 line-clamp-2" dangerouslySetInnerHTML={{ __html: project.description }} />
                 </div>
                 <div className="flex gap-3 mt-4 overflow-hidden justify-end">
-                  <button className="mt-2 bg-[#213824CF] text-white w-[125px] h-[40px] rounded-full text-sm font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824]">
-                    Read
-                  </button>
-                  <button className="mt-2 bg-[#213824CF] text-white w-[125px] h-[40px] rounded-full text-sm font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824]">
-                    Edit
-                  </button>
+                <Link 
+                  to={`/projects/${project._id}`} 
+                  className="mt-2 bg-[#213824CF] text-white w-[125px] h-[40px] rounded-full text-sm font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824] flex items-center justify-center"
+                >
+                  Read
+                </Link>
+                  <Link to={"/editor"} className="mt-2 bg-[#213824CF] text-white w-[125px] h-[40px] rounded-full text-sm font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824] flex items-center justify-center">                
+                      Edit
+                  </Link>
                   <button
                     onClick={() => handleDeleteClick(project)}
                     className="mt-2 bg-[#213824CF] text-white w-[125px] h-[40px] rounded-full text-sm font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824]"

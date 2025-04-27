@@ -324,5 +324,41 @@ router.put('/:projectId/sections/:sectionId', authenticateUser, async (req, res)
   }
 });
 
+// GET a single project by ID
+router.get('/:id', async (req, res) => {
+  try {
+    const projectId = req.params.id;
+    const project = await Project.findById(projectId); 
+
+    if (!project) {
+      return res.status(404).json({ message: 'Project not found' });
+    }
+
+    res.status(200).json( project );
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+// get the name of a user by its id
+router.get('/user/:id', authenticateUser, async (req, res) => {
+  try {
+    const { id } = req.params; // Get user ID from the request params
+    const user = await User.findById(id); // Find user by ID
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Respond with only first name and last name
+    const { firstname, lastname } = user;
+    res.status(200).json({ firstname, lastname });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
 
 module.exports = router;
