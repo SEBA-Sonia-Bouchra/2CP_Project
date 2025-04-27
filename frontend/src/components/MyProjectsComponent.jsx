@@ -1,11 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DiscoverIcon from "../assets/images/discover.png";
 import ConfirmDeleteModal from "./ConfirmDeleteModal"; // Import the modal component
 import { Link } from "react-router-dom";
+import fetchName from "../utils/fetchName";
 
 const MyProjectsComponent = ({ projects, loading, error, onDelete }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [authors, setAuthors] = useState({firstname:"", lastname:""});
+
+  useEffect(() => {
+    const fetchAuthors = async () => {
+      const authorNames = {};
+      for (let project of projects) {
+        if (project.author && !authorNames[project.author]) {
+          // Fetch name only if not already fetched
+          const authorName = await fetchName(project.author); // Assuming author is an ID
+          authorNames[project.author] = authorName;
+        }
+      }
+      setAuthors(authorNames);
+    };
+
+    if (projects.length > 0) {
+      fetchAuthors();
+    }
+  }, [projects]);
 
   const handleDeleteClick = (project) => {
     setSelectedProject(project);
@@ -45,7 +65,6 @@ const MyProjectsComponent = ({ projects, loading, error, onDelete }) => {
             >
               <img
                 src={`http://localhost:5000/${project.coverPhoto}`}
-
                 alt='project cover picture'
                 className="w-1/3 object-cover"
               />
@@ -55,7 +74,7 @@ const MyProjectsComponent = ({ projects, loading, error, onDelete }) => {
                     {project.title}
                   </h3>
                   <p className="text-xs text-gray-500 mb-2">
-                    {new Date(project.dateOfPublish).toLocaleDateString()} - {project.author}
+                  {new Date(project.dateOfPublish).toLocaleDateString()} - {authors[project.author] ? `${authors[project.author].firstname} ${authors[project.author].lastname}` : "Loading..."}
                   </p>
                   <p className="text-sm text-gray-700 line-clamp-2" dangerouslySetInnerHTML={{ __html: project.description }} />
                 </div>

@@ -12,7 +12,7 @@ import Annotations from './SideBar/Annotations';
 import ClickedAnnotation from './SideBar/ClickedAnnotation'
 import EditRequests from './SideBar/EditRequests';
 
-const ProjectSideBar = ({ project, isOwner, currentUser, isProfessional }) => {
+const ProjectSideBar = ({ project, isOwner, currentUser, isProfessional, name }) => {
   const [selectedItem, setSelectedItem] = useState(null)
   const [isStatic, setIsStatic] = useState(false); // Controls sidebar behavior, the sidebar becomes static (not affected by hovers) if we click on an option)
   const [clickedAnnotation, setClickedAnnotation] = useState(null); 

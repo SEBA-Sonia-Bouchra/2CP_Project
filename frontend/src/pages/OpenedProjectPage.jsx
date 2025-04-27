@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import ProjectSideBar from '../components/ProjectSideBar';
 import File from '../components/File';
 import useCurrentUser from '../utils/useCurrentUser'
+import fetchName from '../utils/fetchName';
 
 const OpenedProjectPage = () => {
   const [project, setProject] = useState([]);
@@ -10,6 +11,7 @@ const OpenedProjectPage = () => {
   const [error, setError] = useState(null);
   const { id } = useParams();
   const currentUser = useCurrentUser();
+  const [name, setName] = useState({ firstname: "", lastname: "" });
   
   useEffect(() => {
     const fetchProject = async () => {
@@ -26,27 +28,33 @@ const OpenedProjectPage = () => {
         setLoading(false);
       }
     };
-  
+    
     fetchProject();
   }, [id]);
   
-
+  useEffect(() => {
+    if (project.author) {
+      fetchName(project.author)  // Call the utility function
+      .then((userData) => setName(userData)) 
+      .catch((err) => console.error('Error fetching user:', err)); 
+    }
+  }, [project.author]);
+  
+  
   // If projects are still loading or there's an error
   if (loading) return <div className="pt-32">Loading...</div>;
   if (error) return <div className="pt-32">Error: {error}</div>;
-
+  
   // If no projects found
   if (!project) return <div className="pt-32">Project not found...</div>;
-
+  
   const isOwner = project.author === currentUser?._id;
   const isProfessional = currentUser?.isProfessional ?? false;
-
-  console.log (currentUser, isOwner, isProfessional);
-
+  
   return (
     <div className='pt-12 flex flex-row gap-[1%] justify-center bg-[#FFFFF1] w-full min-h-screen pb-20'>
-      <File project={project} isOwner={isOwner} currentUser={currentUser} isProfessional={isProfessional} />
-      <ProjectSideBar project={project} isOwner={isOwner} currentUser={currentUser} isProfessional={isProfessional} />
+      <File project={project} isOwner={isOwner} currentUser={currentUser} isProfessional={isProfessional} name={name}/>
+      <ProjectSideBar project={project} isOwner={isOwner} currentUser={currentUser} isProfessional={isProfessional} name={name}/>
     </div>
   );
 };
