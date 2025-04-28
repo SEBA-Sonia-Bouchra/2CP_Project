@@ -59,7 +59,7 @@ const RecentProjects = ({ projects }) => {
                   </div>
                   <div className="flex justify-end">
                     <button className="mt-2 bg-[#213824CF] text-white w-[125px] h-[40px] rounded-full text-sm font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824]"
-                            onClick={() => navigate(`/projects/${project.id}`)}
+                            onClick={() => navigate(`/projects/${project._id}`)}
                     >
                       View Project
                     </button>

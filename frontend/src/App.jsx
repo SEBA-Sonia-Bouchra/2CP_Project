@@ -29,7 +29,9 @@ import Myprojects from "./pages/myprojects.jsx";
 import Mycontributions from "./pages/Mycontributions.jsx";
 import EditorPage from "./pages/EditorPage.jsx"
 import TermsPage from "./pages/termsandpolicypage.jsx";
-import SearchPage from './pages/searchpage.jsx'
+import SearchPage from './pages/searchpage.jsx';
+import GoogleCallback from './components/SideBar/GoogleCallback.jsx';
+import OAuthSuccess from './pages/OAuthSuccess';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -46,6 +48,8 @@ const router = createBrowserRouter(
       {<Route path='/request-review' element={<AccountRequest/>}></Route>}
       {<Route path='/request-rejected' element={<RejectRequest/>}></Route>}
       {<Route path="/editor" element={<EditorPage />} />}
+      {<Route path="/oauth/callback" component={GoogleCallback} />}
+      <Route path="/oauth-success" element={<OAuthSuccess />} />
       {<Route path="/" element={<MainLayout/>}>
         <Route path="/home_page" element={<Home_page />} />
         <Route path='/accounts' element={<AccountsPage/>} /> 

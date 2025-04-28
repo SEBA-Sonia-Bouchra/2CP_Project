@@ -43,14 +43,36 @@ export default function Projects() {
     fetchOwnedProjects();
   }, []);
 
+  const handleDelete = async (projectId) => {
+    try {
+      const token = localStorage.getItem('token'); // Get JWT from localStorage
+      if (!token) {
+        throw new Error("No token found");
+      }
+  
+      const response = await fetch(`http://localhost:5000/api/projects/${projectId}`, { 
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`, 
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to delete project");
+      }
+      // After successful deletion, update the local state to remove the project
+      setProjects(prevProjects => prevProjects.filter(project => project._id !== projectId));
+      
+    } catch (error) {
+      setError(error.message);
+    }
+  }; 
+
   return (
     <div className="bg-[#FFFFF1] min-h-screen flex flex-col">
 
       {/* MyProjects Section */}
-        <MyProjectsComponent
-            projects={ownedProjects} loading={loading} error={error}
-        />
-
+        <MyProjectsComponent projects={projects} loading={loading} error={error} onDelete={handleDelete}/>
 
     </div>
   );

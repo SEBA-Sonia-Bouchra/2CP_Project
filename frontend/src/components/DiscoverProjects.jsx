@@ -26,8 +26,8 @@ const DiscoverProjects = ({ projects, loading, error }) => {
         ) : (
           projects.map((project) => (
             <div
-              key={project.id}
-              className="bg-white rounded-lg shadow-lg flex overflow-hidden"
+              key={project._id}
+              className="bg-white rounded-lg shadow-lg flex overflow-hidden h-[220px]"
             >
               <img
                 src={project.coverPhoto}
