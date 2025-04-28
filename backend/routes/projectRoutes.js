@@ -88,6 +88,14 @@ router.post(
         return res.status(400).json({ message: "Invalid 'references' format.", error: error.message });
       }
 
+      const userId = req.user.userId;
+
+      // Add contributor to each section
+      const sectionsWithContributor = parsedSections.map(section => ({
+        ...section,
+        contributor: userId
+      }));
+
       const newProject = new Project({
         title,
         description,
@@ -95,7 +103,8 @@ router.post(
         media: mediaFiles,
         dateOfPublish: new Date(),
         author: user._id,
-        sections: parsedSections,
+        sections: sectionsWithContributor, // <-- use the new one
+        // sections: parsedSections,
         references: parsedReferences,
       });
 
@@ -103,6 +112,7 @@ router.post(
 
       res.status(201).json({ message: 'Project created successfully', project: newProject });
     } catch (error) {
+      console.error('Error creating project:', error);
       res.status(500).json({ message: 'Server error', error: error.message });
     }
   }
