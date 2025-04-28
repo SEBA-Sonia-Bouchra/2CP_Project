@@ -61,7 +61,7 @@ export default function Projects() {
         throw new Error("Failed to delete project");
       }
       // After successful deletion, update the local state to remove the project
-      setProjects(prevProjects => prevProjects.filter(project => project._id !== projectId));
+      setOwnedProjects(prevProjects => prevProjects.filter(project => project._id !== projectId));
       
     } catch (error) {
       setError(error.message);
@@ -72,7 +72,7 @@ export default function Projects() {
     <div className="bg-[#FFFFF1] min-h-screen flex flex-col">
 
       {/* MyProjects Section */}
-        <MyProjectsComponent projects={projects} loading={loading} error={error} onDelete={handleDelete}/>
+        <MyProjectsComponent projects={ownedProjects} loading={loading} error={error} onDelete={handleDelete}/>
 
     </div>
   );

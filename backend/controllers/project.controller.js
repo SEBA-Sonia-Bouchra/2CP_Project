@@ -40,7 +40,7 @@ exports.googleAuthCallback = async (req, res) => {
     // Optionally, store the token in your database or session
     console.log('✅ OAuth successful. Tokens:', tokens); // Debugging
 
-    // Redirect to frontend with tokens (better to encode tokens)
+    // Redirect to frontend with tokens 
     const accessToken = tokens.access_token;
     const refreshToken = tokens.refresh_token;
 
