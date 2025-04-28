@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import Mycontributionscomponents from "../components/Mycontributionscomponents";
 
 export default function Projects() {
-  const [projects, setProjects] = useState([]);
+  const [contributedProjects, setContributedProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     // Fetch projects from backend API
-    const fetchProjects = async () => {
+    const fetchContributedProjects = async () => {
       try {
         const token = localStorage.getItem('token');  // Get JWT from localStorage
 
@@ -28,7 +28,7 @@ export default function Projects() {
           throw new Error("Failed to fetch projects");
         }
         const data = await response.json();
-        setProjects(data);
+        setContributedProjects(data.contributedProjects);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -36,15 +36,16 @@ export default function Projects() {
       }
     };
     
-    fetchProjects();
-  }, []); 
+    fetchContributedProjects();
+  }, []);
   
+  console.log(contributedProjects);
   return (
     <div className="bg-[#FFFFF1] min-h-screen flex flex-col">
 
 
       {/* MyProjects Section */}
-      <Mycontributionscomponents projects={projects} loading={loading} error={error} />
+      <Mycontributionscomponents projects={contributedProjects} loading={loading} error={error} />
 
     </div>
   );

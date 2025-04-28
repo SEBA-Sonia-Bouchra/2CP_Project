@@ -4,13 +4,13 @@ import useCurrentUser from "../utils/useCurrentUser";
 
 export default function Projects() {
   const user = useCurrentUser();
-  const [projects, setProjects] = useState([]);
+  const [ownedProjects, setOwnedProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     // Fetch projects from backend API
-    const fetchProjects = async () => {
+    const fetchOwnedProjects  = async () => {
       try {
       console.log("fetching projects...");
       const token = localStorage.getItem('token');
@@ -26,7 +26,13 @@ export default function Projects() {
           throw new Error("Failed to fetch projects");
         }
         const data = await response.json();
-        setProjects(data);
+        console.log("Fetched data:", data); // Log the fetched data
+       
+        
+        setOwnedProjects(data.ownedProjects);
+        
+        
+      
       } catch (error) {
         setError(error.message);
       } finally {
@@ -34,7 +40,7 @@ export default function Projects() {
       }
     };
 
-    fetchProjects();
+    fetchOwnedProjects();
   }, []);
 
   const handleDelete = async (projectId) => {

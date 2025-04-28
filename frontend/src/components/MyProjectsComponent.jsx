@@ -74,7 +74,7 @@ const MyProjectsComponent = ({ projects, loading, error, onDelete }) => {
                     {project.title}
                   </h3>
                   <p className="text-xs text-gray-500 mb-2">
-                  {new Date(project.dateOfPublish).toLocaleDateString()} - {authors[project.author] ? `${authors[project.author].firstname} ${authors[project.author].lastname}` : "Loading..."}
+                    {new Date(project.dateOfPublish).toLocaleDateString()} - {authors[project.author] ? `${authors[project.author].firstname} ${authors[project.author].lastname}` : "Loading..."}
                   </p>
                   <p className="text-sm text-gray-700 line-clamp-2" dangerouslySetInnerHTML={{ __html: project.description }} />
                 </div>
