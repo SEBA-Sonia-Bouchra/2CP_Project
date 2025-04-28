@@ -54,7 +54,7 @@ const MyProjectsComponent = ({ projects, loading, error, onDeleteProject }) => {
                     {project.title}
                   </h3>
                   <p className="text-xs text-gray-500 mb-2">
-                    {new Date(project.dateOfPublish).toLocaleDateString()} - {project.author}
+                    {new Date(project.dateOfPublish).toLocaleDateString()} {/*{project.author?.id || project.author?._id}*/}
                   </p>
                   <p className="text-sm text-gray-700 line-clamp-2">
                     {project.description}

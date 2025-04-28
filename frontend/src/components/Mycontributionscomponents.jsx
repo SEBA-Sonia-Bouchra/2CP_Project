@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import DiscoverIcon from "../assets/images/discover.png";
 
 
-const Mycontributionscomponents = ({ projects, loading, error, onDeleteProject }) => {
+const Mycontributionscomponents = ({ projects, loading, error }) => {
 
   return (
     <div className="w-full max-w-6xl mx-auto p-6 relative mt-6">
@@ -39,7 +39,7 @@ const Mycontributionscomponents = ({ projects, loading, error, onDeleteProject }
                     {project.title}
                   </h3>
                   <p className="text-xs text-gray-500 mb-2">
-                    {new Date(project.dateOfPublish).toLocaleDateString()} {project.author}
+                  {new Date(project.dateOfPublish).toLocaleDateString('en-GB')} {project.author && ` • ${project.author.firstname} ${project.author.lastname}`}
                   </p>
                   <p className="text-sm text-gray-700 line-clamp-2">
                     {project.description}
