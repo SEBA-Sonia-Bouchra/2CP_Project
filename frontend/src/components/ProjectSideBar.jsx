@@ -40,7 +40,7 @@ const ProjectSideBar = ({ project, isOwner, currentUser, isProfessional, name })
   }, [clickedAnnotation]);
 
   const sidebarItems = [
-    { id: 'options', label: 'Options', icon: options, component: <Options isOwner={isOwner} /> },
+    { id: 'options', label: 'Options', icon: options, component: <Options isOwner={isOwner} project={project}/> },
     { id: 'users', label: 'Contributors', icon: users, component: <Contributers project={project} isOwner={isOwner}/> },
     ...(isProfessional ? [{
       id: 'edit',

@@ -17,6 +17,7 @@ exports.googleAuth = (req, res) => {
   const authUrl = oauth2Client.generateAuthUrl({
     access_type: 'offline', // Needed to get a refresh token as well
     scope: ['https://www.googleapis.com/auth/drive.file'], // Google Drive scope
+    redirect_uri: process.env.GOOGLE_REDIRECT_URI,
   });
   console.log('Redirecting to Google Auth URL:', authUrl);  // Debugging
   res.redirect(authUrl);
@@ -24,7 +25,7 @@ exports.googleAuth = (req, res) => {
 
 // Google Auth Callback: Step 2 - Get Access Token
 exports.googleAuthCallback = async (req, res) => {
-  const { code } = req.query;
+  const { code, state } = req.query;
 
   if (!code) {
     console.log('❌ Missing authorization code');
@@ -39,7 +40,15 @@ exports.googleAuthCallback = async (req, res) => {
     // Optionally, store the token in your database or session
     console.log('✅ OAuth successful. Tokens:', tokens); // Debugging
 
-    res.json({ message: 'OAuth successful', tokens });
+    // Redirect to frontend with tokens (better to encode tokens)
+    const accessToken = tokens.access_token;
+    const refreshToken = tokens.refresh_token;
+
+    const redirectUrl = `http://localhost:5173/oauth-success?access_token=${accessToken}&refresh_token=${refreshToken}&state=${encodeURIComponent(state)}`;
+
+    res.redirect(redirectUrl);
+
+    // res.json({ message: 'OAuth successful', tokens });
   } catch (err) {
     console.error('❌ Error during OAuth2 callback:', err);
     res.status(500).send('OAuth2 callback error');
