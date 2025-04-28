@@ -2,17 +2,17 @@ const Project = require('../models/Project');
 const Annotation = require('../models/annotation');
 const jwt = require('jsonwebtoken');
 
-// Helper function to tag projects with the user's role
+/*// Helper function to tag projects with the user's role
 const tagProjectsWithRole = (projects, userId) =>
   projects.map(project => ({
     ...project.toObject(),
     role: project.owner.toString() === userId ? 'owner' : 'contributor'
-  }));
+  }));*/
 
 // Controller for getting homepage projects
 
 
-exports.getHomepageProjects = async (req, res) => {
+exports.getpageProjects = async (req, res) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
     console.log("Token:", token); // Check if the token is being sent correctly
@@ -21,36 +21,51 @@ exports.getHomepageProjects = async (req, res) => {
       return res.status(401).json({ error: 'No token provided' });
     }
 
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const userId = decoded.userId;
+    const userId = decoded.id;
     // 1. Projects owned by the user
-    const ownedProjects = await Project.find({owner: userId });
+    const ownedProjects = await Project.find({author : userId })
+    /*.populate({
+      path: 'author',
+      select: 'firstname lastname' // Explicitly select these fields
+    });*/
+    
     console.log(ownedProjects);
-
     // 2. Projects where user is a contributor (not owner)
-    const contributedProjects = await Project.find({
-      contributors: userId,
-      owner: { $ne: userId }
-    });
+      const contributedProjects = await Project.find({
+       "sections.contributor": userId,
+        author: { $ne: userId }
+      })
+      /*.populate({
+        path: 'author',
+        select: 'firstname lastname' // Explicitly select these fields
+      });*/
+      console.log(contributedProjects);
 
+
+    
+   
     // 3. Projects where user has annotations (not owner)
     const annotatedProjectIds = await Annotation.distinct('project', { user: userId });
     const annotatedProjects = await Project.find({
       _id: { $in: annotatedProjectIds },
-      owner: { $ne: userId }
+      author: { $ne: userId }
     });
 
-    // ✅ Merge all into one flat array
-    const allProjects = [...ownedProjects, ...contributedProjects, ...annotatedProjects];
-
     // ✅ Send the flat array to frontend
-    res.status(200).json(allProjects);
+    res.status(200).json({
+      ownedProjects,
+      contributedProjects,
+      annotatedProjects
+    });
 
-  } catch (err) {
-    console.error("❌ Error in getHomepageProjects:", err);
-    res.status(500).json({ error: err.message });
+  } catch (error) {
+    console.error(error); // Log the error
+      res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 };
+
 
 // Controller for editing a project (only for the owner)
 exports.editProject = async (req, res) => {
@@ -62,7 +77,7 @@ exports.editProject = async (req, res) => {
     const project = await Project.findById(projectId);
 
     // Check if the user is the owner
-    if (project.owner.toString() !== userId) {
+    if (project.author.toString() !== userId) {
       return res.status(403).send('Unauthorized: Only the owner can edit the project');
     }
 

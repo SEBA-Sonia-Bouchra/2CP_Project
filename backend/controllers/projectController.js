@@ -37,6 +37,7 @@ exports.createProject = async (req, res) => {
 
       parsedSections = parsedSections.map(section => {
         const { title, content, dimension } = section;
+      
 
         if (!title || !content || !dimension) {
           throw new Error("Each section must have a title, content, and dimension.");
@@ -59,8 +60,9 @@ exports.createProject = async (req, res) => {
         return {
           title,
           content,
-          dimension
-        };
+          dimension,
+          contributor: userId   // Set the creator as the initial contributor
+        }
       });
 
       if (parsedSections.length > 4) {
