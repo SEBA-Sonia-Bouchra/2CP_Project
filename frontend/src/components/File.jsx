@@ -3,7 +3,7 @@ import { getColorByDimension } from '../utils/helpers';
 import SectionDropDown from './SectionDropDown';
 import '../index.css'
 
-const File = ({ project, isOwner, currentUser, isProfessional, name }) => {
+const File = ({ project, isOwner, currentUser, isProfessional }) => {
     const [selectedCoverPicture, setSelectedCoverPicure] = useState(null);
     const [sectionDropDown, setSectionDropDown] = useState(null);
     const localhost = "http://localhost:5000/";
@@ -42,7 +42,7 @@ const File = ({ project, isOwner, currentUser, isProfessional, name }) => {
             <h1 className='pb-1'>{project.title}</h1>
             {/* date & author */}
             <p className='text-gray-500 text-[10px] font-montserral pb-1'>
-              {new Date(project.dateOfPublish).toLocaleDateString()} - {name.firstname} {name.lastname}
+              {new Date(project.dateOfPublish).toLocaleDateString()} - {project?.author?.firstname} {project?.author?.lastname}
             </p>
             {/* description */}
             { project.description &&
@@ -73,13 +73,13 @@ const File = ({ project, isOwner, currentUser, isProfessional, name }) => {
                         </svg> 
                       </button>
                     )}
-                    {sectionDropDown === index && <SectionDropDown color={color} section={section} isOwner={isOwner} currentUser={currentUser}/>}
+                    {sectionDropDown === index && <SectionDropDown color={color} section={section} isOwner={isOwner} currentUser={currentUser} project={project}/>}
                   </div>
                 </div>
                 <div style={{ backgroundColor: color }} className={`h-[1.5px] rounded-full mb-2`}></div> 
                  {/* section content */}
                  <div className='w-full'>
-                  <div dangerouslySetInnerHTML={{ __html: section.content }} />
+                  <div className="ProseMirror" dangerouslySetInnerHTML={{ __html: section.content }} />
                  </div> 
               </div>
               );

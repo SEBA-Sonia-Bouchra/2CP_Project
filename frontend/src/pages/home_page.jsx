@@ -53,30 +53,34 @@ export default function Projects() {
 
     fetchProjects();
    }, []);
-
+console.log (user);
 
   return (
-    <div className="bg-[#f5f5dc] min-h-screen flex flex-col"> 
-      {/* Recent Projects Section with Scrollable Feature */}
-      {projects.recent.length > 0 ? (
-        <RecentProjects projects={projects.recent} loading={loading} error={error} />
-      ) : loading ? (
-        <p className="text-center">Loading projects...</p>
-      ) : error ? (
-        <p className="text-center">Error: {error}</p>
-      ) : ( 
-        <></>
-      )}
+    <div className="bg-[#f5f5dc] min-h-screen flex flex-col pt-6"> 
+      {user?.isProfessional === true && (
+          <>
+               {/* Recent Projects Section with Scrollable Feature  */}
+              {projects.recent.length > 0 ? (
+                <RecentProjects projects={projects.recent} loading={loading} error={error} />
+              ) : loading ? (
+                <p className="text-center">Loading projects...</p>
+              ) : error ? (
+                <p className="text-center">Error: {error}</p>
+              ) : ( 
+                <></>
+              )}
 
-      {/* Annotated Section */}
-      {projects.annotated.length > 0  ? (
-        <AnnotatedProjects projects={projects.annotated} loading={loading} error={error} /> 
-      ) : loading ? (
-        <p className="text-center">Loading projects...</p>
-      ) : error ? (
-        <p className="text-center">Error: {error}</p>
-      ) : (
-        <></>
+               {/* Annotated Section  */}
+              {projects.annotated.length > 0  ? (
+                <AnnotatedProjects projects={projects.annotated} loading={loading} error={error} /> 
+              ) : loading ? (
+                <p className="text-center">Loading projects...</p>
+              ) : error ? (
+                <p className="text-center">Error: {error}</p>
+              ) : (
+                <></>
+              )}
+          </>
       )}
 
       {/* Discover Section */}
