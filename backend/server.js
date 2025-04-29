@@ -14,6 +14,8 @@ const filterSearchRoutes = require('./routes/filterSearch');
 const seedAdmin = require("./utils/seedAdmin");
 const homepageRoutes = require('./routes/homepageRoutes');
 const profileRoutes = require('./routes/profileRoutes');
+const downloadRoute = require('./routes/project.routes'); 
+const { googleAuth, googleAuthCallback } = require('./controllers/project.controller');
 
 const app = express();
 
@@ -36,6 +38,16 @@ app.use('/api/filter', filterSearchRoutes);
 app.use("/api/profile", profileRoutes);
 app.use('/homepage', homepageRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Mount project-related routes under /api/projects
+// Example: /api/projects/download/:projectId/:fileType
+app.use('/api/download', downloadRoute);
+
+// Define the route for Google OAuth
+app.get('/auth/google', googleAuth); // This uses the googleAuth function
+
+// Define the route for Google OAuth callback
+app.get('/auth/google/callback', googleAuthCallback);
 
 // Debugging: Show Registered Routes
 console.log("✅ Registered Routes:");

@@ -88,6 +88,14 @@ router.post(
         return res.status(400).json({ message: "Invalid 'references' format.", error: error.message });
       }
 
+      const userId = req.user.userId;
+
+      // Add contributor to each section
+      const sectionsWithContributor = parsedSections.map(section => ({
+        ...section,
+        contributor: userId
+      }));
+
       const newProject = new Project({
         title,
         description,
@@ -95,7 +103,8 @@ router.post(
         media: mediaFiles,
         dateOfPublish: new Date(),
         author: user._id,
-        sections: parsedSections,
+        sections: sectionsWithContributor, // <-- use the new one
+        // sections: parsedSections,
         references: parsedReferences,
       });
 
@@ -103,6 +112,7 @@ router.post(
 
       res.status(201).json({ message: 'Project created successfully', project: newProject });
     } catch (error) {
+      console.error('Error creating project:', error);
       res.status(500).json({ message: 'Server error', error: error.message });
     }
   }
@@ -320,6 +330,42 @@ router.put('/:projectId/sections/:sectionId', authenticateUser, async (req, res)
 
     res.status(200).json({ message: 'Section updated', section });
   } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+// GET a single project by ID
+router.get('/:id', async (req, res) => {
+  try {
+    const projectId = req.params.id;
+    const project = await Project.findById(projectId); 
+
+    if (!project) {
+      return res.status(404).json({ message: 'Project not found' });
+    }
+
+    res.status(200).json( project );
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+// get the name of a user by its id
+router.get('/user/:id', authenticateUser, async (req, res) => {
+  try {
+    const { id } = req.params; // Get user ID from the request params
+    const user = await User.findById(id); // Find user by ID
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Respond with only first name and last name
+    const { firstname, lastname } = user;
+    res.status(200).json({ firstname, lastname });
+
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 });

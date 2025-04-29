@@ -2,52 +2,59 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ProjectSideBar from '../components/ProjectSideBar';
 import File from '../components/File';
+import useCurrentUser from '../utils/useCurrentUser'
+import fetchName from '../utils/fetchName';
 
 const OpenedProjectPage = () => {
-  const [projects, setProjects] = useState([]);
+  const [project, setProject] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { id } = useParams();
+  const currentUser = useCurrentUser();
+  const [name, setName] = useState({ firstname: "", lastname: "" });
   
-  // useEffect(() => {
-  //   const fetchProjects = async () => {
-  //     try {
-  //       const response = await fetch("http://localhost:5001/projects");
-  //       if (!response.ok) {
-  //         throw new Error("Failed to fetch projects");
-  //       }
-  //       const data = await response.json();
-  //       setProjects(data);
-  //     } catch (error) {
-  //       setError(error.message);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchProjects();
-  // }, []);
-
+  useEffect(() => {
+    const fetchProject = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/projects/${id}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch project");
+        }
+        const data = await response.json();
+        setProject(data);  // put it in array 
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchProject();
+  }, [id]);
+  
+  useEffect(() => {
+    if (project.author) {
+      fetchName(project.author)  // Call the utility function
+      .then((userData) => setName(userData)) 
+      .catch((err) => console.error('Error fetching user:', err)); 
+    }
+  }, [project.author]);
+  
+  
   // If projects are still loading or there's an error
   if (loading) return <div className="pt-32">Loading...</div>;
   if (error) return <div className="pt-32">Error: {error}</div>;
-
-  // Check if there are any projects and get the first one
-  const project = projects[0]; 
-
+  
   // If no projects found
   if (!project) return <div className="pt-32">Project not found...</div>;
-
-  const token = localStorage.getItem("token");
-  const currentUser = token ? JSON.parse(atob(token.split(".")[1])) : null;
-  // const isOwner = project.author?.id === currentUser?.id;
-  // const isProfessional = currentUser?.isProfessional ?? false;
-  const isProfessional = true; // tessst
-  const isOwner = true;    // tesssssssst
-
+  
+  const isOwner = project.author === currentUser?._id;
+  const isProfessional = currentUser?.isProfessional ?? false;
+  
   return (
     <div className='pt-12 flex flex-row gap-[1%] justify-center bg-[#FFFFF1] w-full min-h-screen pb-20'>
-      <File project={project} isOwner={isOwner} currentUser={currentUser} isProfessional={isProfessional} />
-      <ProjectSideBar project={project} isOwner={isOwner} currentUser={currentUser} isProfessional={isProfessional} />
+      <File project={project} isOwner={isOwner} currentUser={currentUser} isProfessional={isProfessional} name={name}/>
+      <ProjectSideBar project={project} isOwner={isOwner} currentUser={currentUser} isProfessional={isProfessional} name={name}/>
     </div>
   );
 };

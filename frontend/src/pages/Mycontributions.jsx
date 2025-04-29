@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import NavbarProfessional from "../components/NavbarProfessional";
-import Footer from "../components/Footer";
 import Mycontributionscomponents from "../components/Mycontributionscomponents";
 
 export default function Projects() {
