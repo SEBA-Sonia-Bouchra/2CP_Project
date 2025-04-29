@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getColorByDimension } from '../utils/helpers';
 import SectionDropDown from './SectionDropDown';
+import '../index.css'
 
 const File = ({ project, isOwner, currentUser, isProfessional, name }) => {
     const [selectedCoverPicture, setSelectedCoverPicure] = useState(null);
@@ -48,8 +49,8 @@ const File = ({ project, isOwner, currentUser, isProfessional, name }) => {
               <div id='description' className='my-3 w-full'>
                 <h2 className='font-playfairdisplay mb-2 text-lg'>Description</h2>
                 <div className='h-[1.5px] rounded-full bg-[#4f3726] mb-2'></div>
-                <p dangerouslySetInnerHTML={{ __html: project.description }}/>
-              </div>
+                <div className="ProseMirror" dangerouslySetInnerHTML={{ __html: project.description }} />
+                </div>
             }    
 
             {/* sections */}

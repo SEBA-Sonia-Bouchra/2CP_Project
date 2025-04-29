@@ -7,7 +7,7 @@ const sectionSchema = new mongoose.Schema({
   contributor: {
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'User',  // Reference to the User model
-    required: true
+    required: false
   } 
 });
 
