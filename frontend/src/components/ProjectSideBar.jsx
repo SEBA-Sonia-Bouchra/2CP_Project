@@ -12,7 +12,7 @@ import Annotations from './SideBar/Annotations';
 import ClickedAnnotation from './SideBar/ClickedAnnotation'
 import EditRequests from './SideBar/EditRequests';
 
-const ProjectSideBar = ({ project, isOwner, currentUser, isProfessional }) => {
+const ProjectSideBar = ({ project, isOwner, currentUser, isProfessional, name }) => {
   const [selectedItem, setSelectedItem] = useState(null)
   const [isStatic, setIsStatic] = useState(false); // Controls sidebar behavior, the sidebar becomes static (not affected by hovers) if we click on an option)
   const [clickedAnnotation, setClickedAnnotation] = useState(null); 
@@ -40,8 +40,8 @@ const ProjectSideBar = ({ project, isOwner, currentUser, isProfessional }) => {
   }, [clickedAnnotation]);
 
   const sidebarItems = [
-    { id: 'options', label: 'Options', icon: options, component: <Options isOwner={isOwner} /> },
-    { id: 'users', label: 'Contributors', icon: users, component: <Contributers project={project} isOwner={isOwner}/> },
+    { id: 'options', label: 'Options', icon: options, component: <Options isOwner={isOwner} project={project}/> },
+    { id: 'users', label: 'Contributors', icon: users, component: <Contributers project={project} isOwner={isOwner} name={name} /> },
     ...(isProfessional ? [{
       id: 'edit',
       label: isOwner ? 'Edit Requests' : 'Edit Request',
@@ -49,7 +49,7 @@ const ProjectSideBar = ({ project, isOwner, currentUser, isProfessional }) => {
       component: isOwner ? <EditRequests /> : <EditRequest />
     }] : []),
     { id: 'sections', label: 'Sections', icon: sections, component: <Sections project={project}/> },
-    { id: 'annotations', label: 'Annotations', icon: annotations, component: <Annotations setClickedAnnotation={setClickedAnnotation} currentUser={currentUser} isOwner={isOwner}/> },
+    { id: 'annotations', label: 'Annotations', icon: annotations, component: <Annotations setClickedAnnotation={setClickedAnnotation} currentUser={currentUser} isOwner={isOwner} projectID={project._id}/>},
   ];
   
   return (

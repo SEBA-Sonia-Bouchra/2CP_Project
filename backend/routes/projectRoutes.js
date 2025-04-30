@@ -19,43 +19,13 @@ const upload = multer({ storage });
 
 console.log('✅ projectRoutes loaded successfully');
 
-// ✅ GET ALL Projects Route (NEW)
-router.get('/', async (req, res) => {
-  try {
-    // Get optional query parameters for pagination/filtering
-    const { page = 1, limit = 10, sort = '-createdAt' } = req.query;
-    
-    const projects = await Project.find({})
-      .sort(sort)
-      .limit(limit * 1)
-      .skip((page - 1) * limit)
-      .populate('author', 'firstname lastname') // Include author info
-      .exec();
-
-    // Get total count for pagination info
-    const count = await Project.countDocuments();
-
-    res.status(200).json({
-      total: count,
-      totalPages: Math.ceil(count / limit),
-      currentPage: page,
-      projects
-    });
-  } catch (error) {
-    res.status(500).json({ 
-      message: 'Failed to fetch projects',
-      error: error.message 
-    });
-  }
-});
-
 // ✅ CREATE Project Route
 router.post(
   '/',
   authenticateUser,
   upload.fields([
     { name: 'coverPhoto', maxCount: 1 },
-    { name: 'media', maxCount: 10 }
+    { name: 'media', maxCount: 10 }  //we can add the number of media
   ]),
   async (req, res) => {
     try {
@@ -63,7 +33,7 @@ router.post(
       if (!user) return res.status(404).json({ message: 'User not found' });
 
       if (!user.isProfessional) {
-        return res.status(403).json({ message: 'Only pro users can create project.' });
+        return res.status(403).json({ message: 'Only pro users can annotate sections.' });
       }
 
       const { title, description, sections, references } = req.body;
@@ -118,6 +88,8 @@ router.post(
         return res.status(400).json({ message: "Invalid 'references' format.", error: error.message });
       }
 
+      const userId = req.user.userId;
+
       const newProject = new Project({
         title,
         description,
@@ -133,6 +105,7 @@ router.post(
 
       res.status(201).json({ message: 'Project created successfully', project: newProject });
     } catch (error) {
+      console.error('Error creating project:', error);
       res.status(500).json({ message: 'Server error', error: error.message });
     }
   }
@@ -353,6 +326,47 @@ router.put('/:projectId/sections/:sectionId', authenticateUser, async (req, res)
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
+
+// GET a single project by ID
+router.get('/:id', async (req, res) => {
+  try {
+    const projectId = req.params.id;
+
+    const project = await Project.findById(projectId)
+      .populate({
+        path: 'author',
+        select: 'firstname lastname _id'  
+      });
+
+    if (!project) {
+      return res.status(404).json({ message: 'Project not found' });
+    }
+
+    res.status(200).json( project );
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+// // get the name of a user by its id
+// router.get('/user/:id', authenticateUser, async (req, res) => {
+//   try {
+//     const { id } = req.params; // Get user ID from the request params
+//     const user = await User.findById(id); // Find user by ID
+
+//     if (!user) {
+//       return res.status(404).json({ message: 'User not found' });
+//     }
+
+//     // Respond with only first name and last name
+//     const { firstname, lastname } = user;
+//     res.status(200).json({ firstname, lastname });
+
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Server error', error: error.message });
+//   }
+// });
 
 
 module.exports = router;
