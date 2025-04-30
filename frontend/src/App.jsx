@@ -32,6 +32,7 @@ import TermsPage from "./pages/termsandpolicypage.jsx";
 import SearchPage from './pages/searchpage.jsx';
 import GoogleCallback from './components/SideBar/GoogleCallback.jsx';
 import OAuthSuccess from './pages/OAuthSuccess';
+import AboutUsPage from './pages/AboutUsPage.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -60,6 +61,7 @@ const router = createBrowserRouter(
         <Route path="/projects/:id" element={<OpenedProjectPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/terms" element={<TermsPage />} />
+        <Route path="/About_Us" element={<AboutUsPage />} />
       </Route>}
   </>
   )
