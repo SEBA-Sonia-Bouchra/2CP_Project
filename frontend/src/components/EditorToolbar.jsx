@@ -236,10 +236,10 @@ export default function EditorToolbar({ editor }) {
                editor.chain().focus().setCustomHighlight(c.hex).run()}} colors={[ "#212529", "#7950F2", "#339AF0", "#22B8CF",
                 "#40C057", "#FCC419", "#FA5252", "#E64980", "transparent", "#5F3DC4", "#1864AB","#0B7285", "#2B8A3E" ,"#E67700" ,"#C92A2A", "#A61E4D"]}
                 width="330px"/>}
-                {/*<div className='bg-white px-6 rounded-md drop-shadow-md py-2'>
+                {/* <div className='bg-white px-6 rounded-md drop-shadow-md py-2'>
                   <HexColorPicker onChange={(c)=>editor.chain().focus().setCustomHighlight(c).run()}/>
                   <button className='text-sm flex items-center bg-gray-500 bg-opacity-10 mt-2'>No color<X/></button>
-                </div>*/}
+                </div> */}
                 
                </div>
             )}

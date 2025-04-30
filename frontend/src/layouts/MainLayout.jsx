@@ -13,8 +13,6 @@ export default function MainLayout() {
   const user = useCurrentUser();
   const [showNotifications, setShowNotifications] = useState(false);
   const [unreadCount, setUnreadCount] = useState(3);
-  const [showSearch, setShowSearch] = useState(false);
-  const [projects, setProjects] = useState([]);
 
   const toggleNotifications= () => {
     setShowNotifications(!showNotifications);
@@ -41,13 +39,13 @@ export default function MainLayout() {
         {user ? (
            user.isProfessional == false ? (
             user.isAdmin == true ? (
-              <NavbarAdmin onSearchClick={() => setShowSearch((prev) => !prev)}  />
+              <NavbarAdmin />
             ) : (
               <NavbarNormal />
             )
           ) : user.isProfessional == true ? (
             <NavbarProfessional toggleNotifications={toggleNotifications} showNotifications={showNotifications}
-            unreadCount={unreadCount} onSearchClick={() => setShowSearch((prev) => !prev)} />
+            unreadCount={unreadCount} />
           ) : (
             <p>error loading navbar</p>
           )
@@ -60,7 +58,7 @@ export default function MainLayout() {
                 <Notifications toggleNotifications={() => setShowNotifications(false)} />
               </div>
             )}
-        <main className={`z-10 ${!showSearch ? 'sm:pt-20 ' : ''}`}>
+        <main className="z-10 sm:pt-20 ">
           <Outlet />
         </main>
         <Footer className='z-0'/>

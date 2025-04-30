@@ -21,9 +21,7 @@ export default function Footer() {
                <p>binaateam.dz@gmail.com</p>
                <p>+213 987 098 765</p>
             </div>
-            <Link to="/About_Us">
-              <button className='text-xl'>About Us </button>
-            </Link>
+            <p className='text-xl'>About us</p>
             <p className='text-xl'>Help</p>
             <Link to="/terms">
               <button className='text-xl'>Terms & privacy policy</button>
