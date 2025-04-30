@@ -1,28 +1,8 @@
 import React, { useState, useEffect } from "react";
 import DiscoverIcon from "../assets/images/discover.png";
 import { Link } from "react-router-dom";
-import fetchName from "../utils/fetchName";
 
-const Mycontributionscomponents = ({ projects, loading, error, onDeleteProject }) => {
-  const [authors, setAuthors] = useState({firstname:"", lastname:""});
-
-  useEffect(() => {
-    const fetchAuthors = async () => {
-      const authorNames = {};
-      for (let project of projects) {
-        if (project.author && !authorNames[project.author]) {
-          // Fetch name only if not already fetched
-          const authorName = await fetchName(project.author); // Assuming author is an ID
-          authorNames[project.author] = authorName;
-        }
-      }
-      setAuthors(authorNames);
-    };
-
-    if (projects.length > 0) {
-      fetchAuthors();
-    }
-  }, [projects]);
+const Mycontributionscomponents = ({ projects, loading, error }) => {
 
   return (
     <div className="w-full max-w-6xl mx-auto p-6 relative mt-6">
@@ -59,7 +39,8 @@ const Mycontributionscomponents = ({ projects, loading, error, onDeleteProject }
                     {project.title}
                   </h3>
                   <p className="text-xs text-gray-500 mb-2">
-                    {new Date(project.dateOfPublish).toLocaleDateString()} - {authors[project.author] ? `${authors[project.author].firstname} ${authors[project.author].lastname}` : "Loading..."}
+                    {new Date(project.dateOfPublish).toLocaleDateString()} -  {project.author.firstname} {project.author.lastname}
+                    {/* {new Date(project.dateOfPublish).toLocaleDateString()} - {authors[project.author] ? `${authors[project.author].firstname} ${authors[project.author].lastname}` : "Loading..."} */}
                   </p>
                   <p className="text-sm text-gray-700 line-clamp-2" dangerouslySetInnerHTML={{ __html: project.description }} />
                 </div>

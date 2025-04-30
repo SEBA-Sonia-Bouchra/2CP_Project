@@ -52,15 +52,15 @@ const AnnotatedProjects = ({ projects }) => {
                 <div>
                   <h3 className="text-lg font-semibold">{project.title}</h3>
                   <p className='text-gray-500 text-[10px] font-montserral pb-1'>
-                      {new Date(project.dateOfPublish).toLocaleDateString()} {project.author?._id}
+                      {new Date(project.dateOfPublish).toLocaleDateString()} - {project.author?.firstname} {project.author?.lastname}
                     </p>
-                  <p className="text-sm text-gray-700">{project.description}</p>
-                </div>
+                    <p className="text-sm text-gray-700 line-clamp-2" dangerouslySetInnerHTML={{ __html: project.description }} />
+                    </div>
                 <div className="flex justify-end">
                   <button className="mt-2 bg-[#213824CF] text-white w-[125px] h-[40px] rounded-full text-sm font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824]"
-                          onClick={() => navigate(`/projects/${project.id}`)}
+                          onClick={() => navigate(`/projects/${project._id}`)}
                   >
-                    View Project
+                    <p className="">View Project</p>
                   </button>
                 </div>
               </div>
