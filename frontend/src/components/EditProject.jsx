@@ -13,11 +13,9 @@ import {CustomHighlight} from './extensions/CustomHighlight.js'
 import BulletList from '@tiptap/extension-bullet-list'
 import OrderedList from '@tiptap/extension-ordered-list'
 import ListItem from '@tiptap/extension-list-item'
-import { Navigate, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function EditProject({ onEditorFocus }) {
-  const navigate = useNavigate();
   const [image,setImage]=useState("");
   const defaultSections = [ //this initializes "sections" with this predefined sections, I didn't want to redo my code since i allowed users to
     // insert sections as architecture or history at the begginning but since they must be predefined i did this. 
@@ -35,7 +33,6 @@ export default function EditProject({ onEditorFocus }) {
   const titleRef = useRef(null);
   const descriptionRef = useRef(null);
   const coverPictureRef = useRef(null);
-
   const validate = (values) => {
     const errors = {};
     if(!values.title) {
@@ -49,7 +46,7 @@ export default function EditProject({ onEditorFocus }) {
     }
     return errors;
   }
-  const handleSave = async (e) => {
+  const handleSave = (e) => {
     e.preventDefault();
     const descriptionSection = sections.find(section => section.type === 'Description');
     const descriptionContent = descriptionSection?.editor?.getHTML() || '';
@@ -64,40 +61,12 @@ export default function EditProject({ onEditorFocus }) {
       coverPictureRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
     if (Object.keys(validationErrors).length === 0) {
-      try {
-        const formData = new FormData();
-        formData.append('title', newValues.title);
-        formData.append('description', newValues.description);
-        formData.append('coverPhoto', newValues.coverPicture); 
-  
-        const preparedSections = sections
-          .filter(section => section.type !== "Description")
-          .map(section => ({
-            title: section.type,
-            content: section.editor ? section.editor.getHTML() : section.content,
-            dimension: section.type.toLowerCase()
-          }));
-  
-        formData.append('sections', JSON.stringify(preparedSections));
-  
-        const token = localStorage.getItem("token");
-        const response = await axios.post("http://localhost:5000/api/projects/", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`
-          }
-        });
-        console.log('Project created:', response.data);
-        navigate("/My_Projects");
-      } catch (error) {
-        console.error('Project creation failed:', error.response?.data || error.message);
-      }
+      console.log('project saved succesfully');
     }
     else {
       console.log("error")
     }
   }
-
   const handleChange = (e) => { // update form fields(when entering input)
     const { name, value } = e.target;
     setValues({ ...values, [name]: value });
@@ -107,7 +76,6 @@ export default function EditProject({ onEditorFocus }) {
       return newErrors;
     });
   };
-
   const handleImageChange = (e) => { // To add cover picture
     const file = e.target.files[0];
     if (file) {
@@ -116,7 +84,6 @@ export default function EditProject({ onEditorFocus }) {
       setValues(prev => ({...prev, coverPicture: file}));
     }
   };
-
   useEffect(() => {
     const initializedSections = defaultSections.map(section => ({
       ...section,
@@ -151,7 +118,6 @@ export default function EditProject({ onEditorFocus }) {
     }));
     setSections(initializedSections);
   }, []);
-
   useEffect(() => {
       sections.forEach(section => {
         if (section.editor) { //just to make sure the editor exists
@@ -185,11 +151,9 @@ export default function EditProject({ onEditorFocus }) {
     };
     setSections([...sections, newSection]);
   };
-
   const removeSection = (id) => {
     setSections(sections.filter((section) => section.id !== id)); //removes a section based on its id 
   };
-
   const toggleContentVisibility = (id) => {
     setSections(
       sections.map((section) =>
@@ -307,7 +271,7 @@ export default function EditProject({ onEditorFocus }) {
   };
   return (
     <>
-      <div className='flex flex-col items-center justify-self-center font-montserral min-h-screen w-full max-w-[900px] shadow-lg overflow-y-auto mt-24 mb-8
+      <div className='flex flex-col items-center justify-self-center font-montserral min-h-screen w-full max-w-[900px] shadow-lg overflow-y-auto mt-24
       '>
         <div className='bg-[#4F3726] bg-opacity-20 flex items-center justify-center w-full h-[320px] '  style={{ backgroundImage: image ? `url(${image})` : 'none',
         backgroundSize: 'cover', backgroundPosition: 'center', }}>

@@ -13,8 +13,7 @@ const annotationSchema = new mongoose.Schema({
   sectionId: { 
     type: String, 
     required: true 
-  },
-  dimension: { type: String, required: true }
+  }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Annotation', annotationSchema);

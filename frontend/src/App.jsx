@@ -29,9 +29,8 @@ import Myprojects from "./pages/myprojects.jsx";
 import Mycontributions from "./pages/Mycontributions.jsx";
 import EditorPage from "./pages/EditorPage.jsx"
 import TermsPage from "./pages/termsandpolicypage.jsx";
-import SearchPage from './pages/searchpage.jsx';
-import GoogleCallback from './components/SideBar/GoogleCallback.jsx';
-import OAuthSuccess from './pages/OAuthSuccess';
+import SearchPage from './pages/searchpage.jsx'
+import AboutUsPage from './pages/AboutUsPage.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -47,9 +46,6 @@ const router = createBrowserRouter(
       {<Route path='/set-new-password' element={<SetNewPassword/>}></Route>}
       {<Route path='/request-review' element={<AccountRequest/>}></Route>}
       {<Route path='/request-rejected' element={<RejectRequest/>}></Route>}
-      {<Route path="/editor" element={<EditorPage />} />}
-      {<Route path="/oauth/callback" component={GoogleCallback} />}
-      <Route path="/oauth-success" element={<OAuthSuccess />} />
       {<Route path="/" element={<MainLayout/>}>
         <Route path="/home_page" element={<Home_page />} />
         <Route path='/accounts' element={<AccountsPage/>} /> 
@@ -60,6 +56,7 @@ const router = createBrowserRouter(
         <Route path="/projects/:id" element={<OpenedProjectPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/terms" element={<TermsPage />} />
+        <Route path="/About_Us" element={<AboutUsPage />} />
       </Route>}
   </>
   )

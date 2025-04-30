@@ -18,9 +18,9 @@ router.post('/', authenticateUser, async (req, res) => {
       return res.status(403).json({ message: 'Only pro users can annotate sections.' });
     }
 
-    const { content, projectId, sectionId, dimension } = req.body;
+    const { content, projectId, sectionId } = req.body;
 
-    if (!content || !projectId || !sectionId || !dimension) {
+    if (!content || !projectId || !sectionId) {
       return res.status(400).json({ message: 'All fields are required.' });
     }
 
@@ -35,11 +35,8 @@ router.post('/', authenticateUser, async (req, res) => {
       lastname: user.lastname,
       content,
       project: projectId,
-      sectionId,
-      dimension  
+      sectionId: sectionId
     });
-
-
     await annotation.save();
 
     res.status(201).json({ message: 'Annotation created successfully.', annotation });
@@ -128,47 +125,6 @@ router.put('/:annotationId', authenticateUser, async (req, res) => {
 
   } catch (error) {
     console.error('❌ Server Error Editing Annotation:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  }
-});
-
-// Get all annotations for a specific project, grouped by sectionId
-router.get('/project/:projectId/grouped', authenticateUser, async (req, res) => {
-  try {
-    const { projectId } = req.params;
-
-    // Ensure the project exists
-    const project = await Project.findById(projectId);
-    if (!project) {
-      return res.status(404).json({ message: 'Project not found.' });
-    }
-
-    // Fetch and group annotations by sectionId
-    const annotations = await Annotation.aggregate([
-      { $match: { project: new mongoose.Types.ObjectId(projectId) } },
-      {
-        $group: {
-          _id: '$sectionId',
-          annotations: {
-            $push: {
-              _id: '$_id',
-              user: '$user',
-              firstname: '$firstname',
-              lastname: '$lastname',
-              content: '$content',
-              createdAt: '$createdAt',
-              updatedAt: '$updatedAt',
-              dimension: '$dimension'
-            }
-          }
-        }
-      },
-      { $sort: { '_id': 1 } } // Sort by sectionId
-    ]);
-
-    res.status(200).json({ groupedAnnotations: annotations });
-  } catch (error) {
-    console.error('Error fetching grouped annotations:', error);
     res.status(500).json({ message: 'Server error.', error: error.message });
   }
 });

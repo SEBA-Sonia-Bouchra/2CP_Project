@@ -43,7 +43,7 @@ const EditRequests = () => {
         <p className="text-center text-[#4f3726] p-2 mt-2">No edit requests</p>
       )}
 
-      <span className='h-[0.1px] bg-[#4f37267b] w-full mt-2'></span>
+      <span className='h-[0.1px] bg-[#4f37267b] w-full my-2'></span>
     </div>
   );
 };

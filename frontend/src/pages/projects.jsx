@@ -7,7 +7,7 @@ export default function ProjectsPage() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:5000/projects") // Check if this API endpoint is correct
+    fetch("GET http://localhost:5000/api/projects/") // Check if this API endpoint is correct
       .then((res) => {
         if (!res.ok) {
           throw new Error("Failed to fetch projects");

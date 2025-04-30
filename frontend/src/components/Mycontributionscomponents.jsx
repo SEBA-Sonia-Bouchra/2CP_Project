@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import DiscoverIcon from "../assets/images/discover.png";
-import { Link } from "react-router-dom";
 
-const Mycontributionscomponents = ({ projects, loading, error }) => {
+
+const Mycontributionscomponents = ({ projects, loading, error, onDeleteProject }) => {
 
   return (
     <div className="w-full max-w-6xl mx-auto p-6 relative mt-6">
@@ -25,36 +25,33 @@ const Mycontributionscomponents = ({ projects, loading, error }) => {
         ) : (
           projects.map((project) => (
             <div
-              key={project._id}
-              className="bg-white rounded-xl shadow-lg flex overflow-hidden border border-gray-200 h-[220px]"
+              key={project.id}
+              className="bg-white rounded-xl shadow-lg flex overflow-hidden border border-gray-200"
             >
               <img
-                src={`http://localhost:5000/${project.coverPhoto}`}
+                src={project.coverPhoto}
                 alt='project cover picture'
                 className="w-1/3 object-cover"
               />
               <div className="p-6 flex flex-col justify-between w-2/3">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 font-playfair">
-                    {project.title}
+                    {project.title.content}
                   </h3>
                   <p className="text-xs text-gray-500 mb-2">
-                    {new Date(project.dateOfPublish).toLocaleDateString()} -  {project.author.firstname} {project.author.lastname}
-                    {/* {new Date(project.dateOfPublish).toLocaleDateString()} - {authors[project.author] ? `${authors[project.author].firstname} ${authors[project.author].lastname}` : "Loading..."} */}
+                    {new Date(project.dateOfPublish).toLocaleDateString()} {project.author.name}
                   </p>
-                  <p className="text-sm text-gray-700 line-clamp-2" dangerouslySetInnerHTML={{ __html: project.description }} />
+                  <p className="text-sm text-gray-700 line-clamp-2">
+                    {project.description.content}
+                  </p>
                 </div>
                 <div className="flex gap-3 mt-4 overflow-hidden justify-end">
-                <Link 
-                  to={`/projects/${project._id}`} 
-                  className="mt-2 bg-[#213824CF] text-white w-[125px] h-[40px] rounded-full text-sm font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824] flex items-center justify-center"
-                >
-                  Read
-                </Link>
-                <Link to={"/editor"} 
-                  className="mt-2 bg-[#213824CF] text-white w-[125px] h-[40px] rounded-full text-sm font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824] flex items-center justify-center">                
+                  <button className="mt-2 bg-[#213824CF] text-white w-[125px] h-[40px] rounded-full text-sm font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824]">
+                    Read
+                  </button>
+                  <button className="mt-2 bg-[#213824CF] text-white w-[125px] h-[40px] rounded-full text-sm font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824]">
                     Edit
-                </Link>
+                  </button>
                 </div>
               </div>
             </div>

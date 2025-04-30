@@ -1,6 +1,5 @@
 import React from "react";
 import DiscoverIcon from "../assets/images/discover.png";
-import { Link } from "react-router-dom"
 
 const DiscoverProjects = ({ projects, loading, error }) => {
   return (
@@ -27,11 +26,11 @@ const DiscoverProjects = ({ projects, loading, error }) => {
         ) : (
           projects.map((project) => (
             <div
-              key={project._id}
-              className="bg-white rounded-lg shadow-lg flex overflow-hidden h-[220px]"
+              key={project.id}
+              className="bg-white rounded-lg shadow-lg flex overflow-hidden"
             >
               <img
-               src={`http://localhost:5000/${project.coverPhoto}`}
+                src={project.coverPhoto}
                 alt='project cover picture'
                 className="w-1/3 object-cover"
               />
@@ -41,19 +40,19 @@ const DiscoverProjects = ({ projects, loading, error }) => {
                     className="text-xl font-serif font-semibold text-gray-900"
                     style={{ fontFamily: "Playfair Display" }}
                   >
-                    {project.title}
+                    {project.title.content}
                   </h3>
                   <p className='text-gray-500 text-[10px] font-montserral pb-1'>
-                      {new Date(project.dateOfPublish).toLocaleDateString()} - {project.author?.firstname} {project.author?.lastname}
+                      {new Date(project.dateOfPublish).toLocaleDateString()} {project.author?.name}
                     </p>
-                    <p className="text-sm text-gray-700 line-clamp-2" dangerouslySetInnerHTML={{ __html: project.description }} />
-
+                  <p className="text-sm text-gray-700 mt-1">
+                    {project.description.content}
+                  </p>
                 </div>
                 <div className="flex justify-end">
-                  <Link to={`/projects/${project._id}`}
-                  className="mt-2 bg-[#213824CF] text-white w-[132px] h-[40px] rounded-full text-sm font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824]">
+                  <button className="mt-2 bg-[#213824CF] text-white w-[132px] h-[40px] rounded-full text-sm font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824]">
                     View Project
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>
