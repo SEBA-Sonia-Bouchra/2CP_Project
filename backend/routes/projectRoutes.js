@@ -19,13 +19,43 @@ const upload = multer({ storage });
 
 console.log('✅ projectRoutes loaded successfully');
 
+// ✅ GET ALL Projects Route (NEW)
+router.get('/', async (req, res) => {
+  try {
+    // Get optional query parameters for pagination/filtering
+    const { page = 1, limit = 10, sort = '-createdAt' } = req.query;
+    
+    const projects = await Project.find({})
+      .sort(sort)
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .populate('author', 'firstname lastname') // Include author info
+      .exec();
+
+    // Get total count for pagination info
+    const count = await Project.countDocuments();
+
+    res.status(200).json({
+      total: count,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page,
+      projects
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      message: 'Failed to fetch projects',
+      error: error.message 
+    });
+  }
+});
+
 // ✅ CREATE Project Route
 router.post(
   '/',
   authenticateUser,
   upload.fields([
     { name: 'coverPhoto', maxCount: 1 },
-    { name: 'media', maxCount: 10 }  //we can add the number of media
+    { name: 'media', maxCount: 10 } 
   ]),
   async (req, res) => {
     try {
@@ -33,7 +63,7 @@ router.post(
       if (!user) return res.status(404).json({ message: 'User not found' });
 
       if (!user.isProfessional) {
-        return res.status(403).json({ message: 'Only pro users can annotate sections.' });
+        return res.status(403).json({ message: 'Only pro users can create project.' });
       }
 
       const { title, description, sections, references } = req.body;
