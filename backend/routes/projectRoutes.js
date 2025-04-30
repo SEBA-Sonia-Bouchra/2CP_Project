@@ -90,6 +90,12 @@ router.post(
 
       const userId = req.user.userId;
 
+       // Add contributor to each section
+       const sectionsWithContributor = parsedSections.map(section => ({
+        ...section,
+        contributor: userId
+      }));
+
       const newProject = new Project({
         title,
         description,
@@ -97,7 +103,8 @@ router.post(
         media: mediaFiles,
         dateOfPublish: new Date(),
         author: user._id,
-        sections: parsedSections,
+        sections: sectionsWithContributor, 
+        // sections: parsedSections,
         references: parsedReferences,
       });
 

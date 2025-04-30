@@ -70,26 +70,18 @@ export default function EditProject({ onEditorFocus }) {
         formData.append('description', newValues.description);
         formData.append('coverPhoto', newValues.coverPicture); 
   
-        // const preparedSections = sections
-        // .filter(section => {
-        //   if (section.type === "Description") return false; // exclude Description
-        //   // const html = section.editor ? section.editor.getHTML() : section.content;
-        //   // return html && html !== '<p></p>'; // only keep non-empty content
-        // })
-        // .map(section => ({
-        //   title: section.type,
-        //   content: section.editor.getHTML(),
-        //   dimension: section.type.toLowerCase()
-        // }));
-
         const preparedSections = sections
-        .filter(section => section.type !== "Description")
+        .filter(section => {
+          if (section.type === "Description") return false; // exclude Description
+          const html = section.editor ? section.editor.getHTML() : section.content;
+          return html && html !== '<p></p>'; // only keep non-empty content
+        })
         .map(section => ({
           title: section.type,
-          content: section.editor ? section.editor.getHTML() : section.content,
+          content: section.editor.getHTML(),
           dimension: section.type.toLowerCase()
         }));
-  
+
         formData.append('sections', JSON.stringify(preparedSections));
   
         const token = localStorage.getItem("token");
