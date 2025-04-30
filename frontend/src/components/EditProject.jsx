@@ -71,12 +71,16 @@ export default function EditProject({ onEditorFocus }) {
         formData.append('coverPhoto', newValues.coverPicture); 
   
         const preparedSections = sections
-          .filter(section => section.type !== "Description")
-          .map(section => ({
-            title: section.type,
-            content: section.editor ? section.editor.getHTML() : section.content,
-            dimension: section.type.toLowerCase()
-          }));
+        .filter(section => {
+          if (section.type === "Description") return false; // exclude Description
+          const html = section.editor ? section.editor.getHTML() : section.content;
+          return html && html !== '<p></p>'; // only keep non-empty content
+        })
+        .map(section => ({
+          title: section.type,
+          content: section.editor.getHTML(),
+          dimension: section.type.toLowerCase()
+        }));
   
         formData.append('sections', JSON.stringify(preparedSections));
   
