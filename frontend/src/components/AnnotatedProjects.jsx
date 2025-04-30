@@ -18,7 +18,6 @@ const AnnotatedProjects = ({ projects }) => {
       scrollRef.current.scrollBy({ left: 300, behavior: "smooth" });
     }
   };
-  
 
   return (
     <div className="w-full max-w-6xl mx-auto p-6 relative">
@@ -46,21 +45,20 @@ const AnnotatedProjects = ({ projects }) => {
               key={project.id}
               className="flex-shrink-0 w-80 bg-white rounded-lg shadow-lg overflow-hidden flex flex-col"
             >
-              <img 
-              src={`http://localhost:5000/${project.coverPhoto}`} alt='project cover picture' className="w-full h-40 object-cover" />
+              <img src={project.coverPhoto} alt='project cover picture' className="w-full h-40 object-cover" />
               <div className="p-4 flex flex-col flex-grow justify-between">
                 <div>
-                  <h3 className="text-lg font-semibold">{project.title}</h3>
+                  <h3 className="text-lg font-semibold">{project.title.content}</h3>
                   <p className='text-gray-500 text-[10px] font-montserral pb-1'>
-                      {new Date(project.dateOfPublish).toLocaleDateString()} - {project.author?.firstname} {project.author?.lastname}
+                      {new Date(project.dateOfPublish).toLocaleDateString()} {project.author?.name}
                     </p>
-                    <p className="text-sm text-gray-700 line-clamp-2" dangerouslySetInnerHTML={{ __html: project.description }} />
-                    </div>
+                  <p className="text-sm text-gray-700">{project.description.content}</p>
+                </div>
                 <div className="flex justify-end">
                   <button className="mt-2 bg-[#213824CF] text-white w-[125px] h-[40px] rounded-full text-sm font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824]"
-                          onClick={() => navigate(`/projects/${project._id}`)}
+                          onClick={() => navigate(`/projects/${project.id}`)}
                   >
-                    <p className="">View Project</p>
+                    View Project
                   </button>
                 </div>
               </div>

@@ -1,32 +1,37 @@
 import React, { useEffect, useState } from 'react'
-import filledQuote from '../assets/images/filled-quote.svg';
-import useCurrentUser from '../utils/useCurrentUser'
+import filledQuote from '../assets/images/filled-quote.svg'
 
-const AddAnnotation = ({color, section, setAddAnnotation, onSaveAnnotation, projectId}) => {
+const AddAnnotation = ({color, section, setAddAnnotation, onSaveAnnotation}) => {
   const [annotationText, setAnnotationText] = useState('');
-  const user = useCurrentUser();
 
   // Handle saving the annotation
   const handleSave = async () => {
     if (annotationText.trim() === '') {
       return;
     }
-
-    const token = localStorage.getItem('token'); // Or however you're storing JWT
-    
+  
+    const token = localStorage.getItem("token"); // Get token
+    if (!token) {
+      console.error("User not authenticated");
+      return;
+    }
+  
+    const decodedToken = JSON.parse(atob(token.split(".")[1])); // Decode JWT
+    const { userId, name, surname, projectId } = decodedToken; // Assuming the token contains these fields
+  
     const annotationData = {
-      user: user?._id,
-      firstname: user?.firstname,
-      lastname: user?.lastname,
+      user: userId,
+      name: name,
+      surname: surname,
       content: annotationText,
-      projectId: projectId,
-      sectionId: section._id,
+      project: projectId,
+      sectionId: section.id,
       dimension: section.dimension,
       createdAt: new Date().toISOString(),
     };
   
     try {
-      const response = await fetch("http://localhost:5000/api/annotations/", {
+      const response = await fetch("http://localhost:5000/api/annotations", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -86,7 +91,7 @@ const AddAnnotation = ({color, section, setAddAnnotation, onSaveAnnotation, proj
                     Cancel
                 </button>
                 <button className="bg-[#4F3726] text-white px-5 py-2 rounded-full text-sm shadow-md"
-                  onClick={() => handleSave()}
+                  onClick={() => setAddAnnotation(false)}
                 >
                     Save
                 </button>

@@ -3,7 +3,7 @@ import { getColorByDimension } from '../../utils/helpers';
 import filledQuote from '../../assets/images/filled-quote.svg'
 
 const ClickedAnnotation = ({setClickedAnnotation, clickedAnnotation}) => {
-  const color = getColorByDimension(clickedAnnotation.dimension);
+  const color = getColorByDimension(clickedAnnotation.section.dimension);
   return (
     <div className='fixed top-0 w-full flex items-center justify-center h-screen bg-black bg-opacity-25 z-30'>
         <button className="absolute left-4 top-28 p-2 rounded-full flex items-center justify-center hover:bg-[#00000033]" onClick={() => setClickedAnnotation(null)}>
@@ -14,9 +14,9 @@ const ClickedAnnotation = ({setClickedAnnotation, clickedAnnotation}) => {
         {/* annotation content */}
         <div className=' bg-white rounded-md w-full lg:w-1/2 max-w-lg p-4 text-base'>
           <div className='pt-3 px-3 flex flex-row gap-2 '>
-            {/* <img src={clickedAnnotation.profilePicture} alt="User profile picture" className='rounded-full h-7 w-7 self-center'/> */}
+            <img src={clickedAnnotation.profilePicture} alt="User profile picture" className='rounded-full h-7 w-7 self-center'/>
             <div className='flex flex-col items-start '>
-              <p className='hover:underline whitespace-nowrap cursor-pointer'>{`${clickedAnnotation.firstname} ${clickedAnnotation.lastname}`}</p>
+              <p className='hover:underline whitespace-nowrap cursor-pointer'>{`${clickedAnnotation.name} ${clickedAnnotation.surname}`}</p>
               <span className='text-gray-500 text-xs'>
                 {new Date(clickedAnnotation.createdAt).toLocaleDateString()}
               </span>
@@ -26,11 +26,11 @@ const ClickedAnnotation = ({setClickedAnnotation, clickedAnnotation}) => {
           <div className='px-3 pb-3 pt-2 w-full flex items-start'>
             <p className='overflow-hidden break-words clamped-text cursor-pointer'>
                 <span>
-                    { clickedAnnotation?.dimension?.toLowerCase() === 'architecture' ? (
+                    { clickedAnnotation.section.dimension === 'architecture' ? (
                     <img src={filledQuote} alt="quote icon" className='w-3 h-3 inline mr-2'/>
-                    ) : clickedAnnotation?.dimension?.toLowerCase() === 'history' ? (
+                    ) : clickedAnnotation.section.dimension === 'history' ? (
                     <img src={filledQuote} alt="quote icon" className='w-3 h-3 inline mr-2 green-filter'/>
-                    ) : clickedAnnotation?.dimension?.toLowerCase() === 'archeology' ? (
+                    ) : clickedAnnotation.section.dimension === 'archeology' ? (
                     <img src={filledQuote} alt="quote icon" className='w-3 h-3 inline mr-2 pink-filter'/>
                     ) : (
                     <img src={filledQuote} alt="quote icon" className='w-3 h-3 inline mr-2 red-filter'/>

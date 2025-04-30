@@ -3,12 +3,7 @@ const mongoose = require('mongoose');
 const sectionSchema = new mongoose.Schema({
   title: { type: String, required: true },
   content: { type: String, required: true },
-  dimension: { type: String, required: true },
-  contributor: {
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'User',  // Reference to the User model
-    required: false
-  } 
+  dimension: { type: String, required: true }
 });
 
 const projectSchema = new mongoose.Schema({

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ModifyPermissions from './ModifyPermissions';
 import { getColorByDimension } from '../../utils/helpers';
 
-const Contributers = ({ project, isOwner, name }) => {
+const Contributers = ({ project, isOwner }) => {
   const [showModifyPermissions, setShowModifyPermissions] = useState(false);
 
   return (
@@ -12,8 +12,8 @@ const Contributers = ({ project, isOwner, name }) => {
       {/* Project Owner */}
       <div className='p-2 flex flex-row justify-between'>
         <div className='flex flex-row items-center'>
-          {/* <img src={project.author} alt="User profile picture" className='rounded-full h-6 w-6' /> */}
-          <span className='pl-1 pr-5 hover:underline cursor-pointer'>{(name)? ` ${name.firstname} ${name.lastname}` : "Unknown"}</span>
+          <img src={project.author.profilePicture} alt="User profile picture" className='rounded-full h-6 w-6' />
+          <span className='pl-1 pr-5 hover:underline cursor-pointer'>{project?.author?.name || "Unknown"}</span>
         </div>
         <span className='self-center text-gray-400'>owner</span>
       </div>
@@ -23,11 +23,11 @@ const Contributers = ({ project, isOwner, name }) => {
         const color = getColorByDimension(section.dimension);
 
         return(
-          <div key={section._id} className='p-2 flex flex-row justify-between'>
+          <div key={section.id} className='p-2 flex flex-row justify-between'>
           <div className='flex flex-row items-center'>
-            {/* <img src={section.author} alt="User profile picture" className='rounded-full h-6 w-6' /> */}
+            <img src={section.author.profilePicture} alt="User profile picture" className='rounded-full h-6 w-6' />
             <span className='pl-1 pr-5 hover:underline cursor-pointer truncate max-w-[150px]'>
-              {section?.author || "Unknown"}
+              {section?.author?.name || "Unknown"}
             </span>
           </div>
           <span style={{ color: color }} className='self-center capitalize'>

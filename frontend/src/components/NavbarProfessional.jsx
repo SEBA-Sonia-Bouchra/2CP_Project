@@ -52,7 +52,7 @@ export default function NavbarProfessional({toggleNotifications , showNotificati
                         <Link to="/My_contributions" className="px-4 py-2 hover:bg-[#F5F5DC] hover:text-[#213824] cursor-pointer">My Contributions</Link>
                     </div>
                 </div>
-                <Link to={"/editor"} className='whitespace-nowrap'>Add Project</Link>
+                <Link className='whitespace-nowrap'>Add Project</Link>
             </div>
            <div className='1200:grid flex 1200:grid-cols-4 gap-2 1200:gap-4 justify-center 1200:justify-end'>
              <button className='bg-[#DFD8C8] flex rounded-[70px] py-1 px-3 1200:py-2 1200:px-8 gap-2 place-content-center justify-self-end
@@ -82,11 +82,12 @@ export default function NavbarProfessional({toggleNotifications , showNotificati
                     {/* <ul className="absolute left-0 mt-2 w-56 bg-[#A3AD92] text-white shadow-lg rounded-1200 opacity-0 group-hover:opacity-100 
                     transition-opacity duration-300 z-50"> */}
                     <div className="absolute left-0 mt-2 w-56 bg-[#A3AD92] text-white shadow-lg rounded-1200 opacity-0 z-50 hidden-ul flex flex-col">
-                        <Link to="/My_projects" className="px-4 py-2 hover:bg-[#F5F5DC] hover:text-[#213824] cursor-pointer">My Projects</Link>
+                        <Link to="/My_project" className="px-4 py-2 hover:bg-[#F5F5DC] hover:text-[#213824] cursor-pointer">My Projects</Link>
                         <Link to="/My_contributions" className="px-4 py-2 hover:bg-[#F5F5DC] hover:text-[#213824] cursor-pointer">My Contributions</Link>
                     </div>
                 </div>
-                <Link to={"/editor"} className="py-2 whitespace-nowrap border-[#F5F5DC]">Add Project</Link>
+                <Link className="py-2 whitespace-nowrap border-[#F5F5DC]">Add Project</Link>
+                <Link to="/accounts" className="py-2">Accounts</Link>
             </div>
         </div>
     </>

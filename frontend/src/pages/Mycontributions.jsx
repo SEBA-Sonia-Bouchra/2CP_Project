@@ -1,51 +1,39 @@
 import { useEffect, useState } from "react";
+import NavbarProfessional from "../components/NavbarProfessional";
+import Footer from "../components/Footer";
 import Mycontributionscomponents from "../components/Mycontributionscomponents";
 
 export default function Projects() {
-  const [contributedProjects, setContributedProjects] = useState([]);
+  const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     // Fetch projects from backend API
-    const fetchContributedProjects = async () => {
+    const fetchProjects = async () => {
       try {
-        const token = localStorage.getItem('token');  // Get JWT from localStorage
-
-      if (!token) {
-        throw new Error("No token found");
-                }
-        console.log("fetching projects");
-        const response = await fetch(`http://localhost:5000/homepage` // Replace with your API URL
-        , 
-        {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,  // Include the JWT in the Authorization header
-          }, 
-        });
+        const response = await fetch("http://localhost:5001/projects"); // Replace with your API URL
         if (!response.ok) {
           throw new Error("Failed to fetch projects");
         }
         const data = await response.json();
-        setContributedProjects(data.contributedProjects);
+        setProjects(data);
       } catch (error) {
         setError(error.message);
       } finally {
         setLoading(false);
       }
     };
-    
-    fetchContributedProjects();
+
+    fetchProjects();
   }, []);
-  
-  console.log(contributedProjects);
+
   return (
     <div className="bg-[#FFFFF1] min-h-screen flex flex-col">
 
 
       {/* MyProjects Section */}
-      <Mycontributionscomponents projects={contributedProjects} loading={loading} error={error} />
+      <Mycontributionscomponents projects={projects} loading={loading} error={error} />
 
     </div>
   );
