@@ -1,12 +1,6 @@
 import React from 'react'
-import {
-  Route,
-  createBrowserRouter,
-  createRoutesFromElements,
-  RouterProvider,
-  Routes,
-  Router
-} from 'react-router-dom'
+import { useEffect } from 'react'
+import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider, Routes, Router} from 'react-router-dom'
 import LandingPage from './LandingPage.jsx'
 import SignUpPage from './pages/SignUpPage.jsx'
 import EmailVerification from './pages/EmailVerification.jsx'

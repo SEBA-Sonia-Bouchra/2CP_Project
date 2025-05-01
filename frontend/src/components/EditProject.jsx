@@ -13,10 +13,24 @@ import {CustomHighlight} from './extensions/CustomHighlight.js'
 import BulletList from '@tiptap/extension-bullet-list'
 import OrderedList from '@tiptap/extension-ordered-list'
 import ListItem from '@tiptap/extension-list-item'
+import Link from '@tiptap/extension-link'
+import Image from '@tiptap/extension-image'
+import { Rnd } from 'react-rnd';
+import ImageResize from 'tiptap-extension-resize-image';
+import Table from '@tiptap/extension-table'
+import TableRow from '@tiptap/extension-table-row'
+import TableCell from '@tiptap/extension-table-cell'
+import TableHeader from '@tiptap/extension-table-header'
+import Gapcursor from '@tiptap/extension-gapcursor'
+import Youtube from '@tiptap/extension-youtube'
+import { ReferenceBlock } from './extensions/ReferenceBlock.jsx'
+import { LinkBlock } from './extensions/LinkBlock.jsx';
+import { InternalLinkHandler } from './extensions/InternalLinkHandler'
+import { ExtendedParagraph } from './extensions/ExtendedParagraph.js'
 import { Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-export default function EditProject({ onEditorFocus }) {
+export default function EditProject({ onEditorFocus, coverImageFile }) {
   const navigate = useNavigate();
   const [image,setImage]=useState("");
   const defaultSections = [ //this initializes "sections" with this predefined sections, I didn't want to redo my code since i allowed users to
@@ -25,12 +39,14 @@ export default function EditProject({ onEditorFocus }) {
     { id: 'arch', type: 'Architecture', content: '', showContent: true },
     { id: 'hist', type: 'History', content: '', showContent: true },
     { id: 'archaeo', type: 'Archeology', content: '', showContent: true },
+    { id: 'rfrncs', type: 'References', content: '', showContent: true },
   ];
   const [sections, setSections] = useState(defaultSections); // To store sections
   const [showRemoveSection,setShowRemoveSection]=useState(false);
   const [errors,setErrors]= useState({});
   const initialValues={title:'',coverPicture:'',description:''}
   const [values, setValues]=useState(initialValues);
+  const [references, setReferences] = useState([]); 
   const dropdownList=useRef(null); 
   const titleRef = useRef(null);
   const descriptionRef = useRef(null);
@@ -49,6 +65,7 @@ export default function EditProject({ onEditorFocus }) {
     }
     return errors;
   }
+
   const handleSave = async (e) => {
     e.preventDefault();
     const descriptionSection = sections.find(section => section.type === 'Description');
@@ -130,6 +147,7 @@ export default function EditProject({ onEditorFocus }) {
             bulletList: false,
             orderedList: false,
             listItem: false,
+            paragraph: false, // disable default paragraph and replaced it with that extended one which contains id (so that links to references would work)
           }),
           BulletList,
           OrderedList,
@@ -138,12 +156,40 @@ export default function EditProject({ onEditorFocus }) {
           TextStyle,
           FontFamily,
           FontSize,
+          ImageResize,
+          InternalLinkHandler,
+          Gapcursor,
+          ExtendedParagraph,
+          ReferenceBlock.configure({
+            addReferenceCallback: (newRef) => {
+              setReferences(prev => [...prev, newRef]); // updates references with the new reference that we got from the reference block
+            },
+          }),
+          LinkBlock,
+          Youtube.configure({
+            controls: false,
+            nocookie: true,
+          }),
+          Table.configure({
+            resizable:true,
+          }),
+          TableRow,
+          TableCell,
+          TableHeader,
+          Image.configure({
+            inline:true,
+          }),
           TextAlign.configure({
             types: ['heading', 'paragraph'], 
             alignments: ['left', 'center', 'right', 'justify'], 
           }),
           Color,
           CustomHighlight,
+          Link.configure({
+            openOnClick: true,
+            autolink: true,
+            linkOnPaste: true,
+          }),
           Placeholder.configure({
             placeholder: 'Enter some text...',
             emptyEditorClass: 'editor-initial-content',
@@ -151,18 +197,23 @@ export default function EditProject({ onEditorFocus }) {
             showOnlyCurrent: true,
           }),
         ],
+        nodeViews: {
+          image: ({ node }) => <ResizableImage node={node} />, // Render ResizableImage for image nodes
+        },
       }),
     }));
+    console.log(sections)
     setSections(initializedSections);
   }, []);
 
-  useEffect(() => {
+  useEffect(() => { // to know which section editor is currently focused
       sections.forEach(section => {
         if (section.editor) { //just to make sure the editor exists
           section.editor.on('focus', () => onEditorFocus(section.editor));
         }
       })
-    }, [sections])
+  }, [sections])
+
   const addSection = (type) => {
     if (type === 'Other' && sections.some(s => s.type === 'Other')) return; 
     const newSection = { 
@@ -175,11 +226,18 @@ export default function EditProject({ onEditorFocus }) {
         bulletList: false,
         orderedList: false,
         listItem: false,
+        paragraph:false,
       }),
-      BulletList, OrderedList, ListItem, Underline , TextStyle, FontFamily, FontSize, Color, CustomHighlight,// the editor of the new section
+      BulletList, OrderedList, ListItem, Underline , TextStyle, FontFamily, FontSize, Color, CustomHighlight, Image, ImageResize,Gapcursor,
+      Table, TableRow, TableCell, TableHeader,  ReferenceBlock, LinkBlock, ExtendedParagraph, InternalLinkHandler,// the editor of the new section
         TextAlign.configure({
           types: ['heading', 'paragraph'], 
           alignments: ['left', 'center', 'right', 'justify'], 
+        }),
+        Link.configure({
+          openOnClick: false,
+          autolink: true,
+          linkOnPaste: true,
         }),
         Placeholder.configure({
           placeholder: 'Enter some text...',
@@ -203,6 +261,14 @@ export default function EditProject({ onEditorFocus }) {
   };  
 
   useEffect(() => {
+    if (coverImageFile) {
+      const imageUrl = URL.createObjectURL(coverImageFile);
+      setImage(imageUrl);
+      setValues(prev => ({ ...prev, coverPicture: coverImageFile }));
+    }
+  }, [coverImageFile]);
+
+  useEffect(() => {
       if (showRemoveSection) {
         document.body.style.overflow = "hidden";
       } else {
@@ -211,7 +277,31 @@ export default function EditProject({ onEditorFocus }) {
       return () => {
         document.body.style.overflow = "auto"; 
       };
-    }, [showRemoveSection]);
+  }, [showRemoveSection]);
+
+  useEffect(() => {
+    const referencesSection = sections.find(section => section.type === 'References');
+    if (referencesSection?.editor && references.length > 0) {
+      const paragraphs = references.map((ref, idx) => ({
+        type: 'paragraph',
+        attrs: {
+          id: `ref-${ref.id}`, 
+        },
+        content: [
+          {
+            type: 'text',
+            text: `[${idx + 1}]. ${ref.title}`,
+          },
+        ],
+      }));
+      
+      referencesSection.editor.commands.setContent({
+        type: 'doc',
+        content: paragraphs,
+      });
+    }
+  }, [references, sections]);  
+
   const renderSection = (section) => {
     switch (section.type) {
       case 'Description':
@@ -294,8 +384,7 @@ export default function EditProject({ onEditorFocus }) {
                       <button className='text-[#4F3726] border border-[#4F3726] rounded-full px-6 py-1' onClick={()=>setShowRemoveSection(!showRemoveSection)}>
                       Cancel</button>
                       <button className='text-white rounded-full bg-[#4F3726] px-6 py-1' onClick={()=>{removeSection(section.id)
-                        setShowRemoveSection(!showRemoveSection);
-                      }} >
+                        setShowRemoveSection(!showRemoveSection);}}>
                       Confirm</button>
                     </div>
                   </div>
@@ -305,10 +394,25 @@ export default function EditProject({ onEditorFocus }) {
             {section.showContent && <EditorContent editor={section.editor} className='editor tiptap' />}
           </div>
           );
+        case 'References':
+        return (
+          <div key={section.id} className='shadow-lg rounded-lg px-4 py-3' >
+            <div className='border-b border-black py-3 grid grid-cols-2'>
+              <h1 className='font-playfairdisplay text-2xl '>References</h1>
+              <div className='flex place-self-end gap-2'>
+                {section.showContent ? <ChevronDown className='cursor-pointer hover:bg-[#D9D9D9] hover:bg-opacity-50 rounded-full'
+                onClick={()=>toggleContentVisibility(section.id)}/> : <ChevronUp className='cursor-pointer hover:bg-[#D9D9D9] hover:bg-opacity-50
+                rounded-full' onClick={()=>toggleContentVisibility(section.id)}/>}
+              </div>
+            </div>
+            {section.showContent && <EditorContent editor={section.editor} className="editor tiptap " />}
+          </div>
+        );
       default:
         return null;
     }
   };
+
   return (
     <>
       <div className='flex flex-col items-center justify-self-center font-montserral min-h-screen w-full max-w-[900px] shadow-lg overflow-y-auto mt-24 mb-8
@@ -328,9 +432,11 @@ export default function EditProject({ onEditorFocus }) {
             <input type="text" placeholder='Add a title' className={`outline-none appearance-none rounded-md py-2 px-4 text-md w-full`} name='title'
              value={values.title} onChange={handleChange} ref={titleRef}/>
             {errors.title && <p className='text-red-700 '>{errors.title}</p>}
-          </div>
+          </div>       
           <div className="section-list">
-            {sections.map((section) =>renderSection(section) )} 
+            {sections.map((section) =>{if(section.type!=='References' || references.length>0){
+              return renderSection(section);
+            }})} 
           </div>
           <div className="flex justify-start mt-4">
             <button onClick={() => addSection('Other')} className='flex items-center gap-2 text-lg cursor-pointer bg-white hover:bg-[#D9D9D9]
