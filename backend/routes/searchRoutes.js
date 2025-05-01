@@ -5,12 +5,18 @@ const Project = require('../models/Project');
 const User = require('../models/User');
 const Annotation = require('../models/annotation');
 
-// search by firstname,lastname, email , a word from the title or description
+// Search by firstname, lastname, email, a word from the title, or description
 router.get('/', async (req, res) => {
   const query = req.query.q;
 
-  if (!query) {
-    return res.status(400).json({ message: 'Search query is required.' });
+  // Handle empty query by returning all projects
+  if (!query || query.trim() === '') {
+    try {
+      const allProjects = await Project.find({}).populate('author', 'firstname lastname');
+      return res.status(200).json(allProjects);
+    } catch (error) {
+      return res.status(500).json({ message: 'Server error', error: error.message });
+    }
   }
 
   try {
@@ -22,7 +28,7 @@ router.get('/', async (req, res) => {
         { title: { $regex: regex } },
         { description: { $regex: regex } }
       ]
-    });
+    }).populate('author', 'firstname lastname');
 
     // 2️⃣ Find user by name, surname, or email
     const users = await User.find({
@@ -32,34 +38,31 @@ router.get('/', async (req, res) => {
         { email: { $regex: regex } }
       ]
     });
-    // it appear all the project, sections , annotation that a user have done
+
     let projectsByUser = [];
     let projectsBySectionAuthor = [];
     let projectsByAnnotation = [];
     
     for (const user of users) {
       // 3️⃣ Projects created by the user
-      const userProjects = await Project.find({ author: user._id });
+      const userProjects = await Project.find({ author: user._id })
+        .populate('author', 'firstname lastname');
       projectsByUser.push(...userProjects);
     
       // 4️⃣ Projects where user added a section
-      const sectionProjects = await Project.find({ 'sections.author': user._id });
+      const sectionProjects = await Project.find({ 'sections.author': user._id })
+        .populate('author', 'firstname lastname');
       projectsBySectionAuthor.push(...sectionProjects);
     
       // 5️⃣ Annotations by user
       const annotations = await Annotation.find({ user: user._id }).select('project');
-    
       const annotatedProjectIds = [...new Set(annotations.map(a => a.project.toString()))];
-    
-      const annotationProjects = await Project.find({
-        _id: { $in: annotatedProjectIds }
-      });
-    
+      const annotationProjects = await Project.find({ _id: { $in: annotatedProjectIds } })
+        .populate('author', 'firstname lastname');
       projectsByAnnotation.push(...annotationProjects);
     }
     
-
-    // 🧩 Combine all unique projects
+    // Combine all unique projects
     const allProjects = [
       ...projectsByContent,
       ...projectsByUser,
@@ -67,15 +70,15 @@ router.get('/', async (req, res) => {
       ...projectsByAnnotation
     ];
 
-    // ✅ Filter duplicates using a Map
+    // Filter duplicates using a Map
     const uniqueProjectsMap = new Map();
     allProjects.forEach(project => uniqueProjectsMap.set(project._id.toString(), project));
 
     const uniqueProjects = Array.from(uniqueProjectsMap.values());
 
-    res.status(200).json({ results: uniqueProjects });
+    res.status(200).json(uniqueProjects); // Changed to return array directly
   } catch (error) {
-    console.error('❌ Search Error:', error);
+    console.error('Search Error:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 });

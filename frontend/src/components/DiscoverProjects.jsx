@@ -50,10 +50,13 @@ const DiscoverProjects = ({ projects, loading, error }) => {
 
                 </div>
                 <div className="flex justify-end">
-                  <Link to={`/projects/${project._id}`}
-                  className="mt-2 bg-[#213824CF] text-white w-[132px] h-[40px] rounded-full text-sm font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824]">
-                    View Project
+                  <Link to={`/projects/${project._id}`}>
+                      <button 
+                      className="mt-2 bg-[#213824CF] text-white w-[132px] h-[40px] rounded-full text-sm font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824]">
+                        View Project
+                      </button>
                   </Link>
+                  
                 </div>
               </div>
             </div>
