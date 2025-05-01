@@ -5,6 +5,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const path = require("path");
+const http = require("http");
 
 const authRoutes = require('./routes/authRoutes');
 const projectRoutes = require('./routes/projectRoutes');
@@ -15,9 +16,20 @@ const seedAdmin = require("./utils/seedAdmin");
 const homepageRoutes = require('./routes/homepageRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 const downloadRoute = require('./routes/project.routes'); 
+const notificationRoutes = require('./routes/notificationRoutes');
 const { googleAuth, googleAuthCallback } = require('./controllers/project.controller');
 
 const app = express();
+const server = http.createServer(app); // 🟢 Moved this up
+
+const setupSocket = require('./socket'); // 🟢 Socket Setup
+const io = setupSocket(server); 
+
+// Middleware to attach io to every request
+app.use((req, res, next) => {
+    req.io = io;
+    next();
+});
 
 // Debug JWT_SECRET and Mongo URI
 console.log("🔹 JWT_SECRET:", process.env.JWT_SECRET);
@@ -31,25 +43,21 @@ app.use(morgan('dev'));
 
 // Register Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/projects', projectRoutes); // Ensure project routes are registered under '/api/projects'
+app.use('/api/projects', projectRoutes);
 app.use('/api/annotations', annotationRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/filter', filterSearchRoutes);
 app.use("/api/profile", profileRoutes);
 app.use('/homepage', homepageRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/download', downloadRoute); // 🔧 Make sure this file exports a router
 
-// Mount project-related routes under /api/projects
-// Example: /api/projects/download/:projectId/:fileType
-app.use('/api/download', downloadRoute);
-
-// Define the route for Google OAuth
-app.get('/auth/google', googleAuth); // This uses the googleAuth function
-
-// Define the route for Google OAuth callback
+// Google OAuth Routes
+app.get('/auth/google', googleAuth);
 app.get('/auth/google/callback', googleAuthCallback);
 
-// Debugging: Show Registered Routes
+// Debug Registered Routes
 console.log("✅ Registered Routes:");
 app._router.stack.forEach((r) => {
     if (r.route && r.route.path) {
@@ -61,7 +69,7 @@ app._router.stack.forEach((r) => {
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    serverSelectionTimeoutMS: 30000 // 30 seconds timeout
+    serverSelectionTimeoutMS: 30000
 })
 .then(() => {
     console.log('✅ MongoDB Connected Successfully');
@@ -69,12 +77,7 @@ mongoose.connect(process.env.MONGO_URI, {
 })
 .catch((error) => {
     console.error('Error connecting to MongoDB:', error);
-    process.exit(1); // Exit the application if the connection fails
-  });
-
-// Handle Undefined Routes (404)
-app.use((req, res) => {
-    res.status(404).json({ error: "❌ Route Not Found" });
+    process.exit(1);
 });
 
 // Test Route
@@ -82,8 +85,11 @@ app.get('/', (req, res) => {
     res.send("Welcome to Projet_2CP API!");
 });
 
-// Start Server
+// Handle 404
+app.use((req, res) => {
+    res.status(404).json({ error: "❌ Route Not Found" });
+});
+
+// Start server with Socket.IO
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
-
-
+server.listen(PORT, () => console.log(`🚀 Server running with Socket.IO on port ${PORT}`));
