@@ -142,7 +142,7 @@ div.selected img {
 /*added this because inline styles are not working on EditorContent*/
 @layer components { 
   .editor .ProseMirror {
-    @apply border-none outline-none whitespace-pre-wrap font-timesnewroman text-lg;
+    @apply border-none outline-none whitespace-pre-wrap font-timesnewroman text-lg py-2 ;
   }
   .headless-ui-modal-overlay {
     background-color: rgba(0, 0, 0, 0.5);
@@ -187,6 +187,28 @@ div.selected img {
 
 .tiptap ul {
   @apply list-disc list-outside ml-5;
+}
+a {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+table {
+  /*max-width: 900px;*/
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* Important for text wrapping */
+  word-wrap: break-word;
+}
+
+th, td {
+  border: 1px solid #ccc;
+}
+
+th {
+  background-color: #f1f1f1;
+  word-break: break-word; /* Ensure words break properly */
+  overflow-wrap: break-word; 
 }
 
 

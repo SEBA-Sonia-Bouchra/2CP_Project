@@ -1,12 +1,6 @@
 import React from 'react'
-import {
-  Route,
-  createBrowserRouter,
-  createRoutesFromElements,
-  RouterProvider,
-  Routes,
-  Router
-} from 'react-router-dom'
+import { useEffect } from 'react'
+import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider, Routes, Router} from 'react-router-dom'
 import LandingPage from './LandingPage.jsx'
 import SignUpPage from './pages/SignUpPage.jsx'
 import EmailVerification from './pages/EmailVerification.jsx'
@@ -29,7 +23,7 @@ import Myprojects from "./pages/myprojects.jsx";
 import Mycontributions from "./pages/Mycontributions.jsx";
 import EditorPage from "./pages/EditorPage.jsx"
 import TermsPage from "./pages/termsandpolicypage.jsx";
-import SearchPage from './pages/searchpage.jsx'
+import SearchPage from './pages/searchpage.jsx' 
 
 const router = createBrowserRouter(
   createRoutesFromElements(
