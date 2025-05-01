@@ -27,8 +27,11 @@ import { ReferenceBlock } from './extensions/ReferenceBlock.jsx'
 import { LinkBlock } from './extensions/LinkBlock.jsx';
 import { InternalLinkHandler } from './extensions/InternalLinkHandler'
 import { ExtendedParagraph } from './extensions/ExtendedParagraph.js'
+import { Navigate, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export default function EditProject({ onEditorFocus, coverImageFile }) {
+  const navigate = useNavigate();
   const [image,setImage]=useState("");
   const defaultSections = [ //this initializes "sections" with this predefined sections, I didn't want to redo my code since i allowed users to
     // insert sections as architecture or history at the begginning but since they must be predefined i did this. 
@@ -48,6 +51,7 @@ export default function EditProject({ onEditorFocus, coverImageFile }) {
   const titleRef = useRef(null);
   const descriptionRef = useRef(null);
   const coverPictureRef = useRef(null);
+
   const validate = (values) => {
     const errors = {};
     if(!values.title) {
@@ -62,7 +66,7 @@ export default function EditProject({ onEditorFocus, coverImageFile }) {
     return errors;
   }
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
     const descriptionSection = sections.find(section => section.type === 'Description');
     const descriptionContent = descriptionSection?.editor?.getHTML() || '';
@@ -77,7 +81,38 @@ export default function EditProject({ onEditorFocus, coverImageFile }) {
       coverPictureRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
     if (Object.keys(validationErrors).length === 0) {
-      console.log('project saved succesfully');
+      try {
+        const formData = new FormData();
+        formData.append('title', newValues.title);
+        formData.append('description', newValues.description);
+        formData.append('coverPhoto', newValues.coverPicture); 
+  
+        const preparedSections = sections
+        .filter(section => {
+          if (section.type === "Description") return false; // exclude Description
+          const html = section.editor ? section.editor.getHTML() : section.content;
+          return html && html !== '<p></p>'; // only keep non-empty content
+        })
+        .map(section => ({
+          title: section.type,
+          content: section.editor.getHTML(),
+          dimension: section.type.toLowerCase()
+        }));
+
+        formData.append('sections', JSON.stringify(preparedSections));
+  
+        const token = localStorage.getItem("token");
+        const response = await axios.post("http://localhost:5000/api/projects/", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`
+          }
+        });
+        console.log('Project created:', response.data);
+        navigate("/My_Projects");
+      } catch (error) {
+        console.error('Project creation failed:', error.response?.data || error.message);
+      }
     }
     else {
       console.log("error")
@@ -380,7 +415,7 @@ export default function EditProject({ onEditorFocus, coverImageFile }) {
 
   return (
     <>
-      <div className='flex flex-col items-center justify-self-center font-montserral min-h-screen w-full max-w-[900px] shadow-lg overflow-y-auto mt-24
+      <div className='flex flex-col items-center justify-self-center font-montserral min-h-screen w-full max-w-[900px] shadow-lg overflow-y-auto mt-24 mb-8
       '>
         <div className='bg-[#4F3726] bg-opacity-20 flex items-center justify-center w-full h-[320px] '  style={{ backgroundImage: image ? `url(${image})` : 'none',
         backgroundSize: 'cover', backgroundPosition: 'center', }}>
