@@ -19,13 +19,43 @@ const upload = multer({ storage });
 
 console.log('✅ projectRoutes loaded successfully');
 
+// ✅ GET ALL Projects Route (NEW)
+router.get('/', async (req, res) => {
+  try {
+    // Get optional query parameters for pagination/filtering
+    const { page = 1, limit = 10, sort = '-createdAt' } = req.query;
+    
+    const projects = await Project.find({})
+      .sort(sort)
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .populate('author', 'firstname lastname') // Include author info
+      .exec();
+
+    // Get total count for pagination info
+    const count = await Project.countDocuments();
+
+    res.status(200).json({
+      total: count,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page,
+      projects
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      message: 'Failed to fetch projects',
+      error: error.message 
+    });
+  }
+});
+
 // ✅ CREATE Project Route
 router.post(
   '/',
   authenticateUser,
   upload.fields([
     { name: 'coverPhoto', maxCount: 1 },
-    { name: 'media', maxCount: 10 }  //we can add the number of media
+    { name: 'media', maxCount: 10 } 
   ]),
   async (req, res) => {
     try {
@@ -33,7 +63,7 @@ router.post(
       if (!user) return res.status(404).json({ message: 'User not found' });
 
       if (!user.isProfessional) {
-        return res.status(403).json({ message: 'Only pro users can annotate sections.' });
+        return res.status(403).json({ message: 'Only pro users can create project.' });
       }
 
       const { title, description, sections, references } = req.body;
@@ -90,8 +120,8 @@ router.post(
 
       const userId = req.user.userId;
 
-      // Add contributor to each section
-      const sectionsWithContributor = parsedSections.map(section => ({
+       // Add contributor to each section
+       const sectionsWithContributor = parsedSections.map(section => ({
         ...section,
         contributor: userId
       }));
@@ -103,7 +133,7 @@ router.post(
         media: mediaFiles,
         dateOfPublish: new Date(),
         author: user._id,
-        sections: sectionsWithContributor, // <-- use the new one
+        sections: sectionsWithContributor, 
         // sections: parsedSections,
         references: parsedReferences,
       });
@@ -338,7 +368,12 @@ router.put('/:projectId/sections/:sectionId', authenticateUser, async (req, res)
 router.get('/:id', async (req, res) => {
   try {
     const projectId = req.params.id;
-    const project = await Project.findById(projectId); 
+
+    const project = await Project.findById(projectId)
+      .populate({
+        path: 'author',
+        select: 'firstname lastname _id'  
+      });
 
     if (!project) {
       return res.status(404).json({ message: 'Project not found' });
@@ -350,25 +385,25 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// get the name of a user by its id
-router.get('/user/:id', authenticateUser, async (req, res) => {
-  try {
-    const { id } = req.params; // Get user ID from the request params
-    const user = await User.findById(id); // Find user by ID
+// // get the name of a user by its id
+// router.get('/user/:id', authenticateUser, async (req, res) => {
+//   try {
+//     const { id } = req.params; // Get user ID from the request params
+//     const user = await User.findById(id); // Find user by ID
 
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
+//     if (!user) {
+//       return res.status(404).json({ message: 'User not found' });
+//     }
 
-    // Respond with only first name and last name
-    const { firstname, lastname } = user;
-    res.status(200).json({ firstname, lastname });
+//     // Respond with only first name and last name
+//     const { firstname, lastname } = user;
+//     res.status(200).json({ firstname, lastname });
 
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error', error: error.message });
-  }
-});
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Server error', error: error.message });
+//   }
+// });
 
 
 module.exports = router;

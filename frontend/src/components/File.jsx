@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { getColorByDimension } from '../utils/helpers';
 import SectionDropDown from './SectionDropDown';
+import '../index.css'
 
-const File = ({ project, isOwner, currentUser, isProfessional, name }) => {
+const File = ({ project, isOwner, currentUser, isProfessional }) => {
     const [selectedCoverPicture, setSelectedCoverPicure] = useState(null);
     const [sectionDropDown, setSectionDropDown] = useState(null);
     const localhost = "http://localhost:5000/";
@@ -18,7 +19,8 @@ const File = ({ project, isOwner, currentUser, isProfessional, name }) => {
   return (
     <div className='w-full max-w-[900px] bg-white shadow-md h-fit rounded-md'>
         {/* cover picture section */}
-        <div className='w-full h-56 overflow-hidden rounded-t-md'>
+        <div className='w-full h-72 overflow-hidden rounded-t-md'>
+          {/* <img src={`${localhost}${project.coverPhoto}`} alt="cover-picture" className='w-full h-full object-contain object-center cursor-pointer' */}
             <img src={`${localhost}${project.coverPhoto}`} alt="cover-picture" className='w-full h-full object-cover object-center cursor-pointer'
             onClick={ () => setSelectedCoverPicure(`${localhost}${project.coverPhoto}`)}
             />
@@ -41,15 +43,15 @@ const File = ({ project, isOwner, currentUser, isProfessional, name }) => {
             <h1 className='pb-1'>{project.title}</h1>
             {/* date & author */}
             <p className='text-gray-500 text-[10px] font-montserral pb-1'>
-              {new Date(project.dateOfPublish).toLocaleDateString()} - {name.firstname} {name.lastname}
+              {new Date(project.dateOfPublish).toLocaleDateString()} - {project?.author?.firstname} {project?.author?.lastname}
             </p>
             {/* description */}
             { project.description &&
               <div id='description' className='my-3 w-full'>
                 <h2 className='font-playfairdisplay mb-2 text-lg'>Description</h2>
                 <div className='h-[1.5px] rounded-full bg-[#4f3726] mb-2'></div>
-                <p dangerouslySetInnerHTML={{ __html: project.description }}/>
-              </div>
+                <div className="ProseMirror" dangerouslySetInnerHTML={{ __html: project.description }} />
+                </div>
             }    
 
             {/* sections */}
@@ -72,13 +74,13 @@ const File = ({ project, isOwner, currentUser, isProfessional, name }) => {
                         </svg> 
                       </button>
                     )}
-                    {sectionDropDown === index && <SectionDropDown color={color} section={section} isOwner={isOwner} currentUser={currentUser}/>}
+                    {sectionDropDown === index && <SectionDropDown color={color} section={section} isOwner={isOwner} currentUser={currentUser} project={project}/>}
                   </div>
                 </div>
                 <div style={{ backgroundColor: color }} className={`h-[1.5px] rounded-full mb-2`}></div> 
                  {/* section content */}
                  <div className='w-full'>
-                  <div dangerouslySetInnerHTML={{ __html: section.content }} />
+                  <div className="ProseMirror" dangerouslySetInnerHTML={{ __html: section.content }} />
                  </div> 
               </div>
               );

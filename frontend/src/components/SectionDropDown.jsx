@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import AddAnnotation from './AddAnnotation';
 import DeleteSection from './DeleteSection';
 
-const SectionDropDown = ({color, section, isOwner, currentUser}) => {
+const SectionDropDown = ({color, section, isOwner, currentUser, project}) => {
   const [addAnnotation, setAddAnnotation] = useState (false);
   const [deleteSection, setDeleteSection] = useState (false);
-  let isWriter = currentUser?._id === section.author; 
+  let isWriter = currentUser?._id === section.author;//////////////////////  
 
   return (
     <>
@@ -27,7 +27,7 @@ const SectionDropDown = ({color, section, isOwner, currentUser}) => {
          )}
       </div>
       { addAnnotation && (
-        <AddAnnotation color={color} section={section} setAddAnnotation={setAddAnnotation}/>
+        <AddAnnotation color={color} section={section} setAddAnnotation={setAddAnnotation} projectId={project._id}/>
       )}
       { deleteSection && (
         <DeleteSection setDeleteSection={setDeleteSection}/>

@@ -26,10 +26,10 @@ exports.getpageProjects = async (req, res) => {
     const userId = decoded.id;
     // 1. Projects owned by the user
     const ownedProjects = await Project.find({author : userId })
-    /*.populate({
+    .populate({
       path: 'author',
       select: 'firstname lastname' // Explicitly select these fields
-    });*/
+    });
     
     console.log(ownedProjects);
     // 2. Projects where user is a contributor (not owner)
@@ -37,32 +37,35 @@ exports.getpageProjects = async (req, res) => {
        "sections.contributor": userId,
         author: { $ne: userId }
       })
-      /*.populate({
+      .populate({
         path: 'author',
         select: 'firstname lastname' // Explicitly select these fields
-      });*/
+      });
       console.log(contributedProjects);
 
 
     
    
     // 3. Projects where user has annotations (not owner)
-    const annotatedProjectIds = await Annotation.distinct('project', { user: userId });
+    /*const annotatedProjectIds = await Annotation.distinct('project', { user: userId });
     const annotatedProjects = await Project.find({
       _id: { $in: annotatedProjectIds },
       author: { $ne: userId }
-    });
+    });*/
+   
+    //const annotatedProjects = await getAnnotatedProjects(userId);
 
-    // ✅ Send the flat array to frontend
     res.status(200).json({
       ownedProjects,
-      contributedProjects,
-      annotatedProjects
+      contributedProjects
     });
 
   } catch (error) {
-    console.error(error); // Log the error
-      res.status(500).json({ message: "Internal Server Error", error: error.message });
+    console.error(error);
+    res.status(500).json({ 
+      message: "Internal Server Error", 
+      error: error.message 
+    });
   }
 };
 
@@ -116,5 +119,70 @@ exports.deleteProject = async (req, res) => {
   } catch (error) {
     console.error('Error deleting project:', error);
     res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+/*async function getAnnotatedProjects(userId) {
+  const recentAnnotations = await Annotation.find({ user: userId })
+    .sort({ createdAt: -1 })
+    .limit(5)
+    .select('project');
+  
+  const projectIds = [...new Set(recentAnnotations.map(a => a.project))];
+  
+  return projectIds.length > 0
+    ? await Project.find({
+        _id: { $in: projectIds },
+        author: { $ne: userId }
+      }).populate('author', 'firstname lastname')
+    : [];
+}*/
+// For /home (annotated + discover)
+exports.getHomeProjects = async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+    console.log("Token:", token); // Check if the token is being sent correctly
+
+    if (!token) {
+      return res.status(401).json({ error: 'No token provided' });
+    }
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.id;
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
+    // Fetch in parallel
+    const [annotated, discovered] = await Promise.all([
+      // Annotated projects
+      Annotation.find({ user: userId, createdAt: { $gte: oneMonthAgo } })
+        .sort('-createdAt')
+        .limit(5)
+        .populate({
+          path: 'project',
+          match: { author: { $ne: userId } }, // Exclude user's own projects
+          populate: { path: 'author', select: 'firstname lastname' }
+        }),
+      
+      // Discover projects (newest non-user projects)
+      Project.find({ 
+        author: { $ne: userId },
+        dateOfPublish: { $gte: oneMonthAgo }
+      })
+        .sort('-dateOfPublish')
+        .limit(5)
+        .populate('author', 'firstname lastname')
+    ]);
+
+    // Filter out nulls from annotated projects (due to match condition)
+    const filteredAnnotated = annotated
+      .map(a => a.project)
+      .filter(p => p !== null);
+
+    res.json({
+      annotated: filteredAnnotated,
+      discovered
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };

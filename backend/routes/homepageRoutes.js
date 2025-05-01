@@ -17,5 +17,7 @@ router.put('/:projectId/edit', homepageController.editProject);
 
 // Delete a project (only for the owner)
 router.delete('/:projectId',homepageController.deleteProject);
+router.get('/Home', homepageController.getHomeProjects); 
+
 
 module.exports = router;
