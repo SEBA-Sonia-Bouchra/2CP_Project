@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'
 
 const EditRequest = ({ projectId }) => {
   const [editRequest, setEditRequest] = useState('noRequest');
@@ -31,6 +32,31 @@ const EditRequest = ({ projectId }) => {
     }
   };
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+  
+    const fetchRequestStatus = async () => {
+      try {
+        const res = await fetch(`${localhost}/api/editrequests/project/${projectId}/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+  
+        const data = await res.json();
+        setEditRequest(data.status);
+      } catch (err) {
+        console.error('Failed to fetch request status:', err);
+      }
+    };
+  
+    fetchRequestStatus();
+  
+    // Poll every 10 seconds to check for updates
+    const intervalId = setInterval(fetchRequestStatus, 10000);
+  
+    return () => clearInterval(intervalId);
+  }, [projectId]);  
+
   return (
     <>
       {editRequest === 'noRequest' ? (
@@ -55,7 +81,9 @@ const EditRequest = ({ projectId }) => {
       ) : editRequest === 'accepted' ? (
         <div className='text-xs flex flex-col items-center gap-2 max-w-[232px]'>
           <div className='mt-3 mx-4 mb-2 text-center'>Your editing request has been accepted!</div>
-          <button className='w-28 shadow-sm rounded-full bg-[#4F3726] text-[#FFF8E3] h-6 mb-3'>Start editing</button>
+          <Link to={'/editor'}>
+            <button className='w-28 shadow-sm rounded-full bg-[#4F3726] text-[#FFF8E3] h-6 mb-3'>Start editing</button>
+          </Link>
         </div>
       ) : (
         <div className='text-xs my-3 mx-4 text-center max-w-[300px]'>Your editing request has been declined.</div>
