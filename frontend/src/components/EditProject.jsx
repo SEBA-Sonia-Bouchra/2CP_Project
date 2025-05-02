@@ -90,6 +90,7 @@ export default function EditProject({ onEditorFocus, coverImageFile }) {
         const preparedSections = sections
         .filter(section => {
           if (section.type === "Description") return false; // exclude Description
+          if (section.type === "References") return false;
           const html = section.editor ? section.editor.getHTML() : section.content;
           return html && html !== '<p></p>'; // only keep non-empty content
         })
@@ -100,6 +101,7 @@ export default function EditProject({ onEditorFocus, coverImageFile }) {
         }));
 
         formData.append('sections', JSON.stringify(preparedSections));
+        formData.append('references', JSON.stringify(references));
   
         const token = localStorage.getItem("token");
         const response = await axios.post("http://localhost:5000/api/projects/", formData, {
