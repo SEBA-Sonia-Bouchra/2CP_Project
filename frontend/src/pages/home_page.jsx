@@ -25,7 +25,6 @@ export default function Projects() {
       if (!token) {
         throw new Error("No token found");
                 }
-        console.log("fetching projects");
         const response = await fetch(`http://localhost:5000/homepage/Home` // Replace with your API URL
         , {
           method: 'GET',
@@ -38,7 +37,6 @@ export default function Projects() {
         }
         const data = await response.json();
         
-       console.log("API Data:", data);
         setProjects({
               recent: [],  // You don't have recentProjects from backend yet so it is empty for the moment
               annotated: data.annotated || [],
@@ -53,7 +51,6 @@ export default function Projects() {
 
     fetchProjects();
    }, []);
-console.log (user);
 
   return (
     <div className="bg-[#f5f5dc] min-h-screen flex flex-col pt-6"> 
