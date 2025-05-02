@@ -46,4 +46,18 @@ router.post('/:id', authenticateUser, async (req, res) => {
   }
 });
 
+// Get all edit requests for a specific project
+router.get('/project/:id', authenticateUser, async (req, res) => {
+  try {
+    const requests = await EditRequest.find({ project: req.params.id, status: 'pending' })
+      .populate('requester', 'firstname lastname profilePicture'); 
+
+    res.status(200).json(requests);
+  } catch (error) {
+    console.error('Error fetching edit requests:', error.message);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+
 module.exports = router;

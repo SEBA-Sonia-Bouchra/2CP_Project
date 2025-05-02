@@ -372,7 +372,11 @@ router.get('/:id', async (req, res) => {
     const project = await Project.findById(projectId)
       .populate({
         path: 'author',
-        select: 'firstname lastname _id'  
+        select: 'firstname lastname _id profilePicture'  
+      })
+      .populate({
+        path: 'sections.contributor',
+        select: 'firstname lastname _id profilePicture'
       });
 
     if (!project) {

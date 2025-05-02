@@ -1,6 +1,9 @@
 import React from 'react';
+import edit from '../../assets/images/edit.svg'
 
 const ReportConflict = ({ setReportConflict, annotation, isOwner }) => {
+  const localhost = "http://localhost:5000";
+  
   return (
     <div className='fixed left-0 top-0 w-full flex items-center justify-center h-screen bg-black bg-opacity-25 z-30'>
       <div className='bg-white rounded-md lg:w-1/2 max-w-lg p-4'>
@@ -11,16 +14,16 @@ const ReportConflict = ({ setReportConflict, annotation, isOwner }) => {
           <div className='grid grid-cols-[auto_1fr_auto] gap-2 items-center'>
             {isOwner && (
               <>
-                <img src={annotation.section.profilePicture} alt="User Profile" className='rounded-full h-6 w-6' />
+                <img src={`${localhost}${annotation.profilePicture} ` || edit} alt="User Profile" className='rounded-full h-6 w-6' />
                 <p className='hover:underline truncate max-w-[200px] whitespace-nowrap'>
                   {annotation.section.name} {annotation.section.surname}
                 </p>
                 <span className='text-left text-xs text-gray-600'>Section Writer</span>
               </>
             )}
-            <img src={annotation.profilePicture} alt="User Profile" className='rounded-full h-6 w-6' />
+            <img src={`${localhost}${annotation.profilePicture} ` || edit}  alt="User Profile" className='rounded-full h-6 w-6 object-cover object-center' />
             <p className='hover:underline truncate max-w-[200px] whitespace-nowrap'>
-              {annotation.name} {annotation.surname}
+              {annotation.firstname} {annotation.lastname}
             </p>
             <span className='text-left text-xs text-gray-600'>Annotation Writer</span>
           </div>

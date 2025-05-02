@@ -4,7 +4,14 @@ import filledQuote from '../../assets/images/filled-quote.svg'
 
 const EditAnnotation = ({setEditAnnotation, onSaveAnnotation, annotation}) => {
   const [annotationText, setAnnotationText] = useState('');
-  const color = getColorByDimension(annotation.section.dimension);
+  const color = getColorByDimension(annotation.dimension);
+
+  useEffect(() => {
+    if (annotation?.content) {
+      setAnnotationText(annotation.content);
+    }
+  }, [annotation]);
+  
 
   // Handle saving the annotation
   const handleSave = async () => {
@@ -19,7 +26,6 @@ const EditAnnotation = ({setEditAnnotation, onSaveAnnotation, annotation}) => {
     }
   
     const decodedToken = JSON.parse(atob(token.split(".")[1])); // Decode JWT
-    const { userId, name, surname, projectId } = decodedToken; // Assuming the token contains these fields
   
     const annotationData = {
       content: annotationText,
@@ -27,8 +33,8 @@ const EditAnnotation = ({setEditAnnotation, onSaveAnnotation, annotation}) => {
     };
   
     try {
-      const response = await fetch("http://localhost:5000/api/annotations", {
-        method: "POST",
+      const response = await fetch(`http://localhost:5000/api/annotations/${annotation?._id}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`, // Send token to the backend
@@ -42,10 +48,9 @@ const EditAnnotation = ({setEditAnnotation, onSaveAnnotation, annotation}) => {
   
       const savedAnnotation = await response.json();
       if (onSaveAnnotation) {
-        onSaveAnnotation(savedAnnotation);
+        onSaveAnnotation(savedAnnotation.annotation);
       }
   
-      setEditAnnotation(false);
     } catch (error) {
       console.error("Error saving annotation:", error);
     }
@@ -75,7 +80,7 @@ const EditAnnotation = ({setEditAnnotation, onSaveAnnotation, annotation}) => {
                 placeholder='Add text here' 
                 autoFocus
                 rows="4"
-                value={annotation.content}
+                value={annotationText}
                 onChange={(e) => setAnnotationText(e.target.value)}
                 className='shadow-sm hover:shadow-md m-3 w-[95%] p-3 outline-none rounded-md border border-gray-200 resize-none text-sm hide-scrollbar'
             ></textarea>
@@ -87,7 +92,7 @@ const EditAnnotation = ({setEditAnnotation, onSaveAnnotation, annotation}) => {
                     Cancel
                 </button>
                 <button className="bg-[#4F3726] text-white px-5 py-2 rounded-full text-sm shadow-md"
-                  onClick={() => setEditAnnotation(false)}
+                  onClick={() => handleSave()}
                 >
                     Save
                 </button>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef  } from 'react';
 import { getColorByDimension } from '../utils/helpers';
 import SectionDropDown from './SectionDropDown';
 import '../index.css'
@@ -6,7 +6,19 @@ import '../index.css'
 const File = ({ project, isOwner, currentUser, isProfessional }) => {
     const [selectedCoverPicture, setSelectedCoverPicure] = useState(null);
     const [sectionDropDown, setSectionDropDown] = useState(null);
+    const dropdownRef = useRef(null);
     const localhost = "http://localhost:5000/";
+
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+          setSectionDropDown(null);
+        }
+      };
+  
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     useEffect(() => {
       const originalOverflow = document.body.style.overflow;
@@ -74,7 +86,9 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
                         </svg> 
                       </button>
                     )}
-                    {sectionDropDown === index && <SectionDropDown color={color} section={section} isOwner={isOwner} currentUser={currentUser} project={project}/>}
+                    {sectionDropDown === index && 
+                    <SectionDropDown color={color} section={section} isOwner={isOwner} currentUser={currentUser} project={project} setSectionDropDown={setSectionDropDown} dropdownRef={dropdownRef}/>
+                    }
                   </div>
                 </div>
                 <div style={{ backgroundColor: color }} className={`h-[1.5px] rounded-full mb-2`}></div> 
