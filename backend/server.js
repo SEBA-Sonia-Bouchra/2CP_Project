@@ -18,6 +18,7 @@ const profileRoutes = require('./routes/profileRoutes');
 const downloadRoute = require('./routes/project.routes'); 
 const notificationRoutes = require('./routes/notificationRoutes');
 const editRequestRoutes = require('./routes/editreqRoutes'); 
+const approveeditreqRoutes = require('./routes/approveeditreqRoutes')
 const { googleAuth, googleAuthCallback } = require('./controllers/project.controller');
 
 const app = express();
@@ -53,7 +54,8 @@ app.use('/homepage', homepageRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/download', downloadRoute); 
-app.use('/api/editrequests', editRequestRoutes); 
+app.use('/api/editrequests', editRequestRoutes);
+app.use('/api/approveeditreqest', approveeditreqRoutes) 
 
 // Google OAuth Routes
 app.get('/auth/google', googleAuth);

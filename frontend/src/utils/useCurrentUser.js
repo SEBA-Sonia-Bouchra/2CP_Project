@@ -1,4 +1,4 @@
-// hooks/useCurrentUser.js
+// return current user info
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -13,8 +13,16 @@ const useCurrentUser = () => {
       headers: { Authorization: `Bearer ${token}` },
     })
     .then((res) => setUser(res.data))
-    .catch((err) => console.error("Error fetching user:", err));
-  }, []);
+    .catch((err) => {
+      console.error("Error fetching user:", err);
+    
+      const isExpired = err.response?.status === 401 && err.response?.data?.message === 'jwt expired';
+      if (isExpired) {
+        localStorage.removeItem("token");
+        window.location.href = "/signin"; 
+      }
+    });
+    }, []);
 
   return user;
 };
