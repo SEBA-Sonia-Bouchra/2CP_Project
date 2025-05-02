@@ -59,5 +59,23 @@ router.get('/project/:id', authenticateUser, async (req, res) => {
   }
 });
 
+// Get current user's edit request for a specific project
+router.get('/project/:id/me', authenticateUser, async (req, res) => {
+  try {
+    const request = await EditRequest.findOne({
+      project: req.params.id,
+      requester: req.user._id
+    });
+
+    if (!request) {
+      return res.status(200).json({ status: 'noRequest' });
+    }
+
+    res.status(200).json({ status: request.status });
+  } catch (error) {
+    console.error('Error fetching user edit request:', error.message);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
 
 module.exports = router;

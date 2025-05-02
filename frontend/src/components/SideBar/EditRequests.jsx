@@ -25,8 +25,18 @@ const EditRequests = ({ projectId }) => {
     fetchRequests();
   }, [projectId]);
 
-  const handleRequest = (id) => {
-    setEditRequests(editRequests.filter(request => request._id !== id));
+  const handleRequest = async (id, action) => {
+    try{
+      const token = localStorage.getItem('token');
+      await axios.patch(`${localhost}/api/approveeditreqest/${id}`,
+        {action},
+        {headers: {Authorization: `Bearer ${token}`}}
+      );
+      setEditRequests(editRequests.filter(request => request._id !== id));
+      alert(`Edit request ${action}ed!`);
+    }catch(err){
+      console.log(`Failed to ${action} request `, err);
+    }
   };
 
   return (
@@ -44,10 +54,10 @@ const EditRequests = ({ projectId }) => {
               </span>
             </div>
             <div className='flex flex-row items-center gap-2'>
-              <button onClick={() => handleRequest(request._id)} title="Accept the request">
+              <button onClick={() => handleRequest(request._id, 'accept')} title="Accept the request">
                 <img src={Accept} alt="Accept" className='w-5 h-5'/>   
               </button>
-              <button onClick={() => handleRequest(request._id)} title="Reject the request">
+              <button onClick={() => handleRequest(request._id, 'reject')} title="Reject the request">
                 <img src={Reject} alt="Reject" className='w-5 h-5'/>
               </button>
             </div>
