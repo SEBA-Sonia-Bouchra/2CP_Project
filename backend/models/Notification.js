@@ -6,7 +6,7 @@ const notificationSchema = new mongoose.Schema({
     ref: 'Project',
     required: true
   },
-  ownerId: {
+  recipientId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
@@ -27,6 +27,10 @@ const notificationSchema = new mongoose.Schema({
   annotationId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Annotation'
+  },
+  senderId: {  // 👈 Who triggered the notification (e.g., annotator)
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   },
 
   // Shared
@@ -57,6 +61,12 @@ const notificationSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  hasIo: {
+    type: Boolean,
+    required: function () {
+      return this.type === 'conflict';
+    }
   }
 });
 
