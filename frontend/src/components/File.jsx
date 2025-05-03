@@ -1,24 +1,57 @@
 import React, { useState, useEffect, useRef  } from 'react';
 import { getColorByDimension } from '../utils/helpers';
 import SectionDropDown from './SectionDropDown';
+import DescriptionDropDown from './DescriptionDropDown';
 import '../index.css'
 
 const File = ({ project, isOwner, currentUser, isProfessional }) => {
     const [selectedCoverPicture, setSelectedCoverPicure] = useState(null);
     const [sectionDropDown, setSectionDropDown] = useState(null);
-    const dropdownRef = useRef(null);
+    const [descriptionDropDown, setDescriptionDropDown] = useState(false);
+    const [sections, setSections] = useState(project.sections || []);
+
+    const descDropdownRef = useRef(null);
+    const descButtonRef = useRef(null);
+    const sectionDropdownRef = useRef(null);
+    const sectionButtonRef = useRef(null);
+
     const localhost = "http://localhost:5000/";
 
     useEffect(() => {
-      const handleClickOutside = (event) => {
-        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-          setSectionDropDown(null);
-        }
-      };
-  
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
+    const handleClickOutside = (event) => {
+      const clickedOutsideDesc = descDropdownRef.current &&
+        !descDropdownRef.current.contains(event.target) &&
+        descButtonRef.current &&
+        !descButtonRef.current.contains(event.target);
+
+      const clickedOutsideSection = sectionDropdownRef.current &&
+        !sectionDropdownRef.current.contains(event.target) &&
+        sectionButtonRef.current &&
+        !sectionButtonRef.current.contains(event.target);
+
+      if (clickedOutsideDesc) {
+        setDescriptionDropDown(false);
+      }
+
+      if (clickedOutsideSection) {
+        setSectionDropDown(null);
+      }
+    };
+
+  document.addEventListener('mousedown', handleClickOutside);
+  return () => document.removeEventListener('mousedown', handleClickOutside);
+}, []);
+
+    
+
+    useEffect(() => {
+      setSections(project.sections || []);
+    }, [project.sections]);
+    
+    const handleDeleteSection = (sectionId) => {
+      setSections((prevSections) => prevSections.filter(section => section._id !== sectionId));
+      setSectionDropDown(null); // Close dropdown
+    };    
 
     useEffect(() => {
       const originalOverflow = document.body.style.overflow;
@@ -60,14 +93,30 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
             {/* description */}
             { project.description &&
               <div id='description' className='my-3 w-full'>
-                <h2 className='font-playfairdisplay mb-2 text-lg'>Description</h2>
+                <div className='w-full flex flex-row justify-between mb-1'>
+                  <h2 className='font-playfairdisplay mb-2 text-lg'>Description</h2>
+                  <div className='relative flex flex-col'>
+                    {isOwner && 
+                    <button className='rounded-full p-2 hover:bg-[#00000023] self-center' ref={descButtonRef} onClick={() => setDescriptionDropDown(prev => !prev)}> 
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4 text-[#4f3726]">
+                        <circle cx="12" cy="5" r="2" />
+                        <circle cx="12" cy="12" r="2" />
+                        <circle cx="12" cy="19" r="2" />
+                      </svg> 
+                    </button>
+                    }
+                    {descriptionDropDown && 
+                      <DescriptionDropDown dropdownRef={descDropdownRef} project={project}/>
+                    }             
+                  </div>
+                </div>
                 <div className='h-[1.5px] rounded-full bg-[#4f3726] mb-2'></div>
                 <div className="ProseMirror" dangerouslySetInnerHTML={{ __html: project.description }} />
                 </div>
             }    
 
             {/* sections */}
-             { project.sections.map((section, index) => {
+             { sections.map((section, index) => {
               const color = getColorByDimension(section.dimension);
 
               return(
@@ -78,7 +127,7 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
                   </h2>
                   <div className='relative flex flex-col'>
                     { isProfessional && (
-                      <button className='rounded-full p-2 hover:bg-[#00000023] self-center' onClick={() => (setSectionDropDown(sectionDropDown === index ? null : index))}> 
+                      <button className='rounded-full p-2 hover:bg-[#00000023] self-center' ref={sectionButtonRef} onClick={() => setSectionDropDown(prev => (prev === index ? null : index))}> 
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4" style={{ color: color }}>
                           <circle cx="12" cy="5" r="2" />
                           <circle cx="12" cy="12" r="2" />
@@ -87,7 +136,8 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
                       </button>
                     )}
                     {sectionDropDown === index && 
-                    <SectionDropDown color={color} section={section} isOwner={isOwner} currentUser={currentUser} project={project} setSectionDropDown={setSectionDropDown} dropdownRef={dropdownRef}/>
+                    <SectionDropDown color={color} section={section} isOwner={isOwner} currentUser={currentUser} project={project} setSectionDropDown={setSectionDropDown} 
+                    dropdownRef={sectionDropdownRef} onDeleteSection={handleDeleteSection}/>
                     }
                   </div>
                 </div>
