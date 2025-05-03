@@ -16,10 +16,9 @@ const useCurrentUser = () => {
     .catch((err) => {
       console.error("Error fetching user:", err);
     
-      const isExpired = err.response?.status === 401 && err.response?.data?.message === 'jwt expired';
-      if (isExpired) {
+      if (err.response?.status === 401) {
         localStorage.removeItem("token");
-        window.location.href = "/signin"; 
+        window.location.href = "/signin";
       }
     });
     }, []);

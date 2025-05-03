@@ -12,7 +12,7 @@ const AddAnnotation = ({color, section, setAddAnnotation, onSaveAnnotation, proj
       return;
     }
 
-    const token = localStorage.getItem('token'); // Or however you're storing JWT
+    const token = localStorage.getItem('token'); 
     
     const annotationData = {
       user: user?._id,
@@ -30,7 +30,7 @@ const AddAnnotation = ({color, section, setAddAnnotation, onSaveAnnotation, proj
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Send token to the backend
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(annotationData),
       });
