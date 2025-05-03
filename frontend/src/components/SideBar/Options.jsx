@@ -101,7 +101,7 @@ const Options = ({ isOwner, project }) => {
             onClick={handleHtmlDownload}>
               Download as .html
       </span>
-      <span className='h-[0.1px] bg-[rgba(79,55,38,0.48)] w-full'></span>
+      {/* <span className='h-[0.1px] bg-[rgba(79,55,38,0.48)] w-full'></span>
       <span className='text-[#4F3726] py-2 text-sm cursor-pointer'
             onClick={handleSaveDrive}>
         Save to Drive
@@ -110,7 +110,7 @@ const Options = ({ isOwner, project }) => {
         className="text-[#4F3726] py-2 text-sm cursor-pointer"
         onClick={handleGoogleLogin}>
         Login with Google
-      </span>
+      </span> */}
       <span className='h-[0.1px] bg-[rgba(79,55,38,0.48)] w-full'></span>
 
     </div>

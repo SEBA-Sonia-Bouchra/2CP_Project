@@ -161,7 +161,7 @@ router.put('/:annotationId', authenticateUser, async (req, res) => {
   }
 });
 
-// Get all annotations for a specific project, grouped by sectionId
+
 router.get('/project/:projectId/grouped', authenticateUser, async (req, res) => {
   try {
     const { projectId } = req.params;
@@ -172,9 +172,20 @@ router.get('/project/:projectId/grouped', authenticateUser, async (req, res) => 
       return res.status(404).json({ message: 'Project not found.' });
     }
 
-    // Fetch and group annotations by sectionId
     const annotations = await Annotation.aggregate([
       { $match: { project: new mongoose.Types.ObjectId(projectId) } },
+
+      // Join with User collection to get profilePicture
+      {
+        $lookup: {
+          from: 'users', // Collection name (lowercase and plural of model by default)
+          localField: 'user',
+          foreignField: '_id',
+          as: 'userDetails'
+        }
+      },
+      { $unwind: '$userDetails' },
+
       {
         $group: {
           _id: '$sectionId',
@@ -187,12 +198,13 @@ router.get('/project/:projectId/grouped', authenticateUser, async (req, res) => 
               content: '$content',
               createdAt: '$createdAt',
               updatedAt: '$updatedAt',
-              dimension: '$dimension'
+              dimension: '$dimension',
+              profilePicture: '$userDetails.profilePicture'
             }
           }
         }
       },
-      { $sort: { '_id': 1 } } // Sort by sectionId
+      { $sort: { '_id': 1 } }
     ]);
 
     res.status(200).json({ groupedAnnotations: annotations });
@@ -201,5 +213,6 @@ router.get('/project/:projectId/grouped', authenticateUser, async (req, res) => 
     res.status(500).json({ message: 'Server error.', error: error.message });
   }
 });
+
 
 module.exports = router;

@@ -41,11 +41,11 @@ const AddAnnotation = ({color, section, setAddAnnotation, onSaveAnnotation, proj
   
       const savedAnnotation = await response.json();
       if (onSaveAnnotation) {
-        onSaveAnnotation(savedAnnotation);
+        onSaveAnnotation(savedAnnotation.annotation);
       }
-  
-      setAddAnnotation(false);
-    } catch (error) {
+      console.log('annotation added successfully')
+      
+      } catch (error) {
       console.error("Error saving annotation:", error);
     }
   };

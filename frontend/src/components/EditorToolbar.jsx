@@ -1,18 +1,17 @@
 import React from 'react'
 import {Undo2 ,Redo2 ,Copy ,Clipboard ,ChevronDown ,Bold ,Italic ,Underline ,StrikethroughIcon ,List ,ListOrdered ,Link ,EllipsisVertical ,
-ChevronUp ,AlignCenter ,AlignLeft ,AlignRight ,AlignJustify ,Plus ,Image ,Video ,Grid2X2 ,Triangle ,Play ,Square ,Circle ,MoveUpLeft ,X} from 'lucide-react'
+ChevronUp ,AlignCenter ,AlignLeft ,AlignRight ,AlignJustify ,Plus ,Image ,Video ,Grid2X2 ,Play , MoveUpLeft ,X ,FilePenLine} from 'lucide-react'
 import * as LucideIcons from "lucide-react";
 import { useState, useRef, useEffect } from 'react';
 import menuBar from '../assets/images/menu-bar.svg'
 import backgroundChanger from '../assets/images/backgroundChanger.svg'
 import bookmark from '../assets/images/bookmark.svg'
-import line from '../assets/images/line.svg'
 import { TwitterPicker } from "react-color";
 import {HexColorPicker} from 'react-colorful'
 import TableGridSelector from './TableGridSelector.jsx'
 // () Don't forget keyboard shortcuts for toolbar functionalities ) <= a message for myself
 
-export default function EditorToolbar({ editor }) {
+export default function EditorToolbar({ editor, onSelectCoverPicture }) {
   const [textColor, setTextColor] = useState("#212529");
   const [backgroundColor, setBackgroundColor] = useState("#ffffff");
   const [showPickerText, setShowPickerText] = useState(false);
@@ -27,6 +26,9 @@ export default function EditorToolbar({ editor }) {
   const IconComponent = LucideIcons[selectedAlign];
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
+  const [showOptions, setShowOptions]=useState(false);
+  const [row, setRow]=useState(1);
+  const [col, setCol]=useState(1);
 
 
   const dropdownRefs = useRef({
@@ -36,7 +38,9 @@ export default function EditorToolbar({ editor }) {
     align: null,
     size:null,
     insert:null,
+    options:null,
   });
+  const fileInputRef = useRef();
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -60,6 +64,9 @@ export default function EditorToolbar({ editor }) {
               break;
             case "insert":
               setInsert(false);
+              break;
+            case "options":
+              setShowOptions(false);
               break;
             default:
               break;
@@ -122,6 +129,64 @@ export default function EditorToolbar({ editor }) {
     const text = await navigator.clipboard.readText();
     editor.commands.insertContent(text); // Inserts plain text at the cursor
   };  
+  const handleCoverPicture = () => {
+    fileInputRef.current?.click();
+  };
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file && onSelectCoverPicture) {
+      onSelectCoverPicture(file); 
+    }
+  };
+  const addImage = () => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+  
+    fileInput.onchange = (event) => {
+      const file = event.target?.files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const imageUrl = reader.result;
+  
+          editor.chain().focus().setImage({ 
+            src: imageUrl,
+            width: 200,   // Optional: initial width
+            height: 200,  // Optional: initial height
+          }).run();
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    fileInput.click();
+  }; 
+
+  const addYoutubeVideo = () => {
+    const url = prompt('Enter YouTube URL')
+
+    if (url) {
+      editor.commands.setYoutubeVideo({
+        src: url,
+        width: 640,
+        height: 480,
+      })
+    }
+  }
+
+  const addReferenceBlock = () => {
+    editor?.chain().focus().insertContent({
+      type: 'referenceBlock',
+      attrs: { reference: '' },
+    }).run()
+  }
+
+  const addLinkBlock = () => {
+    editor?.chain().focus().insertContent({
+      type: 'linkBlock',
+    }).run()
+  }
+  
   if (!editor) return null;
   return (
     <>
@@ -142,32 +207,31 @@ export default function EditorToolbar({ editor }) {
             <Clipboard />
            </button>
         </div>
+        {/* THE INSERT LIST  */}
         <div className='font-medium flex relative' ref={(el) => (dropdownRefs.current.insert = el)}>
           <p onClick={() => setInsert(!showInsert)} className={`flex hover:bg-[#4F3726] hover:bg-opacity-20 py-2 px-2 rounded-md cursor-pointer
           ${showInsert && 'bg-[#4F3726] bg-opacity-20'}`} >insert <Plus/>
           </p>
           {showInsert && ( <ul className="absolute left-0 top-10 w-36 bg-white rounded shadow-lg">
-          {["Image", "Video", "Grid2X2", "Triangle"].map((value) => {
+          {["Image", "Video", "Grid2X2"].map((value) => {
             const Icon=LucideIcons[value];
             const LabelInsert={
               Image: "image",
               Video: "video",
               Grid2X2: "table",
-              Triangle: "shape",
             }
             return <li key={value} className={`flex group items-center gap-2 p-2 cursor-pointer hover:bg-[#4F3726] hover:bg-opacity-20 text-center relative`}
-            onClick={() => {setInsert(false)}}>
-            <Icon/> {LabelInsert[value]} {(value=="Grid2X2" || value=="Triangle") && <Play size={8} className='ml-auto'/>}
-            {value=="Grid2X2" && ( <div className='absolute left-36 top-0 z-10 hidden group-hover:block'> <TableGridSelector/></div>)}
-            {value=="Triangle" && ( <ul className='absolute left-36 top-0 rounded-md bg-white hidden group-hover:block w-36 text-lg'>
-              <li className='flex gap-1 hover:bg-[#4F3726] hover:bg-opacity-20 px-2 py-1.5 items-center'><Square/> Rectangle</li>
-              <li className='flex gap-1 hover:bg-[#4F3726] hover:bg-opacity-20 px-2 py-1.5 items-center'><Circle/> Circle</li>
-              <li className='flex gap-1 hover:bg-[#4F3726] hover:bg-opacity-20 px-2 py-1.5 items-center'><Triangle/> Triangle</li>
-              <li className='flex gap-1 hover:bg-[#4F3726] hover:bg-opacity-20 px-2 py-1.5 items-center'><img src={line} className='w-6 h-6'/>Line</li>
-              <li className='flex gap-1 hover:bg-[#4F3726] hover:bg-opacity-20 px-2 py-1.5 items-center'><MoveUpLeft/> Arrow</li>
-            </ul>)} </li>})}
+            onClick={() => {setInsert(false)
+              if(value=='Image'){addImage()}
+              if(value=='Grid2X2'){editor?.commands.insertTable({ rows: row, cols: col })}
+              if(value=='Video'){addYoutubeVideo()}
+            }}>
+            <Icon/> {LabelInsert[value]} {(value=="Grid2X2") && <Play size={8} className='ml-auto'/>}
+            {value=="Grid2X2" && ( <div className='absolute left-36 top-0 z-10 hidden group-hover:block'> <TableGridSelector setRow={setRow} setCol={setCol}/></div>)}
+             </li>})}
           </ul>)}
         </div>
+
         <div className='flex relative' ref={(el) => (dropdownRefs.current.font = el)}>
           <p onClick={() => setFont(!showFont)} className={`flex hover:bg-[#4F3726] hover:bg-opacity-20 py-2 px-2 rounded-md cursor-pointer
           ${showFont && 'bg-[#4F3726] bg-opacity-20'}`} style={{ fontFamily: selectedFont }}>{selectedFont}
@@ -273,16 +337,26 @@ export default function EditorToolbar({ editor }) {
             </button>
         </div>
         <div className='flex'>
-            <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5' title='attach a link'>
+            <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5' title='attach a link' onClick={addLinkBlock} >
                 <Link/>
             </button>
-            <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5' title='attach a reference'>
+            <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5' title='attach a reference' onClick={addReferenceBlock}>
                 <img src={bookmark} alt="bookmark" className='w-5 h-5' />
             </button>
         </div>
-        <button>
+        <div className='relative' ref={(el) => (dropdownRefs.current.options = el)}>
+          <button title='options' onClick={()=>setShowOptions(!showOptions)}>
             <EllipsisVertical/> {/*clear content ? edit cover ? */}
         </button>
+        {showOptions && ( <ul className="absolute right-0 top-10 w-48 overflow-y-auto bg-white rounded shadow-lg">
+          <div>
+          <li className={`p-2 cursor-pointer hover:bg-[#4F3726] hover:bg-opacity-20 flex gap-2 items-center justify-center`}
+          onClick={handleCoverPicture}><FilePenLine/> edit cover picture </li> 
+           <input type="file" accept="image/*" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange}/>
+      </div>
+          <li className='p-2 cursor-pointer hover:bg-[#4F3726] hover:bg-opacity-20 flex gap-2 items-center justify-center'><X/> clear content</li>
+          </ul>)}
+        </div>
       </div>
     </>
   )

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const TableGridSelector = () => {
+const TableGridSelector = ({setRow, setCol}) => {
   const rows = 7;
   const cols = 12;
   const [hoveredRow, setHoveredRow] = useState(1);
@@ -21,6 +21,8 @@ const TableGridSelector = () => {
               onMouseEnter={() => {
                 setHoveredRow(rowIndex + 1);
                 setHoveredCol(colIndex + 1);
+                setRow(rowIndex + 1);
+                setCol(colIndex + 1);
               }}
             />
           ))

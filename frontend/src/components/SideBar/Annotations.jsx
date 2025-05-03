@@ -1,15 +1,28 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState,useEffect, useRef } from 'react'
 import AnnotationOptions from './AnnotationOptions'
 import filledQuote from '../../assets/images/filled-quote.svg'
 import more from '../../assets/images/more-vertical.svg'
 import useCurrentUser from '../../utils/useCurrentUser';
+import edit from '../../assets/images/edit.svg'
 
 const Annotations = ({ setClickedAnnotation, currentUser, isOwner, projectID}) => {
   const [annotationOptions, setAnnotationOptions] = useState(null);
   const [annotationsData, setAnnotationsData] = useState([]);
-  const [deleteAnnotationId, setDeleteAnnotationId] = useState(null);
+  const annOptionsRef = useRef(null);
   const id = currentUser?._id;
   const user = useCurrentUser();
+  const localhost = "http://localhost:5000";
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (annOptionsRef.current && !annOptionsRef.current.contains(event.target)) {
+        setAnnotationOptions(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     fetchAnnotations();
@@ -46,14 +59,23 @@ const Annotations = ({ setClickedAnnotation, currentUser, isOwner, projectID}) =
     }
   };
 
+  const handleUpdateAnnotation = (updatedAnnotation) => {     // this to update the annotation when it is modified
+    setAnnotationsData(prev =>
+      prev.map(ann => ann._id === updatedAnnotation._id ? updatedAnnotation : ann)
+    );
+    setAnnotationOptions(null); // close the 3-dot menu
+  };
+  
+
   return (
-    <div className='text-black max-h-[300px] overflow-y-auto hide-scrollbar'>
+    <div className='text-black max-h-[300px] overflow-y-auto hide-scrollbar pb-11'>
       { annotationsData.length > 0 ? (
         annotationsData.map((annotation) => (
           <div key={annotation._id} className='w-full flex-grow flex flex-col relative'>
             <span className='h-[0.1px] bg-[#4f37267b] w-full '></span>
             {/* Author Info */}
             <div className='pt-3 px-3 flex flex-row gap-2'>
+              <img src={`${localhost}${annotation.profilePicture} ` || edit}  alt="User profile picture" className='rounded-full h-6 w-6 object-cover object-cover'/>
               <div className='flex flex-col items-start text-xs '>
                 <p className='hover:underline whitespace-nowrap cursor-pointer ]'>{`${annotation.firstname} ${annotation.lastname}`}</p>
                 <span className='text-gray-500 text-[10px]'>
@@ -68,11 +90,12 @@ const Annotations = ({ setClickedAnnotation, currentUser, isOwner, projectID}) =
                 <></>
               )}
               { annotationOptions === annotation._id && (
-                <AnnotationOptions isAnnotator={id === annotation.user} annotation={annotation} isOwner={isOwner} setDeleteAnnotationId={setDeleteAnnotationId} 
+                <AnnotationOptions isAnnotator={id === annotation.user} annotation={annotation} isOwner={isOwner} annOptionsRef={annOptionsRef}
                 onDeleteSuccess={(deletedId) => {
                   setAnnotationsData(prev => prev.filter(a => a._id !== deletedId));
                   setAnnotationOptions(null); // closes the 3-dot menu
                 }}
+                onUpdateAnnotation={handleUpdateAnnotation}
                 />
               )}
             </div>

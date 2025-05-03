@@ -15,6 +15,11 @@ const seedAdmin = require("./utils/seedAdmin");
 const homepageRoutes = require('./routes/homepageRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 const conflictRoutes = require('./routes/conflict');
+const downloadRoute = require('./routes/project.routes'); 
+const notificationRoutes = require('./routes/notificationRoutes');
+const editRequestRoutes = require('./routes/editreqRoutes'); 
+const approveeditreqRoutes = require('./routes/approveeditreqRoutes')
+const { googleAuth, googleAuthCallback } = require('./controllers/project.controller');
 
 const app = express();
 
@@ -38,6 +43,10 @@ app.use("/api/profile", profileRoutes);
 app.use('/homepage', homepageRoutes);//here it is in my server
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/conflict', conflictRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/download', downloadRoute); 
+app.use('/api/editrequests', editRequestRoutes);
+app.use('/api/approveeditreqest', approveeditreqRoutes) 
 
 // Debugging: Show Registered Routes
 console.log("✅ Registered Routes:");
