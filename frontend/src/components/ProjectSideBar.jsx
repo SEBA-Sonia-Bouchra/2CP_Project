@@ -47,7 +47,7 @@ const ProjectSideBar = ({ project, isOwner, currentUser, isProfessional, isStati
       component: isOwner ? <EditRequests projectId={project._id}/> : <EditRequest projectId={project._id}/>
     }] : []),
     { id: 'sections', label: 'Sections', icon: sections, component: <Sections project={project}/> },
-    { id: 'annotations', label: 'Annotations', icon: annotations, component: <Annotations setClickedAnnotation={setClickedAnnotation} currentUser={currentUser} isOwner={isOwner} projectID={project._id}/>},
+    { id: 'annotations', label: 'Annotations', icon: annotations, component: <Annotations setClickedAnnotation={setClickedAnnotation} currentUser={currentUser} isOwner={isOwner} project={project}/>},
   ];
   
   return (

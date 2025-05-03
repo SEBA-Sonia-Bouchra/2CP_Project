@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ModifyPermissions from './ModifyPermissions';
 import { getColorByDimension } from '../../utils/helpers';
-import edit from '../../assets/images/edit.svg'
+import icon from '../../assets/images/icon-placeholder.png';
 
 const Contributers = ({ project, isOwner }) => {
   const [showModifyPermissions, setShowModifyPermissions] = useState(false);
@@ -14,7 +14,7 @@ const Contributers = ({ project, isOwner }) => {
       {/* Project Owner */}
       <div className='p-2 flex flex-row justify-between'>
         <div className='flex flex-row items-center'>
-          <img src={`${localhost}${project?.author?.profilePicture} ` || edit} alt="User profile picture" className='rounded-full h-6 w-6 object-cover object-center' />
+          <img src={project.author.profilePicture ? `${localhost}${project.author.profilePicture}` : icon} alt="User profile picture" className='rounded-full h-6 w-6 object-cover object-center' />
           <span className='pl-1 pr-5 hover:underline cursor-pointer'>
             {(project?.author)? ` ${project.author.firstname} ${project.author.lastname}` : "Unknown"}
           </span>
@@ -31,7 +31,7 @@ const Contributers = ({ project, isOwner }) => {
           <div className='flex flex-row items-center'>
             <img src={`${localhost}${section?.contributor?.profilePicture}`} alt="User profile picture" className='rounded-full h-6 w-6 object-cover object-center' />
             <span className='pl-1 pr-5 hover:underline cursor-pointer truncate max-w-[150px]'>
-              {section?.contributor?.firstname || "Unknown"}
+              {section?.contributor?.firstname || "Unknown"} {section?.contributor?.lastname || "Unknown"}
             </span>
           </div>
           <span style={{ color: color }} className='self-center capitalize'>

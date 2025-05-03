@@ -1,6 +1,27 @@
+import axios from 'axios';
 import React from 'react'
 
-const DeleteSection = ({setDeleteSection}) => {
+const DeleteSection = ({setDeleteSection, projectId, sectionId, onDeleteSection}) => {
+  const handleDelete = async () => {
+    try{
+      const token = localStorage.getItem('token');
+      const res = await axios.delete(`http://localhost:5000/api/projects/${projectId}/sections/${sectionId}`,{
+        headers:{
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      if (onDeleteSection) onDeleteSection(sectionId);
+      setDeleteSection(false);
+      
+    }catch(err){
+      console.log('Error deleting the section: ', err);
+    }
+  }
+
+
+
   return (
     <div className='fixed left-0 top-0 w-full flex items-center justify-center h-screen bg-black bg-opacity-25 z-30'>
         <div className=' bg-white rounded-md lg:w-1/2 max-w-lg p-2 text-[#]'>
@@ -13,7 +34,7 @@ const DeleteSection = ({setDeleteSection}) => {
                     Cancel
                 </button>
                 <button className="bg-[#4F3726] text-white px-5 py-2 rounded-full text-sm shadow-md"
-                  onClick={() => setDeleteSection(false)}
+                  onClick={handleDelete}
                 >
                     Confirm
                 </button>
