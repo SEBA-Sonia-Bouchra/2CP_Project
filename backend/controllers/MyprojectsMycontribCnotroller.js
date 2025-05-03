@@ -26,6 +26,7 @@ exports.getpageProjects = async (req, res) => {
     const userId = decoded.id;
     // 1. Projects owned by the user
     const ownedProjects = await Project.find({author : userId })
+    .sort({ createdAt: -1 })
     .populate({
       path: 'author',
       select: 'firstname lastname' // Explicitly select these fields
@@ -37,6 +38,7 @@ exports.getpageProjects = async (req, res) => {
        "sections.contributor": userId,
         author: { $ne: userId }
       })
+      .sort({ createdAt: -1 })
       .populate({
         path: 'author',
         select: 'firstname lastname' // Explicitly select these fields
@@ -173,10 +175,17 @@ exports.getHomeProjects = async (req, res) => {
     ]);
 
     // Filter out nulls from annotated projects (due to match condition)
-    const filteredAnnotated = annotated
-      .map(a => a.project)
-      .filter(p => p !== null);
+    const seen = new Set();
+const filteredAnnotated = [];
 
+for (const a of annotated) {
+  if (a.project && !seen.has(a.project._id.toString())) {
+    seen.add(a.project._id.toString());
+    filteredAnnotated.push(a.project);
+  }
+}
+
+    
     res.json({
       annotated: filteredAnnotated,
       discovered
