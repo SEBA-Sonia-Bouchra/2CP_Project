@@ -89,60 +89,186 @@ const respondEditNotification = async (req, res) => {
 };
 
 // Annotation Added Notification
-const annotationAddedNotification = async (req, res) => {
-  const { projectId, annotationId, ownerId, sectionWriterId, projectName } = req.body;
+/*const annotationAddedNotification = async (req, res) => {
+  const { 
+    projectId, 
+    ownerId, 
+    sectionWriterId, 
+    projectName,
+    annotatorName,
+    annotationId,
+    sectionId,
+    userId // 👈 Now comes from req.body
+  } = req.body;
 
   try {
-    const message = `A new annotation has been added to your project '${projectName}'.`;
+if (ownerId) {
+  console.log("👔 Creating notification for owner:", ownerId);
+  const ownerNotification = new Notification({
+    recipientId: ownerId,
+    senderId:  userId,  // 👈 Annotator's user ID
+    senderName: annotatorName,
+    projectId,
+    projectName,
+    annotationId,
+    sectionId,
+    type: 'annotation',
+    isRead: false
+  });
+  await ownerNotification.save();
+}
+// Notification for section writer (if different from owner)
+if (sectionWriterId && sectionWriterId !== ownerId) {
+  const writerNotification = new Notification({
+    recipientId: sectionWriterId,
+    senderId: userId,
+    senderName: annotatorName,
+    projectId,
+    projectName,
+    annotationId,
+    sectionId,
+    type: 'annotation',
+    isRead: false
+  });
 
-    const newNotification = new Notification({
-      projectId,
-      ownerId,
-      sectionWriterId,
-      projectName,
-      message,
-      type: 'annotation',
-      isRead: false
-    });
-
-    await newNotification.save();
-
-    req.io.to(ownerId).emit('annotation-added', { message, projectId, projectName });
-    req.io.to(sectionWriterId).emit('annotation-added', { message, projectId, projectName });
-
-    res.status(201).json(newNotification);
+await writerNotification.save();
+console.log("💾 Section writer notification saved:", writerNotification);
+}
+res.status(201).json({ success: true });
   } catch (err) {
-    res.status(500).json({ message: 'Error creating annotation notification', error: err });
+    console.error('Error creating annotation notification:', err);
+    res.status(500).json({ 
+      message: 'Error creating annotation notification', 
+      error: err.message 
+    });
+  }
+};*/
+const annotationAddedNotification = async (req, res) => {
+  const { 
+    projectId, 
+    ownerId, 
+    sectionWriterId, 
+    projectName,
+    annotatorName,
+    annotationId,
+    sectionId,
+    userId
+  } = req.body;
+
+  try {
+    // ✅ Notification for project owner
+    if (ownerId && userId.toString() !== ownerId.toString()) {
+      console.log("👔 Creating notification for owner:", ownerId);
+      const message = `${annotatorName} added a new annotation to "${projectName}"`;
+
+      const ownerNotification = new Notification({
+        recipientId: ownerId,
+        senderId: userId,
+        senderName: annotatorName,
+        projectId,
+        projectName,
+        annotationId,
+        sectionId,
+        type: 'annotation',
+        isRead: false,
+        message
+      });
+      console.log("📤 Saving owner notification:", ownerNotification);
+      await ownerNotification.save();
+      console.log("✅ Owner notification saved");
+
+      // 🔔 Emit real-time notification to owner
+      if (req.io) {
+        req.io.to(ownerId).emit('annotation-added', {
+          projectId,
+          projectName,
+          annotationId,
+          sectionId,
+          from: annotatorName
+        });
+      }
+    }
+
+    // ✅ Notification for section writer if different
+    if (
+      sectionWriterId &&
+      sectionWriterId.toString() !== ownerId.toString() &&
+      sectionWriterId.toString() !== userId.toString()
+    )  {
+      const writerNotification = new Notification({
+        recipientId: sectionWriterId,
+        senderId: userId,
+        senderName: annotatorName,
+        projectId,
+        projectName,
+        annotationId,
+        sectionId,
+        type: 'annotation',
+        isRead: false,
+        message:`${annotatorName} added a new annotation to a section you're working on in ${projectName}`,
+      });
+      await writerNotification.save();
+      console.log("💾 Section writer notification saved:", writerNotification);
+
+      // 🔔 Emit real-time notification to section writer
+      if (req.io) {
+        req.io.to(sectionWriterId).emit('annotation-added', {
+          projectId,
+          projectName,
+          annotationId,
+          sectionId,
+          from: annotatorName
+        });
+      }
+    }
+
+    res.status(201).json({ success: true });
+
+  } catch (err) {
+    console.error('❌ Error creating annotation notification:', err);
+    res.status(500).json({ 
+      message: 'Error creating annotation notification', 
+      error: err.message 
+    });
   }
 };
 
-// Conflict Reported Notification
-const reportConflictNotification = async (req, res) => {
-  const { projectId, ownerId, sectionWriterId, projectName } = req.body;
 
+
+const reportConflictNotification = async ({ recipientId, projectId, projectName, io }) => {
   try {
     const message = `A conflict has been reported on your project '${projectName}'.`;
 
     const newNotification = new Notification({
       projectId,
-      ownerId,
-      sectionWriterId,
+      recipientId,
       projectName,
       message,
       type: 'conflict',
-      isRead: false
+      isRead: false,
+      hasIo: true
     });
 
     await newNotification.save();
 
-    req.io.to(ownerId).emit('conflict-reported', { message, projectId, projectName });
-    req.io.to(sectionWriterId).emit('conflict-reported', { message, projectId, projectName });
+    // ✅ Check if io exists and has a 'to' method before emitting
+    if (io && typeof io.to === 'function') {
+      io.to(recipientId.toString()).emit('conflict-reported', {
+        message,
+        projectId,
+        projectName
+      });
+      console.log(`📢 Real-time notification sent to user ${recipientId}`);
+    } else {
+      console.warn('⚠️ Socket.io instance not available. Skipped real-time notification.');
+    }
 
-    res.status(201).json(newNotification);
+    console.log(`🔔 Notification created for user ${recipientId} on project ${projectName}`);
   } catch (err) {
-    res.status(500).json({ message: 'Error creating conflict notification', error: err });
+    console.error('❌ Error creating conflict notification:', err);
   }
 };
+
 
 // Mark Notification as Read
 const markAsRead = async (req, res) => {

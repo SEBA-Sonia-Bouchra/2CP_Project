@@ -4,13 +4,17 @@ const router = express.Router();
 const Annotation = require('../models/annotation');
 const Project = require('../models/Project');
 const authenticateUser = require('../middleware/authUser');
+const { annotationAddedNotification } = require('../controllers/notificationController');
 
 // 🟢 Create Annotation
 router.post('/', authenticateUser, async (req, res) => {
   try {
-    const user = req.user;
+    const user = req.user; // Ensure this exists
+    console.log("User ID:", user?._id); // Debug
 
-    console.log("🔹 Authenticated User:", user);
+    if (!user) {
+      return res.status(401).json({ message: "User not authenticated." });
+    }
 
     // ✅ Check if user is a Pro
     if (!user.isProfessional) {
@@ -40,6 +44,31 @@ router.post('/', authenticateUser, async (req, res) => {
 
 
     await annotation.save();
+    // 🔍 Find the section contributor
+const section = project.sections.find(s => s._id.toString() === sectionId);
+const sectionWriterId = section?.contributor?.toString();
+
+// 🔔 Trigger annotation-added notification
+await annotationAddedNotification(
+  {
+    body: {
+      projectId,
+      ownerId: project.author.toString(),
+      sectionWriterId,
+      projectName: project.title,
+      annotatorName: `${user.firstname} ${user.lastname}`,
+      annotationId: annotation._id,
+      sectionId,
+      userId: user._id // 👈 Pass the user ID explicitly
+    },
+    user: req.user,
+    io: req.app.get('io')
+  },
+  {
+    status: () => ({ json: () => {} }) // Dummy res to match expected signature
+  }
+);
+
 
     res.status(201).json({ message: 'Annotation created successfully.', annotation });
   } catch (error) {
