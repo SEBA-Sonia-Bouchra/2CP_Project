@@ -92,7 +92,7 @@ const ReportConflict = ({ setReportConflict, annotation, project }) => {
               </>
             )}
 
-            {(contributor?._id !== annotation.user) && (
+            {(contributor?._id !== annotation.user && contributor?._id !== project.author._id) && (
               <>
                 <img
                   src={contributor?.profilePicture ? `${localhost}${contributor?.profilePicture}` : icon}
