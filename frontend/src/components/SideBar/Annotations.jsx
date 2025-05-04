@@ -3,35 +3,40 @@ import AnnotationOptions from './AnnotationOptions'
 import filledQuote from '../../assets/images/filled-quote.svg'
 import more from '../../assets/images/more-vertical.svg'
 import useCurrentUser from '../../utils/useCurrentUser';
-import edit from '../../assets/images/edit.svg'
+import icon from '../../assets/images/icon-placeholder.png';
 
-const Annotations = ({ setClickedAnnotation, currentUser, isOwner, projectID}) => {
+const Annotations = ({ setClickedAnnotation, currentUser, isOwner, project}) => {
   const [annotationOptions, setAnnotationOptions] = useState(null);
   const [annotationsData, setAnnotationsData] = useState([]);
   const annOptionsRef = useRef(null);
+  const quoteRef = useRef(null);
   const id = currentUser?._id;
   const user = useCurrentUser();
   const localhost = "http://localhost:5000";
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (annOptionsRef.current && !annOptionsRef.current.contains(event.target)) {
+      const clickedOutsideAnnOptions = annOptionsRef.current && !annOptionsRef.current.contains(event.target);
+      const clickedOutsideQuote = quoteRef.current && !quoteRef.current.contains(event.target);
+  
+      if (clickedOutsideAnnOptions && clickedOutsideQuote) {
         setAnnotationOptions(null);
       }
     };
-
+  
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+  
 
   useEffect(() => {
     fetchAnnotations();
-  }, [projectID]);
+  }, [project._id]);
 
   const fetchAnnotations = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/annotations/project/${projectID}/grouped`, {
+      const response = await fetch(`http://localhost:5000/api/annotations/project/${project._id}/grouped`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -75,7 +80,7 @@ const Annotations = ({ setClickedAnnotation, currentUser, isOwner, projectID}) =
             <span className='h-[0.1px] bg-[#4f37267b] w-full '></span>
             {/* Author Info */}
             <div className='pt-3 px-3 flex flex-row gap-2'>
-              <img src={`${localhost}${annotation.profilePicture} ` || edit}  alt="User profile picture" className='rounded-full h-6 w-6 object-cover object-cover'/>
+              <img src={annotation.profilePicture ? `${localhost}${annotation.profilePicture}` : icon}  alt="User profile picture" className='rounded-full h-6 w-6 object-cover object-cover'/>
               <div className='flex flex-col items-start text-xs '>
                 <p className='hover:underline whitespace-nowrap cursor-pointer ]'>{`${annotation.firstname} ${annotation.lastname}`}</p>
                 <span className='text-gray-500 text-[10px]'>
@@ -96,6 +101,7 @@ const Annotations = ({ setClickedAnnotation, currentUser, isOwner, projectID}) =
                   setAnnotationOptions(null); // closes the 3-dot menu
                 }}
                 onUpdateAnnotation={handleUpdateAnnotation}
+                project={project}
                 />
               )}
             </div>
@@ -104,7 +110,7 @@ const Annotations = ({ setClickedAnnotation, currentUser, isOwner, projectID}) =
             <div className='px-3 pb-3 pt-2 w-full flex items-start'>
               <p className='text-xs overflow-hidden break-words clamped-text cursor-pointer'
                 onClick={() => setClickedAnnotation(annotation)}>
-                <span>
+                <span ref={quoteRef}>
                   { annotation?.dimension?.toLowerCase() === 'architecture' ? (
                     <img src={filledQuote} alt="quote icon" className='w-3 h-3 inline mr-2'/>
                   ) : annotation?.dimension?.toLowerCase() === 'history' ? (

@@ -4,7 +4,7 @@ import ReportConflict from './reportConflict';
 import EditAnnotation from './EditAnnotation';
 import useCurrentUser from '../../utils/useCurrentUser';
 
-const AnnotationOptions = ({ isOwner, isAnnotator, annotation, onDeleteSuccess, onUpdateAnnotation, annOptionsRef}) => {
+const AnnotationOptions = ({project, isOwner, isAnnotator, annotation, onDeleteSuccess, onUpdateAnnotation, annOptionsRef}) => {
   const [deleteAnnotation, setDeleteAnnotation] = useState (false);
   const [reportConflict, setReportConflict] = useState (false);
   const [editAnnotation, setEditAnnotation] = useState (false);
@@ -25,7 +25,7 @@ const AnnotationOptions = ({ isOwner, isAnnotator, annotation, onDeleteSuccess, 
              <span className='h-[0.1px] w-full bg-[#4f3726]' ></span>
           </>
          )}
-         { (isAnnotator || isOwner ) && (          //isContributer
+         { (isAnnotator || isOwner ) && (      
              <>
              <button  onClick={() => {setDeleteAnnotation(true)}} className='py-2 px-4'>Delete annotation</button> 
             </>
@@ -46,7 +46,7 @@ const AnnotationOptions = ({ isOwner, isAnnotator, annotation, onDeleteSuccess, 
         }}/>
       )}
       { reportConflict && (
-        <ReportConflict setReportConflict={setReportConflict} annotation={annotation} isOwner={isOwner}/>
+        <ReportConflict setReportConflict={setReportConflict} annotation={annotation} project={project}/>
       )}
     </div>
   )

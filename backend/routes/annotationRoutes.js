@@ -6,7 +6,6 @@ const Project = require('../models/Project');
 const authenticateUser = require('../middleware/authUser');
 const { annotationAddedNotification } = require('../controllers/notificationController');
 
-
 // 🟢 Create Annotation
 router.post('/', authenticateUser, async (req, res) => {
   try {
@@ -192,6 +191,7 @@ router.get('/project/:projectId/grouped', authenticateUser, async (req, res) => 
           annotations: {
             $push: {
               _id: '$_id',
+              sectionId: '$sectionId',
               user: '$user',
               firstname: '$firstname',
               lastname: '$lastname',
@@ -210,6 +210,49 @@ router.get('/project/:projectId/grouped', authenticateUser, async (req, res) => 
     res.status(200).json({ groupedAnnotations: annotations });
   } catch (error) {
     console.error('Error fetching grouped annotations:', error);
+    res.status(500).json({ message: 'Server error.', error: error.message });
+  }
+});
+
+// get the contributer info for display purposes
+router.get('/project/:projectId/section/:sectionId/contributor', async (req, res) => {
+  const { projectId, sectionId } = req.params;
+
+  try {
+    // Validate ObjectId format (optional but recommended)
+    if (!mongoose.Types.ObjectId.isValid(projectId) || !mongoose.Types.ObjectId.isValid(sectionId)) {
+      return res.status(400).json({ message: 'Invalid project or section ID format.' });
+    }
+
+    // Find the project by its ID and populate the sections along with contributor details
+    const project = await Project.findById(projectId)
+      .populate({
+        path: 'sections.contributor',  // Populate the 'contributor' field in each section
+        select: 'firstname lastname email profilePicture _id' 
+      })
+      .select('sections'); // Select only the 'sections' field to avoid unnecessary data
+
+    if (!project) {
+      return res.status(404).json({ message: 'Project not found.' });
+    }
+
+    // Find the section that matches the given sectionId
+    const section = project.sections.find(section => section._id.toString() === sectionId);
+    if (!section) {
+      return res.status(404).json({ message: 'Section not found.' });
+    }
+
+    // Check if the contributor exists
+    if (!section.contributor) {
+      return res.status(404).json({ message: 'Contributor not found.' });
+    }
+
+    // Send the contributor's info as a response
+    res.status(200).json({
+      contributor: section.contributor,
+    });
+  } catch (error) {
+    console.error('Error fetching contributor info:', error); // Log full error details
     res.status(500).json({ message: 'Server error.', error: error.message });
   }
 });
