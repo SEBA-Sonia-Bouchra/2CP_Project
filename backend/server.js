@@ -5,6 +5,9 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const path = require("path");
+const http = require ("http");
+const setupSocket = require("./socket");
+
 
 const authRoutes = require('./routes/authRoutes');
 const projectRoutes = require('./routes/projectRoutes');
@@ -20,8 +23,11 @@ const notificationRoutes = require('./routes/notificationRoutes');
 const editRequestRoutes = require('./routes/editreqRoutes'); 
 const approveeditreqRoutes = require('./routes/approveeditreqRoutes')
 const { googleAuth, googleAuthCallback } = require('./controllers/project.controller');
-
+const { Server } = require("socket.io");
 const app = express();
+const server = http.createServer(app);
+const io = setupSocket(server);
+app.set("socketio", io);
 
 // Debug JWT_SECRET and Mongo URI
 console.log("🔹 JWT_SECRET:", process.env.JWT_SECRET);
@@ -83,6 +89,6 @@ app.get('/', (req, res) => {
 
 // Start Server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
 
 
