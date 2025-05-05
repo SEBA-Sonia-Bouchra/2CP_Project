@@ -211,10 +211,11 @@ BinaA team`;
       notifiedUserIds.add(annotationOwner._id.toString());
     }
 
-    // 📨 Loop through recipients and send email + system notification
+    // Loop through recipients and send emails (loop removed to send one mail)
+    await sendEmail([...recipients], subject, emailMessage, senderDetails);
+    
+    // 📨 Loop through recipients system notification
     for (const recipientEmail of recipients) {
-      await sendEmail(recipientEmail, subject, emailMessage, senderDetails);
-
       const user = await User.findOne({ email: recipientEmail });
       if (user && notifiedUserIds.has(user._id.toString())) {
         await reportConflictNotification({
