@@ -19,7 +19,6 @@ const downloadRoute = require('./routes/project.routes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const editRequestRoutes = require('./routes/editreqRoutes'); 
 const approveeditreqRoutes = require('./routes/approveeditreqRoutes');
-const conflictRoutes = require('./routes/conflict')
 const { googleAuth, googleAuthCallback } = require('./controllers/project.controller');
 
 const app = express();

@@ -6,7 +6,7 @@ import DeleteSection from './DeleteSection';
 const SectionDropDown = ({color, section, isOwner, currentUser, project, setSectionDropDown, dropdownRef, onDeleteSection}) => {
   const [addAnnotation, setAddAnnotation] = useState (false);
   const [deleteSection, setDeleteSection] = useState (false);
-  let isWriter = currentUser?._id === section.contributor._id; 
+  let isWriter = currentUser?._id === section?.contributor?._id; 
 
   return (
     <div ref={dropdownRef}>

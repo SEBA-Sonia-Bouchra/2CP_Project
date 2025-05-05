@@ -53,7 +53,7 @@ const OpenedProjectPage = () => {
   // If no projects found
   if (!project) return <div className="pt-32">Project not found...</div>;
   
-  const isOwner = project.author._id === currentUser?._id;
+  const isOwner = project.author?._id === currentUser?._id;
   const isProfessional = currentUser?.isProfessional ?? false;
   
   return (
