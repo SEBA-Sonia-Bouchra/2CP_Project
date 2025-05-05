@@ -60,11 +60,9 @@ const ReportConflict = ({ setReportConflict, annotation, project }) => {
         }
       );
       setSuccessMsg(response.data.message);
-      alert(successMsg);
       setTimeout(() => setReportConflict(false), 2000);
     } catch (error) {
       setErrorMsg(error.response?.data?.message || 'Failed to report conflict.');
-      alert(errorMsg);
     } finally {
       setLoading(false);
     }

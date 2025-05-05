@@ -107,10 +107,8 @@ BinaA team`;
       email: sender.email || 'Unknown',
     };
 
-    // Loop through recipients and send emails
-    for (const recipient of recipients) {
-      await sendEmail(recipient, subject, emailMessage, senderDetails);
-      const user = await User.findOne({ email: recipient });
+    // Loop through recipients and send emails (loop removed to send one mail)
+    await sendEmail([...recipients], subject, emailMessage, senderDetails);
 
   if (user && user._id.toString() !== sender._id.toString()) {
     await reportConflictNotification({
@@ -121,7 +119,6 @@ BinaA team`;
     }, { status: () => ({ json: () => {} }) });
   }
   }
-
     return res.status(200).json({ message: 'Conflict reported and emails sent successfully.' });
 
   } catch (error) {
