@@ -54,7 +54,7 @@ export default function MainLayout() {
         )}
 
           {showNotifications && (
-              <div className='w-screen fixed top-0 z-50'>
+              <div className='w-screen fixed top-0 z-40'>
                 <Notifications toggleNotifications={() => setShowNotifications(false)} />
               </div>
             )}

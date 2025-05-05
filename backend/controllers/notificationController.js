@@ -43,15 +43,16 @@ const getNotifications = async (req, res) => {
       $or: [
         { ownerId: userId },
         { requesterId: userId },
-        { sectionWriterId: userId }
+        { sectionWriterId: userId },
+        { recipientId: userId } // ← add this
       ]
     }).sort({ createdAt: -1 });
 
-    if (notifications.length === 0) {
-      return res.status(404).json({ message: 'No notifications found' });
-    }
+    // if (notifications.length === 0) {
+    //   return res.status(404).json({ message: 'No notifications found' });
+    // }
+    res.json(notifications); // always return 200, even if empty
 
-    res.json(notifications);
   } catch (err) {
     res.status(500).json({ message: 'Error fetching notifications', error: err });
   }

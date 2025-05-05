@@ -43,7 +43,7 @@ const AnnotatedProjects = ({ projects }) => {
         >
           {projects.slice(0, 6).map((project) => (
             <div
-              key={project.id}
+              key={project._id}
               className="flex-shrink-0 w-80 bg-white rounded-lg shadow-lg overflow-hidden flex flex-col"
             >
               <img 
