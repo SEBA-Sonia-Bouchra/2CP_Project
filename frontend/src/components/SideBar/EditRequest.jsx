@@ -57,6 +57,23 @@ const EditRequest = ({ projectId }) => {
     return () => clearInterval(intervalId);
   }, [projectId]);  
 
+    // const handleSendRequest = async () => {
+    //     try {
+    //         setWaitingMessage(true);
+    //         const response = await axios.post(`/api/edit-requests/${projectId}`);
+    //         if (response.status === 200) {
+    //            console.log("✅ Request sent:", response.data);
+    //         }
+    //     } catch (err) {
+    //         console.error('❌ Failed to send edit request:', err);
+    //         setWaitingMessage(false);
+    //         if (err.response?.data?.message) {
+    //             setError(err.response.data.message);
+    //         } else {
+    //             setError("An error occurred while sending your request.");
+    //         }
+    //     }
+    // };
   return (
     <>
       {editRequest === 'noRequest' ? (

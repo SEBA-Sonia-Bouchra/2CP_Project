@@ -2,48 +2,58 @@ import { Node, mergeAttributes, ReactNodeViewRenderer } from '@tiptap/react'
 import { NodeViewWrapper } from '@tiptap/react'
 import { useState } from 'react'
 
-function ReferenceBlockComponent({ node, updateAttributes, getPos, editor, addReferenceCallback }) {
-  const [newReference, setNewReference] = useState('') // for the input
-  const references = node.attrs.references || []
+function ReferenceBlockComponent({ node, updateAttributes, getPos, editor, addReferenceCallback, getGlobalReferenceCount}) {
+  const [newReference, setNewReference] = useState(''); // input only
+  const references = node.attrs.references || [];
 
   const handleAddReference = () => {
     if (!newReference.trim()) return;
+
+    const nextId = references.length + 1;
     const newRef = {
       title: newReference.trim(),
-      id: references.length+1,
+      id: nextId,
     };
-    updateAttributes({ references: [...references, newRef] }); // updates references array with the new reference
+
+    const updatedReferences = [...references, newRef];
+    updateAttributes({ references: updatedReferences }); // correctly update node.attrs
+
     if (addReferenceCallback) {
-      addReferenceCallback(newRef); // storing reference to pass it to edit project component
+      addReferenceCallback(newRef);
     }
-    const newRefId = `ref-${newRef.id}`;
-    editor.chain().focus().insertContent([{ // to insert a link to the editor where we inserted the reference node
-          type: 'text',
-          text: `[${references.length + 1}]`, 
-          marks: [
-            {
-              type: 'link',
-              attrs: {
-                href: `#${newRefId}`,
-                target: null, // remove target
-                rel: null,
-              },
+
+    const newRefId = `ref-${nextId}`;
+    editor
+    .chain()
+    .focus()
+    .insertContent([
+      {
+        type: 'text',
+        text: `[${getGlobalReferenceCount() + 1}]`,
+        marks: [
+          {
+            type: 'link',
+            attrs: {
+              href: `#${newRefId}`,
+              target: null,
+              rel: null,
             },
-          ],
-        },
-        {
-          type: 'text',
-          text: ' ',
-        },
-      ])
-      .run();
-    setNewReference('') // clear the input
-    // to delete the node after inserting the new reference
+          },
+        ],
+      },
+      {
+        type: 'text',
+        text: ' ',
+      },
+    ])
+    .run();
+    setNewReference('');
+
     const pos = getPos();
     if (typeof pos === 'number') {
       editor.commands.deleteRange({ from: pos, to: pos + 1 });
     }
-  }
+  };
 
   return (
     <NodeViewWrapper className="shadow-xl p-4 rounded-lg my-4 bg-white flex flex-col gap-2 font-montserral w-96">
@@ -67,8 +77,8 @@ export const ReferenceBlock = Node.create({
 
   addAttributes() {
     return {
-      references: {
-        default: [],
+      reference: {
+        default: null,
       },
     }
   },
@@ -84,12 +94,13 @@ export const ReferenceBlock = Node.create({
   addOptions() {
     return {
       addReferenceCallback: () => {},
+      getGlobalReferenceCount: () => 0,
     };
   },
   
   addNodeView() {
     return ReactNodeViewRenderer((props) =>
-      <ReferenceBlockComponent {...props} addReferenceCallback={this.options.addReferenceCallback} />
+      <ReferenceBlockComponent {...props} addReferenceCallback={this.options.addReferenceCallback} getGlobalReferenceCount={this.options.getGlobalReferenceCount} />
     );
   }
   

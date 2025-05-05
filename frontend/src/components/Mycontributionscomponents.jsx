@@ -9,7 +9,7 @@ const Mycontributionscomponents = ({ projects, loading, error }) => {
       {/* Title */}
       <div className="w-full max-w-4xl flex items-center space-x-3 mb-6">
         <img src={DiscoverIcon} alt="Vector Icon" className="w-6 h-6" />
-        <h2 className="text-2xl font-semibold text-gray-900 font-playfairdisplay">
+        <h2 className="text-2xl text-black font-montserral">
           My Contributions
         </h2>
       </div>
@@ -17,11 +17,11 @@ const Mycontributionscomponents = ({ projects, loading, error }) => {
       {/* Project List */}
       <div className="w-full max-w-6xl space-y-6">
         {loading ? (
-          <p className="text-gray-700">Loading projects...</p>
+          <p className="text-gray-700 font-montserral">Loading projects...</p>
         ) : error ? (
           <p className="text-red-500">{error}</p>
         ) : projects.length === 0 ? (
-          <p className="text-gray-500">No projects available.</p>
+          <p className="text-gray-500 font-montserral">No projects available.</p>
         ) : (
           projects.map((project) => (
             <div

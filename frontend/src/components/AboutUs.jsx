@@ -12,14 +12,14 @@ import rectanglesmall from '../assets/images/rectanglesmall.png';
 
 const AboutUs = () => {
   return (
-    <div className="bg-[#FFF8E3] text-[#1d2a1f] font-serif pt-24">
+    <div className="bg-[#FFF8E3] text-[#1d2a1f] font-montserral pt-24">
       {/* Who We Are Section */}
       <section className="px-6 md:px-20 py-12 max-w-7xl mx-auto">
-        <h1 className="text-4xl font-extrabold mb-10 font-[PlayfairDisplay] text-[#213824]">ABOUT US</h1>
+        <h1 className="text-4xl font-extrabold mb-10 font-playfairdisplay text-[#213824]">ABOUT US</h1>
         <div className="flex flex-col lg:flex-row justify-between items-center gap-8">
           <div className="lg:w-2/3">
-            <h2 className="text-2xl font-semibold mb-4 font-[PlayfairDisplay] text-[#213824]">Who We Are:</h2>
-            <p className="mb-4 leading-relaxed">
+            <h2 className="text-2xl  mb-4 font-playfairdisplay text-[#213824]">Who We Are:</h2>
+            <p className="mb-4 leading-relaxed font-montserral">
               Welcome to Binaa, a collaborative platform dedicated to documenting and preserving architectural heritage.
               We bring together architects, historians, and researchers to contribute, annotate, and share knowledge about significant structures.
             </p>
@@ -34,8 +34,8 @@ const AboutUs = () => {
         style={{ backgroundImage: `url(${rectangle})` }}
       >
         <div className="bg-opacity-60 p-8 rounded-xl max-w-7xl mx-auto">
-          <h2 className="text-2xl text-center font-semibold mb-6 font-[PlayfairDisplay] text-[#213824]">Our Mission:</h2>
-          <ul className="list-disc list-inside space-y-2 leading-relaxed">
+          <h2 className="text-2xl text-center mb-6 font-playfairdisplay text-[#213824]">Our Mission:</h2>
+          <ul className="list-disc list-inside space-y-2 leading-relaxed font-montserral">
             <li>Document architectural resources with detailed descriptions and images.</li>
             <li>Collaborate through structured contributions and annotations.</li>
             <li>Resolve conflicts and verify historical accuracy through expert reviews.</li>
@@ -55,7 +55,7 @@ const AboutUs = () => {
 
       {/* How It Works Section */}
       <section className="py-16 px-6 md:px-20 max-w-7xl mx-auto text-center">
-        <h2 className="text-2xl font-semibold mb-12 font-[PlayfairDisplay] text-[#213824]">How It Works:</h2>
+        <h2 className="text-2xl mb-12 font-playfairdisplay text-[#213824]">How It Works:</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {[
             {
@@ -77,18 +77,18 @@ const AboutUs = () => {
           ].map((step, idx) => (
             <div
               key={idx}
-              className="relative p-6 text-[#1d2a1f] font-serif flex flex-col items-center justify-center text-center min-h-[250px]"
+              className="relative p-6 text-[#1d2a1f] font-montserral flex flex-col items-center justify-center text-center min-h-[250px]"
             >
               <img
                 src={rectanglesmall}
                 alt="card background"
                 className="absolute inset-0 w-full h-full object-cover rounded-xl"
               />
-              <div className="relative z-10 flex items-center justify-center bg-[#1d2a1f] text-white w-10 h-10 rounded-full mb-4 text-sm font-semibold">
+              <div className="relative z-10 flex items-center justify-center bg-[#1d2a1f] text-white w-10 h-10 rounded-full mb-4 text-sm">
                 {idx + 1}
               </div>
-              <h3 className="relative z-10 font-bold text-md mb-2 font-[montserrat] text-[#213824]">{step.title}</h3>
-              <p className="relative z-10 text-sm">{step.description}</p>
+              <h3 className="relative z-10 font-bold text-md mb-2 font-montserral text-[#213824]">{step.title}</h3>
+              <p className="relative z-10 text-sm font-montserral">{step.description}</p>
             </div>
           ))}
         </div>
@@ -100,8 +100,8 @@ const AboutUs = () => {
         style={{ backgroundImage: `url(${rectangle2})` }}
       >
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-xl font-semibold mb-6 font-[PlayfairDisplay] text-[#213824]">Why Choose Us?</h2>
-          <ul className="list-disc list-inside space-y-2 leading-relaxed">
+          <h2 className="text-xl mb-6 font-playfairdisplay text-[#213824]">Why Choose Us?</h2>
+          <ul className="list-disc list-inside space-y-2 leading-relaxed font-montserral">
             <li>A structured and user-friendly editor for detailed architectural documentation.</li>
             <li>Expert-driven collaboration with verified contributions.</li>
             <li>Conflict resolution features to maintain historical accuracy.</li>
@@ -112,16 +112,16 @@ const AboutUs = () => {
 
       {/* Join Us Section */}
       <section className="py-16 px-6 md:px-20 max-w-7xl mx-auto text-center">
-        <h2 className="text-xl font-semibold mb-4 font-[PlayfairDisplay] text-[#213824]">Join Us!</h2>
-        <p className="mb-6 text-md max-w-2xl mx-auto">
+        <h2 className="text-xl mb-4 font-playfairdisplay text-[#213824]">Join Us!</h2>
+        <p className="mb-6 text-md max-w-2xl mx-auto font-montserral">
           Be a part of a growing community dedicated to preserving architectural history. Whether you're an architect, historian, or researcher, your contributions matter!
         </p>
-        <div className="flex flex-col items-center space-y-2 text-sm">
+        <div className="flex flex-col items-center space-y-2 text-sm font-montserral">
           <p className="flex items-center gap-2">
             <img src={vector} alt="email icon" className="w-4 h-4" />
             <span>Contact Us: <a className="underline" href="mailto:binaateam.dz@gmail.com">binaateam.dz@gmail.com</a></span>
           </p>
-          <p className="flex items-center gap-2">
+          <p className="flex items-center gap-2 ">
             <img src={direction} alt="web icon" className="w-4 h-4" />
             <span>Website: <a className="underline" href="https://binaa.com">Binaa.com</a></span>
           </p>

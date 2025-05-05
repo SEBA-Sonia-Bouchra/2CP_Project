@@ -42,7 +42,8 @@ const router = createBrowserRouter(
       {<Route path='/set-new-password' element={<SetNewPassword/>}></Route>}
       {<Route path='/request-review' element={<AccountRequest/>}></Route>}
       {<Route path='/request-rejected' element={<RejectRequest/>}></Route>}
-      {<Route path="/editor" element={<EditorPage />} />}
+      {<Route path="/new-project" element={<EditorPage />} />}
+      {<Route path="/projects/:id/edit" element={<EditorPage />} />}
       {<Route path="/oauth/callback" component={GoogleCallback} />}
       <Route path="/oauth-success" element={<OAuthSuccess />} />
       {<Route path="/" element={<MainLayout/>}>
