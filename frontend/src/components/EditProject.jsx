@@ -112,7 +112,6 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
         }));
 
         formData.append('sections', JSON.stringify(preparedSections));
-
         const token = localStorage.getItem("token");
         if (!token) {
           console.error("No auth token found.");

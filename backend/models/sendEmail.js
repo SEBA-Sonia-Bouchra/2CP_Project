@@ -11,18 +11,20 @@ const transporter = nodemailer.createTransport({
 
 /**
  * Sends an email
- * @param {string} to - Recipient email address
+ * @param {string[]} to - List of recipient emails
  * @param {string} subject - Email subject
  * @param {string} text - Email body (text)
  * @param {object} sender - Sender object { firstname, lastname, email }
  */
+
 async function sendEmail(to, subject, text, sender) {
   const mailOptions = {
     from: `"${sender.firstname} ${sender.lastname}" <binaateam.dz@gmail.com>`,
     // ⬆️ Will show sender's name but really sent from your-app-email
-    to: to,   // recipient's email (string)
+    to: [...to].join(','),   // recipient's email (string)
     subject: subject,
-    text: text + `\n\nSender's email: ${sender.email}`,  // Optionally add sender's real email inside body
+    text: `${text.trim()}\n\nSender's email: ${sender.email}`,  // Optionally add sender's real email inside body
+    replyTo: sender.email,
   };
 
   try {

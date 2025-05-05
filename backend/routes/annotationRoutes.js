@@ -4,14 +4,17 @@ const router = express.Router();
 const Annotation = require('../models/annotation');
 const Project = require('../models/Project');
 const authenticateUser = require('../middleware/authUser');
-
+const { annotationAddedNotification } = require('../controllers/notificationController');
 
 // 🟢 Create Annotation
 router.post('/', authenticateUser, async (req, res) => {
   try {
-    const user = req.user;
+    const user = req.user; // Ensure this exists
+    console.log("User ID:", user?._id); // Debug
 
-    console.log("🔹 Authenticated User:", user);
+    if (!user) {
+      return res.status(401).json({ message: "User not authenticated." });
+    }
 
     // ✅ Check if user is a Pro
     if (!user.isProfessional) {
@@ -41,6 +44,31 @@ router.post('/', authenticateUser, async (req, res) => {
 
 
     await annotation.save();
+    // 🔍 Find the section contributor
+const section = project.sections.find(s => s._id.toString() === sectionId);
+const sectionWriterId = section?.contributor?.toString();
+
+// 🔔 Trigger annotation-added notification
+await annotationAddedNotification(
+  {
+    body: {
+      projectId,
+      ownerId: project.author.toString(),
+      sectionWriterId,
+      projectName: project.title,
+      annotatorName: `${user.firstname} ${user.lastname}`,
+      annotationId: annotation._id,
+      sectionId,
+      userId: user._id // 👈 Pass the user ID explicitly
+    },
+    user: req.user,
+    io: req.app.get('io')
+  },
+  {
+    status: () => ({ json: () => {} }) // Dummy res to match expected signature
+  }
+);
+
 
     res.status(201).json({ message: 'Annotation created successfully.', annotation });
   } catch (error) {
@@ -132,7 +160,7 @@ router.put('/:annotationId', authenticateUser, async (req, res) => {
   }
 });
 
-// Get all annotations for a specific project, grouped by sectionId
+
 router.get('/project/:projectId/grouped', authenticateUser, async (req, res) => {
   try {
     const { projectId } = req.params;
@@ -143,27 +171,40 @@ router.get('/project/:projectId/grouped', authenticateUser, async (req, res) => 
       return res.status(404).json({ message: 'Project not found.' });
     }
 
-    // Fetch and group annotations by sectionId
     const annotations = await Annotation.aggregate([
       { $match: { project: new mongoose.Types.ObjectId(projectId) } },
+
+      // Join with User collection to get profilePicture
+      {
+        $lookup: {
+          from: 'users', // Collection name (lowercase and plural of model by default)
+          localField: 'user',
+          foreignField: '_id',
+          as: 'userDetails'
+        }
+      },
+      { $unwind: '$userDetails' },
+
       {
         $group: {
           _id: '$sectionId',
           annotations: {
             $push: {
               _id: '$_id',
+              sectionId: '$sectionId',
               user: '$user',
               firstname: '$firstname',
               lastname: '$lastname',
               content: '$content',
               createdAt: '$createdAt',
               updatedAt: '$updatedAt',
-              dimension: '$dimension'
+              dimension: '$dimension',
+              profilePicture: '$userDetails.profilePicture'
             }
           }
         }
       },
-      { $sort: { '_id': 1 } } // Sort by sectionId
+      { $sort: { '_id': 1 } }
     ]);
 
     res.status(200).json({ groupedAnnotations: annotations });
@@ -172,5 +213,49 @@ router.get('/project/:projectId/grouped', authenticateUser, async (req, res) => 
     res.status(500).json({ message: 'Server error.', error: error.message });
   }
 });
+
+// get the contributer info for display purposes
+router.get('/project/:projectId/section/:sectionId/contributor', async (req, res) => {
+  const { projectId, sectionId } = req.params;
+
+  try {
+    // Validate ObjectId format (optional but recommended)
+    if (!mongoose.Types.ObjectId.isValid(projectId) || !mongoose.Types.ObjectId.isValid(sectionId)) {
+      return res.status(400).json({ message: 'Invalid project or section ID format.' });
+    }
+
+    // Find the project by its ID and populate the sections along with contributor details
+    const project = await Project.findById(projectId)
+      .populate({
+        path: 'sections.contributor',  // Populate the 'contributor' field in each section
+        select: 'firstname lastname email profilePicture _id' 
+      })
+      .select('sections'); // Select only the 'sections' field to avoid unnecessary data
+
+    if (!project) {
+      return res.status(404).json({ message: 'Project not found.' });
+    }
+
+    // Find the section that matches the given sectionId
+    const section = project.sections.find(section => section._id.toString() === sectionId);
+    if (!section) {
+      return res.status(404).json({ message: 'Section not found.' });
+    }
+
+    // Check if the contributor exists
+    if (!section.contributor) {
+      return res.status(404).json({ message: 'Contributor not found.' });
+    }
+
+    // Send the contributor's info as a response
+    res.status(200).json({
+      contributor: section.contributor,
+    });
+  } catch (error) {
+    console.error('Error fetching contributor info:', error); // Log full error details
+    res.status(500).json({ message: 'Server error.', error: error.message });
+  }
+});
+
 
 module.exports = router;

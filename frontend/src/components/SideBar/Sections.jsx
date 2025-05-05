@@ -3,12 +3,14 @@ import { getColorByDimension } from '../../utils/helpers';
 
 const Sections = ({project}) => {
   const scrollToSection = (id) => {
-    const element = document.getElementById(id);
-    const yOffset = -110; // height of your fixed navbar
-    if (element) {
-      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-    }
+    setTimeout(() => {
+      const element = document.getElementById(id);
+      const yOffset = -110;
+      if (element) {
+        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    }, 100); // small delay
   };
 
   return (
@@ -19,15 +21,15 @@ const Sections = ({project}) => {
             description
           </button>
         )}
-        { project.sections.map((section, index) => {
+        { project.sections.map((section) => {
           const color = getColorByDimension(section.dimension);
           return(
-            <button key={section.id}  onClick={() => scrollToSection(`${section.id}`)} style={{ color: color}} className='capitalize hover:underline mb-1'>
+            <button key={section._id} onClick={() => scrollToSection(`${section._id}`)} style={{ color: color}} className='capitalize hover:underline mb-1'>
             {section.dimension}
           </button>
           )
         })}
-        { project.references && (
+        { project.references?.length > 0 && (
           <button onClick={() => scrollToSection("references")} className='capitalize hover:underline mb-1 text-gray-400'>
             references
           </button>

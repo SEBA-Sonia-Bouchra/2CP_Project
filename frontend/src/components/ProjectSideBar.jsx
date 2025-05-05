@@ -12,9 +12,7 @@ import Annotations from './SideBar/Annotations';
 import ClickedAnnotation from './SideBar/ClickedAnnotation'
 import EditRequests from './SideBar/EditRequests';
 
-const ProjectSideBar = ({ project, isOwner, currentUser, isProfessional, name }) => {
-  const [selectedItem, setSelectedItem] = useState(null)
-  const [isStatic, setIsStatic] = useState(false); // Controls sidebar behavior, the sidebar becomes static (not affected by hovers) if we click on an option)
+const ProjectSideBar = ({ project, isOwner, currentUser, isProfessional, isStatic, setIsStatic, sideBarRef, selectedItem, setSelectedItem }) => {
   const [clickedAnnotation, setClickedAnnotation] = useState(null); 
 
   const handleItemClick = (item) => {
@@ -41,21 +39,23 @@ const ProjectSideBar = ({ project, isOwner, currentUser, isProfessional, name })
 
   const sidebarItems = [
     { id: 'options', label: 'Options', icon: options, component: <Options isOwner={isOwner} project={project}/> },
-    { id: 'users', label: 'Contributors', icon: users, component: <Contributers project={project} isOwner={isOwner} name={name} /> },
+    { id: 'users', label: 'Contributors', icon: users, component: <Contributers project={project} isOwner={isOwner} /> },
     ...(isProfessional ? [{
       id: 'edit',
       label: isOwner ? 'Edit Requests' : 'Edit Request',
       icon: edit,
-      component: isOwner ? <EditRequests /> : <EditRequest />
+      component: isOwner ? <EditRequests projectId={project._id}/> : <EditRequest projectId={project._id}/>
     }] : []),
     { id: 'sections', label: 'Sections', icon: sections, component: <Sections project={project}/> },
-    { id: 'annotations', label: 'Annotations', icon: annotations, component: <Annotations setClickedAnnotation={setClickedAnnotation} currentUser={currentUser} isOwner={isOwner} projectID={project._id}/>},
+    { id: 'annotations', label: 'Annotations', icon: annotations, component: <Annotations setClickedAnnotation={setClickedAnnotation} currentUser={currentUser} isOwner={isOwner} project={project}/>},
   ];
   
   return (
     <>
     
-    <div className={`sticky sm:top-28 lg:top-32 h-fit ${isStatic ? 'w-[232px] lg:w-[300px]' : 'hover:lg:w-[300px] hidden-div'}`}> {/* Prevent hover effect when static' */}
+    <div 
+    ref={sideBarRef}
+    className={`sticky sm:top-28 lg:top-32 h-fit  ${isStatic ? 'w-[232px] lg:w-[300px]' : 'hover:lg:w-[300px] hidden-div'}`}> {/* Prevent hover effect when static' */}
       <div
         className={`z-10 flex flex-col items-start bg-white shadow-md h-fit border border-[#4f37267b] 
           rounded-md text-[#4f3726] overflow-hidden font-montserral`}>

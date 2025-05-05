@@ -18,8 +18,6 @@ export default function ModificationProfessional() {
     setIsEditing(false);
     e.preventDefault();
     
-    console.log(formValues);
-
     const formData = new FormData();
     formData.append("firstname", formValues.firstname);
     formData.append("lastname", formValues.lastname);
@@ -70,7 +68,6 @@ export default function ModificationProfessional() {
   
   useEffect(() => {
     if (user) {
-      console.log(user);
       setFormValues({
         firstname: user.firstname || "",
         lastname: user.lastname || "",
@@ -109,7 +106,7 @@ export default function ModificationProfessional() {
                    <label htmlFor="description" className='text-lg md:text-xl drop-shadow ml-2'>Description</label>
                    {isEditing ? (
                      <>
-                        <textarea type='text' className='appearance-none outline-none rounded-[5px] w-80 h-48 bg-[#DFD8C8] resize-none p-2' 
+                        <textarea type='text' className='appearance-none outline-none rounded-[5px] w-80 h-48 bg-[#DFD8C8] resize-none p-2 hide-scrollbar' 
                         maxLength={400} name='description' id="description" value={formValues.description} onChange={handleChange} rows={3}/>
                         <p className="text-sm text-gray-700">{400 - formValues.description.length} characters left</p>
                       </>
