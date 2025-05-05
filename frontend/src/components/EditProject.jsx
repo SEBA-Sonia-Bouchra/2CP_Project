@@ -30,24 +30,31 @@ import { ExtendedParagraph } from './extensions/ExtendedParagraph.js'
 import { Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-export default function EditProject({ onEditorFocus, coverImageFile }) {
+export default function EditProject({ onEditorFocus, coverImageFile, savedProject }) {
   const navigate = useNavigate();
-  const [image,setImage]=useState("");
-  const defaultSections = [ //this initializes "sections" with this predefined sections, I didn't want to redo my code since i allowed users to
-    // insert sections as architecture or history at the begginning but since they must be predefined i did this. 
-    { id: 'desc', type: 'Description', content: '', showContent: true  },
-    { id: 'arch', type: 'Architecture', content: '', showContent: true },
-    { id: 'hist', type: 'History', content: '', showContent: true },
-    { id: 'archaeo', type: 'Archeology', content: '', showContent: true },
-    { id: 'rfrncs', type: 'References', content: '', showContent: true },
-  ];
+  const [image,setImage]=useState('');
+  const defaultSections = !savedProject ? [ //this initializes "sections" with this predefined sections.
+    { id: 'desc', title: 'Description', content: '', showContent: true  },
+    { id: 'arch', title: 'Architecture', content: '', showContent: true },
+    { id: 'hist', title: 'History', content: '', showContent: true },
+    { id: 'archaeo', title: 'Archeology', content: '', showContent: true },
+    { id: 'rfrncs', title: 'References', content: '', showContent: true },
+  ] : [ { id: 'desc', title: 'Description', content: savedProject?.description, showContent: true  }, // this is for the case where a user wants to edit their project
+  { id: 'arch', title: 'Architecture', content: savedProject?.sections.find(s => s.title === 'Architecture')?.content, showContent: true },
+  { id: 'hist', title: 'History', content: savedProject?.sections.find(s => s.title === 'History')?.content, showContent: true },
+  { id: 'archaeo', title: 'Archeology', content: savedProject?.sections.find(s => s.title === 'Archeology')?.content, showContent: true },
+  { id: 'rfrncs', title: 'References', content: savedProject?.sections.find(s => s.title === 'References')?.content, showContent: true }] ;
   const [sections, setSections] = useState(defaultSections); // To store sections
   const [showRemoveSection,setShowRemoveSection]=useState(false);
   const [errors,setErrors]= useState({});
-  const initialValues={title:'',coverPicture:'',description:''}
+  const ImageUrl = savedProject?.coverPhoto?.replace("\\", "/"); 
+  const initialValues = {
+    title: savedProject?.title || '',
+    coverPicture: ImageUrl || null,
+    description: savedProject?.description || ''
+  }; // initializes the values array with savedProject necessary fields if it's edit else empty if the project is new 
   const [values, setValues]=useState(initialValues);
   const [references, setReferences] = useState([]); 
-  const dropdownList=useRef(null); 
   const titleRef = useRef(null);
   const descriptionRef = useRef(null);
   const coverPictureRef = useRef(null);
@@ -57,7 +64,7 @@ export default function EditProject({ onEditorFocus, coverImageFile }) {
     if(!values.title) {
       errors.title="Please enter a title to this project.";
     }
-    if(!values.description || values.description=='<p></p>'){
+    if(!values.description || values.description.trim() === '' || values.description === '<p></p>'){
       errors.description="Please fill out the description."
     }
     if(!values.coverPicture){
@@ -66,9 +73,13 @@ export default function EditProject({ onEditorFocus, coverImageFile }) {
     return errors;
   }
 
+  useEffect(()=>{
+    console.log(image)
+  },[image])
+
   const handleSave = async (e) => {
     e.preventDefault();
-    const descriptionSection = sections.find(section => section.type === 'Description');
+    const descriptionSection = sections.find(section => section.title === 'Description');
     const descriptionContent = descriptionSection?.editor?.getHTML() || '';
     const newValues = { ...values, description: descriptionContent };
     const validationErrors = validate(newValues); 
@@ -77,45 +88,53 @@ export default function EditProject({ onEditorFocus, coverImageFile }) {
       titleRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } else if (validationErrors.description) {
       descriptionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      console.log(descriptionRef.current)
     } else if (validationErrors.coverPicture) {
       coverPictureRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
+    console.log(validationErrors)
     if (Object.keys(validationErrors).length === 0) {
       try {
-        const formData = new FormData();
+        const formData = new FormData(); // save the project information
         formData.append('title', newValues.title);
         formData.append('description', newValues.description);
         formData.append('coverPhoto', newValues.coverPicture); 
-  
         const preparedSections = sections
-        .filter(section => {
-          if (section.type === "Description") return false; // exclude Description
-          const html = section.editor ? section.editor.getHTML() : section.content;
+        .filter(section => { if (section.title === "Description") return false; // exclude Description ( since it's not included with sections array in backend)
+          const html = section.editor ? section.editor.getHTML() : section?.content;
           return html && html !== '<p></p>'; // only keep non-empty content
         })
         .map(section => ({
-          title: section.type,
+          title: section.title,
           content: section.editor.getHTML(),
-          dimension: section.type.toLowerCase()
+          dimension: section.title.toLowerCase(),
+          contributor: savedProject?.author
         }));
 
         formData.append('sections', JSON.stringify(preparedSections));
-  
+
         const token = localStorage.getItem("token");
-        const response = await axios.post("http://localhost:5000/api/projects/", formData, {
-          headers: {
+        if (!token) {
+          console.error("No auth token found.");
+          return;
+        }
+        const isEdit = Boolean(savedProject?._id); // if this returns an id then we're in the edit mode of an existing project
+        const url = isEdit // if it's edit mode we put new data in the route specefied else we post a new project to the route after : 
+        ? `http://localhost:5000/api/projects/${savedProject._id}` : "http://localhost:5000/api/projects/";
+        const method = isEdit ? "put" : "post";
+        const response = await axios[method](url, formData, {
+           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`
-          }
+             Authorization: `Bearer ${token}`
+            }
         });
-        console.log('Project created:', response.data);
+        console.log(`Project ${isEdit ? 'updated' : 'created'}:`, response.data);
         navigate("/My_Projects");
       } catch (error) {
-        console.error('Project creation failed:', error.response?.data || error.message);
+        console.error('Project save failed:', error.response?.data || error.message);
       }
-    }
-    else {
-      console.log("error")
+    } else {
+      console.log("Validation error");
     }
   }
 
@@ -139,9 +158,17 @@ export default function EditProject({ onEditorFocus, coverImageFile }) {
   };
 
   useEffect(() => {
+    if (savedProject?.coverPhoto) {
+      const fullCoverUrl = `http://localhost:5000/${savedProject.coverPhoto}`;
+      setImage(fullCoverUrl);
+    }
+  }, [savedProject]);
+
+  useEffect(() => {
     const initializedSections = defaultSections.map(section => ({
       ...section,
       editor: new Editor({
+        content: section.content || '',
         extensions: [
           StarterKit.configure({
             bulletList: false,
@@ -202,7 +229,6 @@ export default function EditProject({ onEditorFocus, coverImageFile }) {
         },
       }),
     }));
-    console.log(sections)
     setSections(initializedSections);
   }, []);
 
@@ -214,39 +240,42 @@ export default function EditProject({ onEditorFocus, coverImageFile }) {
       })
   }, [sections])
 
-  const addSection = (type) => {
-    if (type === 'Other' && sections.some(s => s.type === 'Other')) return; 
-    const newSection = { 
-      id: Date.now(),
-      type,
-      title: '',
-      content: '',
-      showContent: true,
-      editor: new Editor({ extensions: [StarterKit.configure({
-        bulletList: false,
-        orderedList: false,
-        listItem: false,
-        paragraph:false,
-      }),
-      BulletList, OrderedList, ListItem, Underline , TextStyle, FontFamily, FontSize, Color, CustomHighlight, Image, ImageResize,Gapcursor,
-      Table, TableRow, TableCell, TableHeader,  ReferenceBlock, LinkBlock, ExtendedParagraph, InternalLinkHandler,// the editor of the new section
-        TextAlign.configure({
-          types: ['heading', 'paragraph'], 
-          alignments: ['left', 'center', 'right', 'justify'], 
+  const addSection = (title) => {
+      if (title === 'Other' && sections.some(s => s.title === 'Other')) return; 
+      const newSection = { 
+        id: 'other',
+        title: 'Other',
+        content: '',
+        showContent: true,
+        editor: new Editor({ extensions: [StarterKit.configure({
+          bulletList: false,
+          orderedList: false,
+          listItem: false,
+          paragraph:false,
         }),
-        Link.configure({
-          openOnClick: false,
-          autolink: true,
-          linkOnPaste: true,
-        }),
-        Placeholder.configure({
-          placeholder: 'Enter some text...',
-          emptyEditorClass: 'editor-initial-content',
-          showOnlyWhenEditable: true,
-          showOnlyCurrent: true, }),], })
-    };
-    setSections([...sections, newSection]);
+        BulletList, OrderedList, ListItem, Underline , TextStyle, FontFamily, FontSize, Color, CustomHighlight, Image, ImageResize,Gapcursor,
+        Table, TableRow, TableCell, TableHeader,  ReferenceBlock, LinkBlock, ExtendedParagraph, InternalLinkHandler,// the editor of the new section
+          TextAlign.configure({
+            types: ['heading', 'paragraph'], 
+            alignments: ['left', 'center', 'right', 'justify'], 
+          }),
+          Link.configure({
+            openOnClick: false,
+            autolink: true,
+            linkOnPaste: true,
+          }),
+          Placeholder.configure({
+            placeholder: 'Enter some text...',
+            emptyEditorClass: 'editor-initial-content',
+            showOnlyWhenEditable: true,
+            showOnlyCurrent: true, }),], })
+      };
+      setSections([...sections, newSection]);
   };
+
+  useEffect(()=>{
+    console.log(sections)
+  },[sections])
 
   const removeSection = (id) => {
     setSections(sections.filter((section) => section.id !== id)); //removes a section based on its id 
@@ -280,7 +309,7 @@ export default function EditProject({ onEditorFocus, coverImageFile }) {
   }, [showRemoveSection]);
 
   useEffect(() => {
-    const referencesSection = sections.find(section => section.type === 'References');
+    const referencesSection = sections.find(section => section.title === 'References');
     if (referencesSection?.editor && references.length > 0) {
       const paragraphs = references.map((ref, idx) => ({
         type: 'paragraph',
@@ -300,14 +329,22 @@ export default function EditProject({ onEditorFocus, coverImageFile }) {
         content: paragraphs,
       });
     }
-  }, [references, sections]);  
+  }, [references, sections]);
+
+  useEffect(() => {
+    if (savedProject?.coverPhoto) {
+      const imagePath = savedProject.coverPhoto.replace("\\", "/");
+      setImage(`http://localhost:5000/${imagePath}`);
+    }
+  }, [savedProject]);
+  
 
   const renderSection = (section) => {
-    switch (section.type) {
+    switch (section.title) {
       case 'Description':
         return (
-          <>
-          <div key={section.id} className='shadow-lg rounded-lg px-4 py-3' >
+        <div key={section.id}>
+          <div className='shadow-lg rounded-lg px-4 py-3' >
             <div className='border-b border-black py-3 grid grid-cols-2'>
               <h1 className='font-playfairdisplay text-2xl'>Description</h1>
               <div className='flex place-self-end gap-2'>
@@ -321,7 +358,7 @@ export default function EditProject({ onEditorFocus, coverImageFile }) {
              </div>}          
           </div>
           {errors.description && (<p className='text-red-700 text-md'>{errors.description}</p>)}
-          </>
+        </div>
         );
       case 'Architecture':
         return (
@@ -417,14 +454,14 @@ export default function EditProject({ onEditorFocus, coverImageFile }) {
     <>
       <div className='flex flex-col items-center justify-self-center font-montserral min-h-screen w-full max-w-[900px] shadow-lg overflow-y-auto mt-24 mb-8
       '>
-        <div className='bg-[#4F3726] bg-opacity-20 flex items-center justify-center w-full h-[320px] '  style={{ backgroundImage: image ? `url(${image})` : 'none',
-        backgroundSize: 'cover', backgroundPosition: 'center', }}>
-          <input type="file" accept="image/*" className="hidden" id="imageUpload" onChange={handleImageChange} name='coverPicture' ref={coverPictureRef}/>
+        <div className='bg-[#4F3726] bg-opacity-20 flex items-center justify-center w-full h-[320px] ' style={{ backgroundImage: image ? `url("${image}")` : 'none' ,
+        backgroundSize: 'cover', backgroundPosition: 'center',  }} ref={coverPictureRef}>
+          <input type="file" accept="image/*" className="hidden" id="imageUpload" onChange={handleImageChange} name='coverPicture' />
           {(image=='') && <label htmlFor="imageUpload" className='group flex items-center text-lg cursor-pointer transition-all duration-300
            ease-in-out overflow-hidden bg-white drop-shadow-md rounded-full px-4 py-3 w-[55px] hover:w-64'>
             <Plus className='shrink-0'/>
             <span className='ml-3 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300'>Add a cover picture</span>
-          </label> }
+          </label> } 
         </div>
         {errors.coverPicture && (image=='') && <p className='text-red-700 self-start'>{errors.coverPicture}</p>}
         <div className='py-4 px-8 flex flex-col gap-5 w-full '>
@@ -434,7 +471,7 @@ export default function EditProject({ onEditorFocus, coverImageFile }) {
             {errors.title && <p className='text-red-700 '>{errors.title}</p>}
           </div>       
           <div className="section-list">
-            {sections.map((section) =>{if(section.type!=='References' || references.length>0){
+            {sections.map((section) =>{if(section.title!=='References' || references.length>0){
               return renderSection(section);
             }})} 
           </div>

@@ -50,8 +50,7 @@ router.get('/', async (req, res) => {
 });
 
 // ✅ CREATE Project Route
-router.post(
-  '/',
+router.post('/',
   authenticateUser,
   upload.fields([
     { name: 'coverPhoto', maxCount: 1 },
@@ -119,7 +118,6 @@ router.post(
       }
 
       const userId = req.user.userId;
-
        // Add contributor to each section
        const sectionsWithContributor = parsedSections.map(section => ({
         ...section,
@@ -282,7 +280,7 @@ router.put(
         return res.status(403).json({ message: 'Not authorized to update this project' });
       }
 
-      const { title, description, references } = req.body;
+      const { title, description, references, sections } = req.body;
       if (title) project.title = title;
       if (description) project.description = description;
 
@@ -296,6 +294,18 @@ router.put(
           return res.status(400).json({ message: 'Invalid references format. Must be JSON array.' });
         }
       }
+
+      if (sections) {
+        let parsedSections;
+        try {
+          parsedSections = JSON.parse(sections);
+          if (!Array.isArray(parsedSections)) throw new Error();
+          project.sections = parsedSections;
+        } catch (err) {
+          return res.status(400).json({ message: 'Invalid sections format. Must be JSON array.' });
+        }
+      }
+      
 
       if (req.files['coverPhoto']) {
         project.coverPhoto = req.files['coverPhoto'][0].path;

@@ -1,9 +1,27 @@
 import React, { useState } from 'react'
 
-const EditRequest = () => {
+const EditRequest = ({ projectId }) => {
     const [editRequest, setEditRequest] = useState('noRequest')
     const [waitingMessage, setWaitingMessage] = useState(false)
+    // const [error, setError] = useState(null);
 
+    // const handleSendRequest = async () => {
+    //     try {
+    //         setWaitingMessage(true);
+    //         const response = await axios.post(`/api/edit-requests/${projectId}`);
+    //         if (response.status === 200) {
+    //            console.log("✅ Request sent:", response.data);
+    //         }
+    //     } catch (err) {
+    //         console.error('❌ Failed to send edit request:', err);
+    //         setWaitingMessage(false);
+    //         if (err.response?.data?.message) {
+    //             setError(err.response.data.message);
+    //         } else {
+    //             setError("An error occurred while sending your request.");
+    //         }
+    //     }
+    // };
   return (
     <>
         { editRequest === 'noRequest' ? (
@@ -11,7 +29,8 @@ const EditRequest = () => {
                 { !waitingMessage ?(
                     <>
                         <div className='mt-3 mx-4 mb-2 text-center'>Do you want to send an editing request to the owner of the project?</div>
-                        <button className='w-20 shadow-sm rounded-full bg-[#4F3726] text-[#FFF8E3] h-6 mb-3' onClick={() => setWaitingMessage(true)}>Confirm</button>
+                        <button className='w-20 shadow-sm rounded-full bg-[#4F3726] text-[#FFF8E3] h-6 mb-3' onClick={()=>setWaitingMessage(true)}>
+                        Confirm</button>
                     </>
                 ) : (
                     <div className='text-xs my-3 mx-4 text-center'>Your editting request has been sent.</div>
