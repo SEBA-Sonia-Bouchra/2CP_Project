@@ -42,14 +42,14 @@ const Contributers = ({ project, isOwner }) => {
       })}
 
       {/* Modify Permissions Button */}
-      {isOwner && (
+      {/* {isOwner && (
         <button 
           onClick={() => setShowModifyPermissions(!showModifyPermissions)}
           className=" bg-[#4F3726] text-white px-5 py-2 mb-2 rounded-full w-fit self-center"
         >
           Modify Permission
         </button>
-      )}
+      )} */}
 
       {/* Show ModifyPermissions Component */}
       {showModifyPermissions && <ModifyPermissions project={project} setShowModifyPermissions={setShowModifyPermissions}/>}
