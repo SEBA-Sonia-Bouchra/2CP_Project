@@ -18,7 +18,8 @@ const AnnotatedProjects = ({ projects }) => {
       scrollRef.current.scrollBy({ left: 300, behavior: "smooth" });
     }
   };
-
+  
+  console.log('Annotated projects:', AnnotatedProjects);
   return (
     <div className="w-full max-w-6xl mx-auto p-6 relative">
       {/* Title */}
