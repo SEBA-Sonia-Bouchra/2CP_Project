@@ -100,7 +100,9 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
         formData.append('description', newValues.description);
         formData.append('coverPhoto', newValues.coverPicture); 
         const preparedSections = sections
-        .filter(section => { if (section.title === "Description") return false; // exclude Description ( since it's not included with sections array in backend)
+        .filter(section => { 
+          if (section.title === "Description") return false; // exclude Description ( since it's not included with sections array in backend)
+          if (section.type === "References") return false;
           const html = section.editor ? section.editor.getHTML() : section?.content;
           return html && html !== '<p></p>'; // only keep non-empty content
         })
