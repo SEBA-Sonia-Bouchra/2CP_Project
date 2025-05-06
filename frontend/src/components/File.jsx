@@ -120,7 +120,7 @@ const File = ({ project, isOwner, currentUser, isProfessional }) => {
               const color = getColorByDimension(section.dimension);
 
               return(
-              <div key={index} id={`${section.id}`} className='my-3 w-full'>
+              <div key={index} id={`${section._id}`} className='my-3 w-full'>
                 <div className='w-full flex flex-row justify-between mb-1'>
                   <h2 style={{color: color}} className='capitalize self-center text-lg font-playfairdisplay'>
                     { section.dimension }

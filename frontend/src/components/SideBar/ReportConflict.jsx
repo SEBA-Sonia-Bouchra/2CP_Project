@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'
 import icon from '../../assets/images/icon-placeholder.png';
 import useCurrentUser from '../../utils/useCurrentUser';
 import axios from 'axios';
@@ -60,15 +61,16 @@ const ReportConflict = ({ setReportConflict, annotation, project }) => {
         }
       );
       setSuccessMsg(response.data.message);
-      alert(successMsg);
       setTimeout(() => setReportConflict(false), 2000);
     } catch (error) {
       setErrorMsg(error.response?.data?.message || 'Failed to report conflict.');
-      alert(errorMsg);
     } finally {
       setLoading(false);
     }
   };
+  console.log(project.author?._id)
+  console.log(annotation?.user)
+  console.log(contributor?._id)
 
   return (
     <div className="fixed left-0 top-0 w-full flex items-center justify-center h-screen bg-black bg-opacity-25 z-30">
@@ -78,41 +80,53 @@ const ReportConflict = ({ setReportConflict, annotation, project }) => {
         <div className="text-sm mb-6 px-2">
           <p className="mb-2">Send an email to:</p>
           <div className="grid grid-cols-[auto_1fr_auto] gap-2 items-center">
-            {(project.author._id !== annotation.user && project.author._id !== contributor?._id) && (
+            {(project.author?._id !== annotation?.user && project.author?._id !== contributor?._id) && (
               <>
-                <img
-                  src={project.author.profilePicture ? `${localhost}${project.author.profilePicture}` : icon}
-                  alt="User Profile"
-                  className="rounded-full h-6 w-6 object-cover object-center"
-                />
-                <p className="hover:underline truncate max-w-[200px] whitespace-nowrap">
-                  {project.author.firstname} {project.author.lastname}
-                </p>
+                <Link to={`/see-profile/${project.author?._id}`}>
+                  <img
+                    src={project.author.profilePicture ? `${localhost}${project.author.profilePicture}` : icon}
+                    alt="User Profile"
+                    className="rounded-full h-6 w-6 object-cover object-center cursor-pointer"
+                    />
+                </Link>
+                <Link to={`/see-profile/${project.author?._id}`}>
+                  <p className="hover:underline truncate max-w-[200px] whitespace-nowrap cursor-pointer">
+                    {project.author.firstname} {project.author.lastname}
+                  </p>
+                </Link>
                 <span className="text-left text-xs text-gray-600">Project owner</span>
               </>
             )}
 
-            {(contributor?._id !== annotation.user && contributor?._id !== project.author._id) && (
+            {(contributor?._id !== annotation.user) && (
               <>
+                <Link to={`/see-profile/${contributor?._id}`}>
                 <img
                   src={contributor?.profilePicture ? `${localhost}${contributor?.profilePicture}` : icon}
                   alt="Contributor Profile"
                   className="rounded-full h-6 w-6 object-cover object-center"
-                />
+                  />
+                </Link>
+                <Link to={`/see-profile/${contributor?._id}`}>
                 <p className="hover:underline truncate max-w-[200px] whitespace-nowrap">
                   {contributor?.firstname} {contributor?.lastname}
                 </p>
+                </Link>
                 <span className="text-left text-xs text-gray-600">Section contributor</span>
               </>
             )}
+            <Link to={`/see-profile/${annotation.user}`}>
                 <img
                   src={annotation.profilePicture ? `${localhost}${annotation.profilePicture}` : icon}
                   alt="Annotator profile picture"
                   className="rounded-full h-6 w-6 object-cover object-center"
-                />
+                  />
+            </Link>
+            <Link to={`/see-profile/${annotation.user}`}>
                 <p className="hover:underline truncate max-w-[200px] whitespace-nowrap">
                   {annotation.firstname} {annotation.lastname}
                 </p>
+            </Link>
                 <span className="text-left text-xs text-gray-600">Annotation writer</span>
           </div>
         </div>

@@ -9,8 +9,7 @@ const DiscoverProjects = ({ projects, loading, error }) => {
       <div className="w-full max-w-4xl flex items-center space-x-3 mb-6">
         <img src={DiscoverIcon} alt="Vector Icon" className="w-6 h-6" />
         <h2
-          className="text-2xl font-semibold text-gray-900"
-          style={{ fontFamily: "Playfair Display" }}
+          className="text-2xl text-black font-playfairdisplay"
         >
           Discover
         </h2>
@@ -19,11 +18,11 @@ const DiscoverProjects = ({ projects, loading, error }) => {
       {/* Project List */}
       <div className="w-full max-w-6xl space-y-6">
         {loading ? (
-          <p className="text-gray-700">Loading projects...</p>
+          <p className="text-gray-700 font-montserral">Loading projects...</p>
         ) : error ? (
           <p className="text-red-500">{error}</p>
         ) : projects.length === 0 ? (
-          <p className="text-gray-500">No projects available.</p>
+          <p className="text-gray-500 font-montserral">No projects available.</p>
         ) : (
           projects.map((project) => (
             <div
@@ -38,8 +37,7 @@ const DiscoverProjects = ({ projects, loading, error }) => {
               <div className="p-6 flex flex-col justify-between w-2/3">
                 <div>
                   <h3
-                    className="text-xl font-serif font-semibold text-gray-900"
-                    style={{ fontFamily: "Playfair Display" }}
+                    className="text-xl font-playfairdisplay text-gray-900"
                   >
                     {project.title}
                   </h3>
@@ -52,7 +50,8 @@ const DiscoverProjects = ({ projects, loading, error }) => {
                 <div className="flex justify-end">
                   <Link to={`/projects/${project._id}`}>
                       <button 
-                      className="mt-2 bg-[#213824CF] text-white w-[132px] h-[40px] rounded-full text-sm font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824]">
+                      className="mt-2 bg-[#213824CF] text-white w-[160px] h-[50px] rounded-full text-lg font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824]
+                      font-montserral">
                         View Project
                       </button>
                   </Link>

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { getColorByDimension } from '../../utils/helpers';
 import filledQuote from '../../assets/images/filled-quote.svg'
 import icon from '../../assets/images/icon-placeholder.png';
@@ -16,9 +17,13 @@ const ClickedAnnotation = ({setClickedAnnotation, clickedAnnotation}) => {
         {/* annotation content */}
         <div className=' bg-white rounded-md w-full lg:w-1/2 max-w-lg p-4 text-base'>
           <div className='pt-3 px-3 flex flex-row gap-2 '>
-            <img src={clickedAnnotation.profilePicture ? `${localhost}${clickedAnnotation.profilePicture}` : icon} alt="User profile picture" className='rounded-full h-7 w-7 self-center object-cover object-center'/>
+            <Link to={`/see-profile/${clickedAnnotation.user}`}>
+              <img src={clickedAnnotation.profilePicture ? `${localhost}${clickedAnnotation.profilePicture}` : icon} alt="User profile picture" className='rounded-full h-7 w-7 self-center object-cover object-center'/>
+            </Link>
             <div className='flex flex-col items-start '>
-              <p className='hover:underline whitespace-nowrap cursor-pointer'>{`${clickedAnnotation.firstname} ${clickedAnnotation.lastname}`}</p>
+              <Link to={`/see-profile/${clickedAnnotation.user}`}>
+                <p className='hover:underline whitespace-nowrap cursor-pointer'>{`${clickedAnnotation.firstname} ${clickedAnnotation.lastname}`}</p>
+              </Link>
               <span className='text-gray-500 text-xs'>
                 {new Date(clickedAnnotation.createdAt).toLocaleDateString()}
               </span>

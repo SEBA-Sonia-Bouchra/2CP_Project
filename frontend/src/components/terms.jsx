@@ -9,10 +9,10 @@ const TermsAndPolicy = () => {
 
 
       <section className="mb-10">
-        <h2 className="text-xl font-semibold mb-2 font-playfairdisplay text-[#4B5E4B]">
+        <h2 className="text-xl mb-2 font-playfairdisplay text-[#4B5E4B]">
           1. Introduction:
         </h2>
-        <p className="text-base leading-relaxed">
+        <p className="text-base leading-relaxed font-montserral">
           Welcome to Binaa! Our platform is dedicated to preserving and documenting Algerian
           architectural heritage through collaboration and knowledge sharing. We prioritize user
           privacy and security while ensuring a transparent and fair environment for all members.
@@ -23,10 +23,10 @@ const TermsAndPolicy = () => {
       </section>
 
       <section className="mb-10">
-        <h2 className="text-xl font-semibold mb-2 font-playfairdisplay text-[#4B5E4B]">
+        <h2 className="text-xl  mb-2 font-playfairdisplay text-[#4B5E4B]">
           2. Terms of Service
         </h2>
-        <ul className="list-disc list-inside text-base leading-relaxed space-y-2 font-montserrat">
+        <ul className="list-disc list-inside text-base leading-relaxed space-y-2 font-montserral">
           <li><strong>User Responsibilities:</strong> Users must provide accurate information, respect intellectual property, and avoid harmful content.</li>
           <li><strong>Content Ownership:</strong> Users own their content but grant Binaa permission to display it. We may remove content violating guidelines.</li>
           <li><strong>Account Usage:</strong> Users must secure their accounts. Violations may result in suspension.</li>
@@ -35,10 +35,10 @@ const TermsAndPolicy = () => {
       </section>
 
       <section className="mb-10">
-        <h2 className="text-xl font-semibold mb-2 font-playfairdisplay text-[#4B5E4B]">
+        <h2 className="text-xl  mb-2 font-playfairdisplay text-[#4B5E4B]">
           3. Privacy Policy
         </h2>
-        <ul className="list-disc list-inside text-base leading-relaxed space-y-2 font-montserrat">
+        <ul className="list-disc list-inside text-base leading-relaxed space-y-2 font-montserral">
           <li><strong>Data Collection & Use:</strong> We collect user-provided data (e.g., name, email) and usage analytics to enhance the platform.</li>
           <li><strong>Data Sharing:</strong> We don’t sell data but may share it with trusted service providers or legal authorities if required.</li>
           <li><strong>Security & Rights:</strong> We protect user data and allow users to access, modify, or delete it. Contact us for data-related requests.</li>
@@ -46,19 +46,19 @@ const TermsAndPolicy = () => {
       </section>
 
       <section className="mb-10">
-        <h2 className="text-xl font-semibold mb-2 font-playfairdisplay text-[#4B5E4B]">
+        <h2 className="text-xl mb-2 font-playfairdisplay text-[#4B5E4B]">
           4. Cookies & Tracking
         </h2>
-        <p className="text-base leading-relaxed">
+        <p className="text-base leading-relaxed font-montserral">
           We use cookies for authentication and analytics. Users can adjust their browser settings to manage cookies.
         </p>
       </section>
 
       <section>
-        <h2 className="text-xl font-semibold mb-2 font-playfairdisplay text-[#4B5E4B]">
+        <h2 className="text-xl mb-2 font-playfairdisplay text-[#4B5E4B] ">
           5. Contact Information
         </h2>
-        <p className="text-base leading-relaxed">
+        <p className="text-base leading-relaxed font-montserral">
           For inquiries, contact us at <a className="text-blue-700 underline" href="mailto:binaateam.dz@gmail.com">binaateam.dz@gmail.com</a> or <a className="text-blue-700 underline" href="tel:+213987098765">+213 987 098 765</a>.
           <br /><br />
           Thank you for being part of <strong>BinaA!</strong>

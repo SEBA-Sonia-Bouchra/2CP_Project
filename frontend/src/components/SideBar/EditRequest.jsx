@@ -57,6 +57,23 @@ const EditRequest = ({ projectId }) => {
     return () => clearInterval(intervalId);
   }, [projectId]);  
 
+    // const handleSendRequest = async () => {
+    //     try {
+    //         setWaitingMessage(true);
+    //         const response = await axios.post(`/api/edit-requests/${projectId}`);
+    //         if (response.status === 200) {
+    //            console.log("✅ Request sent:", response.data);
+    //         }
+    //     } catch (err) {
+    //         console.error('❌ Failed to send edit request:', err);
+    //         setWaitingMessage(false);
+    //         if (err.response?.data?.message) {
+    //             setError(err.response.data.message);
+    //         } else {
+    //             setError("An error occurred while sending your request.");
+    //         }
+    //     }
+    // };
   return (
     <>
       {editRequest === 'noRequest' ? (
@@ -81,7 +98,7 @@ const EditRequest = ({ projectId }) => {
       ) : editRequest === 'accepted' ? (
         <div className='text-xs flex flex-col items-center gap-2 max-w-[232px]'>
           <div className='mt-3 mx-4 mb-2 text-center'>Your editing request has been accepted!</div>
-          <Link to={'/editor'}>
+          <Link to={`/projects/${projectId}/edit`}>
             <button className='w-28 shadow-sm rounded-full bg-[#4F3726] text-[#FFF8E3] h-6 mb-3'>Start editing</button>
           </Link>
         </div>

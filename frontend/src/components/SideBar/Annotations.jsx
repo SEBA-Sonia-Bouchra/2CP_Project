@@ -1,4 +1,5 @@
-import React, { useState,useEffect, useRef } from 'react'
+import React, { useState,useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom'
 import AnnotationOptions from './AnnotationOptions'
 import filledQuote from '../../assets/images/filled-quote.svg'
 import more from '../../assets/images/more-vertical.svg'
@@ -80,13 +81,15 @@ const Annotations = ({ setClickedAnnotation, currentUser, isOwner, project}) => 
             <span className='h-[0.1px] bg-[#4f37267b] w-full '></span>
             {/* Author Info */}
             <div className='pt-3 px-3 flex flex-row gap-2'>
-              <img src={annotation.profilePicture ? `${localhost}${annotation.profilePicture}` : icon}  alt="User profile picture" className='rounded-full h-6 w-6 object-cover object-cover'/>
+              <img src={annotation.profilePicture ? `${localhost}${annotation.profilePicture}` : icon}  alt="User profile picture" className='rounded-full h-6 w-6 object-cover object-center'/>
+              <Link to={`/see-profile/${annotation.user}`}>
               <div className='flex flex-col items-start text-xs '>
                 <p className='hover:underline whitespace-nowrap cursor-pointer ]'>{`${annotation.firstname} ${annotation.lastname}`}</p>
                 <span className='text-gray-500 text-[10px]'>
                   {new Date(annotation.createdAt).toLocaleDateString()}
                 </span>
-              </div>
+              </div> 
+              </Link>
               {(user.isProfessional === true)  ? (       
                <button className='rounded-full p-1 hover:bg-[#00000023] self-start ml-auto' onClick={() => {setAnnotationOptions(annotationOptions === annotation._id ? null : annotation._id)}}> 
                   <img src={more} alt="options" className='w-4 h-4 inline mx-1'/>

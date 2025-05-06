@@ -79,7 +79,7 @@ export default function ModificationNormal() {
             {isEditing && (
               <>
                 <input type="file" accept="image/*" className="hidden" id="imageUpload" onChange={handleImageChange}/>
-                <label htmlFor="imageUpload" className={`absolute bottom-3 right-16 p-1 rounded-full ${isEditing && 'cursor-pointer'} shadow-md bg-[#213824] flex items-center justify-center w-12 h-12`}>
+                <label htmlFor="imageUpload" className={`absolute bottom-3 right-6 p-1 rounded-full ${isEditing && 'cursor-pointer'} shadow-md bg-[#213824] flex items-center justify-center w-12 h-12`}>
                 <img src={edit} alt="update-image" className="w-6 h-6 flex-none" />
                 </label>
               </>

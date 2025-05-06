@@ -1,5 +1,4 @@
 import React from 'react'
-import { useEffect } from 'react'
 import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider, Routes, Router} from 'react-router-dom'
 import LandingPage from './LandingPage.jsx'
 import SignUpPage from './pages/SignUpPage.jsx'
@@ -26,7 +25,8 @@ import TermsPage from "./pages/termsandpolicypage.jsx";
 import SearchPage from './pages/searchpage.jsx';
 import GoogleCallback from './components/SideBar/GoogleCallback.jsx';
 import OAuthSuccess from './pages/OAuthSuccess';
-import AboutUsPage from './pages/AboutUsPage.jsx'
+import AboutUsPage from './pages/AboutUsPage.jsx';
+import Profile from './pages/Profile.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -42,8 +42,8 @@ const router = createBrowserRouter(
       {<Route path='/set-new-password' element={<SetNewPassword/>}></Route>}
       {<Route path='/request-review' element={<AccountRequest/>}></Route>}
       {<Route path='/request-rejected' element={<RejectRequest/>}></Route>}
-      {<Route path="/editor" element={<EditorPage />} />}
-      {<Route path="/oauth/callback" component={GoogleCallback} />}
+      {<Route path="/new-project" element={<EditorPage />} />}
+      {<Route path="/projects/:id/edit" element={<EditorPage />} />}
       <Route path="/oauth-success" element={<OAuthSuccess />} />
       {<Route path="/" element={<MainLayout/>}>
         <Route path="/home_page" element={<Home_page />} />
@@ -56,6 +56,7 @@ const router = createBrowserRouter(
         <Route path="/search" element={<SearchPage />} />
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/About_Us" element={<AboutUsPage />} />
+        <Route path="/see-profile/:id" element={<Profile />} />
       </Route>}
   </>
   )

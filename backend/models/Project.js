@@ -25,7 +25,7 @@ const projectSchema = new mongoose.Schema({
   references: [
     {
       title: { type: String, required: true },
-      link: { type: String } // Optional: If you want reference links
+      // link: { type: String } // Optional: If you want reference links
     }
   ], 
 }, { timestamps: true }); 

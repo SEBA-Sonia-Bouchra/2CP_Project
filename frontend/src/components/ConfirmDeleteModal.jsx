@@ -4,7 +4,7 @@ const ConfirmDeleteModal = ({ isOpen, onClose, onConfirm }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 font-montserral">
       <div className="bg-[#E8E5D9] p-6 rounded-lg shadow-lg w-96 text-center">
         <p className="text-gray-900 text-lg">Do you want to delete this project?</p>
 

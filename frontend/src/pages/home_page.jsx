@@ -84,11 +84,11 @@ export default function Projects() {
       {projects.discovered.length > 0  ? (
         <DiscoverProjects projects={projects.discovered} loading={loading} error={error} /> 
       ) : loading ? (
-        <p className="text-center pt-6 font-montserral">Loading projects...</p>
+        <p className="text-center font-montserral mt-8 text-xl">Loading projects...</p>
       ) : error ? (
-        <p className="text-center pt-6 font-montserral">Error: {error}</p>
+        <p className="text-center font-montserral mt-8 text-xl">Error: {error}</p>
       ) : ( 
-        <p className="text-center pt-6 font-montserral">No projects available.</p>
+        <p className="text-center font-montserral mt-8 text-xl">No projects available.</p>
       )}
       
     </div>
