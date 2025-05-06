@@ -4,6 +4,8 @@ const authenticateUser = require('../middleware/authUser');
 const EditRequest = require('../models/EditRequest');
 const Project = require('../models/Project');
 const User = require('../models/User');
+const Notification = require('../models/Notification');
+
 
 // Send an edit request
 router.post('/:id', authenticateUser, async (req, res) => {
@@ -38,6 +40,19 @@ router.post('/:id', authenticateUser, async (req, res) => {
     });
 
     await newRequest.save();
+    const notification = new Notification({
+      projectId: project._id,
+      recipientId: project.author._id, // assuming 'author' is the project owner
+      requesterId: requester._id,
+      requesterName: requester.firstname + ' ' + requester.lastname,
+      projectName: project.title, // or project.name
+      message: `${requester.firstname} ${requester.lastname} wants to edit your project "${project.title}".`,
+      type: 'edit-request',
+      status: 'none',
+      isRead: false
+    });
+
+    await notification.save();
 
     res.status(200).json({ message: 'Edit request sent successfully.', request: newRequest });
   } catch (error) {

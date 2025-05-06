@@ -51,7 +51,7 @@ export default function Projects() {
 
     fetchProjects();
    }, []);
-
+   console.log('Annotated projects:', projects.annotated);
   return (
     <div className="bg-[#f5f5dc] min-h-screen flex flex-col pt-6"> 
       {user?.isProfessional === true && (

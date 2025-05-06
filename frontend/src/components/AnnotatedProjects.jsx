@@ -19,7 +19,7 @@ const AnnotatedProjects = ({ projects }) => {
     }
   };
   
-
+  console.log('Annotated projects:', AnnotatedProjects);
   return (
     <div className="w-full max-w-6xl mx-auto p-6 relative">
       {/* Title */}
