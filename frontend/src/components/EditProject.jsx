@@ -102,7 +102,7 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
         const preparedSections = sections
         .filter(section => { 
           if (section.title === "Description") return false; // exclude Description ( since it's not included with sections array in backend)
-          if (section.type === "References") return false;
+          if (section.title === "References") return false;
           const html = section.editor ? section.editor.getHTML() : section?.content;
           return html && html !== '<p></p>'; // only keep non-empty content
         })
@@ -114,6 +114,8 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
         }));
 
         formData.append('sections', JSON.stringify(preparedSections));
+        formData.append('references', JSON.stringify(references));
+
         const token = localStorage.getItem("token");
         if (!token) {
           console.error("No auth token found.");

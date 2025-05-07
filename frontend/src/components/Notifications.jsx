@@ -1,15 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
 import xicon from "../assets/images/x.svg";
 import NoNotifications from "./NoNotifications";
 import axios from 'axios';
 import useCurrentUser from '../utils/useCurrentUser';
-import { io } from "socket.io-client";
 
 const NotificationBox = ({ toggleNotifications }) => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const user = useCurrentUser();
-  const socketRef = useRef(null);
 
   useEffect(() => {
     if (!user?._id) return;
@@ -30,29 +29,17 @@ const NotificationBox = ({ toggleNotifications }) => {
     fetchNotifications();
   }, [user?._id]);
 
-  useEffect(() => {
-    if (user?._id) {
-      if (!socketRef.current) {
-        socketRef.current = io("http://localhost:5000");
-      }
+  console.log(notifications);
 
-      socketRef.current.emit("register", user._id);
-
-      socketRef.current.on("newNotification", (notification) => {
-        console.log("New notification received:", notification);
-        setNotifications((prevNotifications) => [notification, ...prevNotifications]);
-      });
-
-      return () => {
-        socketRef.current.off("newNotification");
-      };
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/notifications/delete/${id}`);
+      setNotifications(notifications.filter(notification => notification._id !== id));
+    } catch (error) {
+      console.error("Error deleting notification:", error.response?.data || error.message);
     }
-  }, [user?._id]);
-
-
-const handleDelete = (id) => {
-  setNotifications(notifications.filter(notification => notification._id !== id)); // use _id here
-};
+  };
+  
   return (
     <div className="flex items-center justify-center min-h-screen bg-black bg-opacity-25 font-montserral relative">
       <button
@@ -89,36 +76,67 @@ const handleDelete = (id) => {
                 <div className="space-x-2">
                   {notification.type === "request" && (
                     <>
-                      <button className="px-4 pt-1 pb-1 text-[#213824CC] text-base rounded-full shadow-sm hover:text-[#21382499] border border-[#213824CC] hover:border-[#21382499]">
+                      <button
+                        onClick={() => handleDelete(notification._id)}
+                        className="px-4 pt-1 pb-1 text-[#213824CC] text-base rounded-full shadow-sm hover:text-[#21382499] border border-[#213824CC] hover:border-[#21382499]">
                         Decline
                       </button>
-                      <button className="px-5 pt-1 pb-1 bg-[#213824CC] text-[#FFF8E3] text-base shadow-md rounded-full hover:bg-[#21382499]">
+
+                      <button
+                        onClick={() => handleDelete(notification._id)}
+                        className="px-5 pt-1 pb-1 bg-[#213824CC] text-[#FFF8E3] text-base shadow-md rounded-full hover:bg-[#21382499]">
                         Accept
                       </button>
+
                     </>
                   )}
 
                   {notification.type === "conflict" && (
                     <>
-                      <button className="px-4 pt-1 pb-1 text-[#213824CC] text-base rounded-full shadow-sm hover:text-[#21382499] border border-[#213824CC] hover:border-[#21382499]">
+                      <button
+                        onClick={() => handleDelete(notification._id)}
+                        className="px-4 pt-1 pb-1 text-[#213824CC] text-base rounded-full shadow-sm hover:text-[#21382499] border border-[#213824CC] hover:border-[#21382499]">
                         Dismiss
                       </button>
-                      <button className="px-6 pt-1 pb-1 bg-[#213824CC] text-[#FFF8E3] text-base shadow-md rounded-full hover:bg-[#21382499]">
-                        Open
-                      </button>
+
+                      <Link to={`/projects/${notification?.projectId}`}>
+                        <button className="px-6 pt-1 pb-1 bg-[#213824CC] text-[#FFF8E3] text-base shadow-md rounded-full hover:bg-[#21382499]">
+                          Open
+                        </button>
+                      </Link>
                     </>
                   )}
 
                   {notification.type === "accepted-edit" && (
+                    <>
+                      <button
+                        onClick={() => handleDelete(notification._id)}
+                        className="px-4 pt-1 pb-1 text-[#213824CC] text-base rounded-full shadow-sm hover:text-[#21382499] border border-[#213824CC] hover:border-[#21382499]">
+                        Dismiss
+                      </button>
+
+                    <Link to={`/projects/${notification?.projectId}/edit`}>
                     <button className="px-7 pt-1 pb-1 shadow-md bg-[#213824CC] text-[#FFF8E3] text-base rounded-full hover:bg-[#21382499]">
                       Edit
                     </button>
+                    </Link>
+                    </>
                   )}
 
                   {notification.type === "annotation" && (
+                    <>
+                      <button
+                        onClick={() => handleDelete(notification._id)}
+                        className="px-4 pt-1 pb-1 text-[#213824CC] text-base rounded-full shadow-sm hover:text-[#21382499] border border-[#213824CC] hover:border-[#21382499]">
+                        Dismiss
+                      </button>
+
+                    <Link to={`/projects/${notification?.projectId}`}>
                     <button className="px-6 pt-1 pb-1 shadow-md bg-[#213824CC] text-[#FFF8E3] text-base rounded-full hover:bg-[#21382499]">
                       Open
                     </button>
+                    </Link>
+                    </>
                   )}
                 </div>
               </div>
