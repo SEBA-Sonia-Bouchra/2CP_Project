@@ -40,6 +40,21 @@ const getNotifications = async (req, res) => {
 
   try {
     const notifications = await Notification.find({
+      recipientId: userId
+    }).sort({ createdAt: -1 });
+
+    res.json(notifications); // Always return 200, even if empty
+
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching notifications', error: err });
+  }
+};
+
+/*const getNotifications = async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    const notifications = await Notification.find({
       $or: [
         { ownerId: userId },
         { requesterId: userId },
@@ -56,7 +71,7 @@ const getNotifications = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: 'Error fetching notifications', error: err });
   }
-};
+};*/
 
 // Respond to Edit Request Notification
 const respondEditNotification = async (req, res) => {
@@ -301,6 +316,23 @@ const deleteNotification = async (req, res) => {
   }
 };
 
+// Count unread notifications for a user
+const countUnreadNotifications = async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    const count = await Notification.countDocuments({
+      recipientId: userId,
+      isRead: false
+    });
+
+    res.json({ unreadCount: count });
+  } catch (err) {
+    res.status(500).json({ message: 'Error counting unread notifications', error: err });
+  }
+};
+
+
 module.exports = {
   requestEditNotification,
   respondEditNotification,
@@ -308,5 +340,6 @@ module.exports = {
   reportConflictNotification,
   getNotifications,
   markAsRead,
-  deleteNotification
+  deleteNotification,
+  countUnreadNotifications
 };

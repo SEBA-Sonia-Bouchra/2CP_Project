@@ -63,4 +63,25 @@ router.put("/modify-profile", upload.single("profilePicture"), async (req, res) 
     }
 });
 
+// GET professional user profile by ID
+router.get("/:id", async (req, res) => {
+    try {
+        const userId = req.params.id;
+
+        // Find the user by ID and check if they are a professional
+        const user = await User.findOne(
+            { _id: userId, isProfessional: true },
+            "firstname lastname description email role institution levelOfExpertise profilePicture"
+        );
+
+        if (!user) {
+            return res.status(404).json({ message: "❌ Professional user not found" });
+        }
+
+        res.json({ message: "✅ Profile fetched successfully", profile: user });
+    } catch (error) {
+        res.status(500).json({ message: "❌ Server Error", error: error.message });
+    }
+});
+
 module.exports = router;

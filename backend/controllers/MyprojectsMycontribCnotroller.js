@@ -157,7 +157,7 @@ exports.getHomeProjects = async (req, res) => {
       // Annotated projects
       Annotation.find({ user: userId, createdAt: { $gte: oneMonthAgo } })
         .sort('-createdAt')
-        .limit(5)
+        .limit(20)
         .populate({
           path: 'project',
           match: { author: { $ne: userId } }, // Exclude user's own projects
@@ -170,7 +170,7 @@ exports.getHomeProjects = async (req, res) => {
         dateOfPublish: { $gte: oneMonthAgo }
       })
         .sort('-dateOfPublish')
-        .limit(5)
+        .limit(10)
         .populate('author', 'firstname lastname')
     ]);
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import DeleteAnnotation from './DeleteAnnotation';
-import ReportConflict from './reportConflict';
+import ReportConflict from './ReportConflict';
 import EditAnnotation from './EditAnnotation';
 import useCurrentUser from '../../utils/useCurrentUser';
 
