@@ -276,9 +276,9 @@ router.put(
       const project = await Project.findById(projectId);
       if (!project) return res.status(404).json({ message: 'Project not found' });
 
-      if (project.author.toString() !== userId) {
-        return res.status(403).json({ message: 'Not authorized to update this project' });
-      }
+      // if (project.author.toString() !== userId) {
+      //   return res.status(403).json({ message: 'Not authorized to update this project' });
+      // }
 
       const { title, description, references, sections } = req.body;
       if (title) project.title = title;
@@ -301,6 +301,7 @@ router.put(
           parsedSections = JSON.parse(sections);
           if (!Array.isArray(parsedSections)) throw new Error();
           project.sections = parsedSections;
+          project.sections.contributor = userId;
         } catch (err) {
           return res.status(400).json({ message: 'Invalid sections format. Must be JSON array.' });
         }

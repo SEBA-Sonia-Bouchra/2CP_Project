@@ -9,9 +9,10 @@ import bookmark from '../assets/images/bookmark.svg'
 import { TwitterPicker } from "react-color";
 import {HexColorPicker} from 'react-colorful'
 import TableGridSelector from './TableGridSelector.jsx'
+import useCurrentUser from '../utils/useCurrentUser.js';
 // () Don't forget keyboard shortcuts for toolbar functionalities ) <= a message for myself
 
-export default function EditorToolbar({ editor, onSelectCoverPicture }) {
+export default function EditorToolbar({ editor, onSelectCoverPicture, savedProject, user }) {
   const [textColor, setTextColor] = useState("#212529");
   const [backgroundColor, setBackgroundColor] = useState("#ffffff");
   const [showPickerText, setShowPickerText] = useState(false);
@@ -29,6 +30,7 @@ export default function EditorToolbar({ editor, onSelectCoverPicture }) {
   const [showOptions, setShowOptions]=useState(false);
   const [row, setRow]=useState(1);
   const [col, setCol]=useState(1);
+  const [display, setDisplay]= useState(true);
 
 
   const dropdownRefs = useRef({
@@ -134,7 +136,7 @@ export default function EditorToolbar({ editor, onSelectCoverPicture }) {
   };
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file && onSelectCoverPicture) {
+    if (file && onSelectCoverPicture ) {
       onSelectCoverPicture(file); 
     }
   };
@@ -186,6 +188,21 @@ export default function EditorToolbar({ editor, onSelectCoverPicture }) {
       type: 'linkBlock',
     }).run()
   }
+
+  useEffect(()=> {
+    if(!savedProject.title){
+      setDisplay(true);
+    }
+    else{
+      if((savedProject.author?._id === user?._id) && (savedProject && user)){
+        setDisplay(true);
+      }
+      else {
+        setDisplay(false);
+      }
+    }
+  }
+)
   
   if (!editor) return null;
   return (
@@ -349,11 +366,11 @@ export default function EditorToolbar({ editor, onSelectCoverPicture }) {
             <EllipsisVertical/> {/*clear content ? edit cover ? */}
         </button>
         {showOptions && ( <ul className="absolute right-0 top-10 w-48 overflow-y-auto bg-white rounded shadow-lg">
-          <div>
-          <li className={`p-2 cursor-pointer hover:bg-[#4F3726] hover:bg-opacity-20 flex gap-2 items-center justify-center`}
-          onClick={handleCoverPicture}><FilePenLine/> edit cover picture </li> 
-           <input type="file" accept="image/*" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange}/>
-      </div>
+          {display && (<div>
+            <li className={`p-2 cursor-pointer hover:bg-[#4F3726] hover:bg-opacity-20 flex gap-2 items-center justify-center`}
+            onClick={handleCoverPicture}><FilePenLine/> edit cover picture </li> 
+            <input type="file" accept="image/*" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange}/>
+          </div>) }
           <li className='p-2 cursor-pointer hover:bg-[#4F3726] hover:bg-opacity-20 flex gap-2 items-center justify-center'><X/> clear content</li>
           </ul>)}
         </div>

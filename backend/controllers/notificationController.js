@@ -316,6 +316,23 @@ const deleteNotification = async (req, res) => {
   }
 };
 
+// Count unread notifications for a user
+const countUnreadNotifications = async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    const count = await Notification.countDocuments({
+      recipientId: userId,
+      isRead: false
+    });
+
+    res.json({ unreadCount: count });
+  } catch (err) {
+    res.status(500).json({ message: 'Error counting unread notifications', error: err });
+  }
+};
+
+
 module.exports = {
   requestEditNotification,
   respondEditNotification,
@@ -323,5 +340,6 @@ module.exports = {
   reportConflictNotification,
   getNotifications,
   markAsRead,
-  deleteNotification
+  deleteNotification,
+  countUnreadNotifications
 };

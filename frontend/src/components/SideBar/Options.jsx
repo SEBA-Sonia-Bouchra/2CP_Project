@@ -55,7 +55,7 @@ const Options = ({ isOwner, project }) => {
     };
     
     const handleSaveDrive = async () => {
-      const accessToken = localStorage.getItem('access_token');
+      const accessToken = sessionStorage.getItem('access_token');
       if (!accessToken) {
         console.error('No access token found');
         return;

@@ -11,10 +11,10 @@ const OAuthSuccess = () => {
     const state = params.get('state'); // <- get the original page
 
     if (accessToken) {
-      localStorage.setItem('access_token', accessToken);
+      sessionStorage.setItem('access_token', accessToken);
     }
     if (refreshToken) {
-      localStorage.setItem('refresh_token', refreshToken);
+      sessionStorage.setItem('refresh_token', refreshToken);
     }
 
     // Redirect back to the page user was on, or default

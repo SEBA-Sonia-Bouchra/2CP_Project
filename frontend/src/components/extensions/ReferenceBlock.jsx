@@ -5,10 +5,8 @@ import { useState } from 'react'
 function ReferenceBlockComponent({ node, updateAttributes, getPos, editor, addReferenceCallback, getGlobalReferenceCount}) {
   const [newReference, setNewReference] = useState(''); // input only
   const references = node.attrs.references || [];
-
   const handleAddReference = () => {
     if (!newReference.trim()) return;
-
     const nextId = references.length + 1;
     const newRef = {
       title: newReference.trim(),
@@ -71,9 +69,10 @@ function ReferenceBlockComponent({ node, updateAttributes, getPos, editor, addRe
 
 export const ReferenceBlock = Node.create({
   name: 'referenceBlock',
-  group: 'block',
+  group: 'inline',
   atom:true,
   selectable: true,
+  inline:true,
 
   addAttributes() {
     return {
@@ -105,8 +104,4 @@ export const ReferenceBlock = Node.create({
   }
   
 })
-
-
-
-
 

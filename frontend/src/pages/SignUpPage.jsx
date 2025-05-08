@@ -60,7 +60,7 @@ export default function SignUpPage() {
           },
         }
       );
-      localStorage.setItem("signupEmail", formData.get("email")); 
+      sessionStorage.setItem("signupEmail", formData.get("email")); 
       console.log("Signup success:", response.data);
       navigate("/email-verification"); 
     } catch (error) {

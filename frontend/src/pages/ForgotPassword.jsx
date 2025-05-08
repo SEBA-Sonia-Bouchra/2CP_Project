@@ -29,7 +29,7 @@ const ForgotPassword = () => {
     try {
 
       const response = await axios.post("http://localhost:5000/api/auth/forgot-password", { email });
-      localStorage.setItem("signupEmail", email);
+      sessionStorage.setItem("signupEmail", email);
   
       setSuccessMessage("A verification code has been sent to your email.");
       navigate("/verify-code");

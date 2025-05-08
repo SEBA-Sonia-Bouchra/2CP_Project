@@ -4,7 +4,7 @@ import axios from 'axios';
 const DeleteAnnotation = ({ annotationId, setDeleteAnnotation, onDeleteSuccess }) => {
   const handleDelete = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
 
       await axios.delete(`http://localhost:5000/api/annotations/${annotationId}`, {
         headers: {
