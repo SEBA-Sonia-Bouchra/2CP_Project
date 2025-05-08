@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'
 import axios from 'axios';
 import Accept from '../../assets/images/Accept.svg';
 import Reject from '../../assets/images/Reject.svg';
@@ -46,6 +47,7 @@ const EditRequests = ({ projectId }) => {
       {editRequests.length > 0 ? (
         editRequests.map((request) => (
           <div key={request._id} className='pt-2 px-2 flex flex-row justify-between'>
+            <Link to={`/see-profile/${request.requester._id}`}>
             <div className='flex flex-row items-center'>
               <img src={`${localhost}${request.requester.profilePicture} ` || edit} 
               alt="User profile" className='rounded-full h-6 w-6 object-cover object-center' />
@@ -53,6 +55,7 @@ const EditRequests = ({ projectId }) => {
                 {request.requester.firstname} {request.requester.lastname}
               </span>
             </div>
+            </Link>
             <div className='flex flex-row items-center gap-2'>
               <button onClick={() => handleRequest(request._id, 'accept')} title="Accept the request">
                 <img src={Accept} alt="Accept" className='w-5 h-5'/>   

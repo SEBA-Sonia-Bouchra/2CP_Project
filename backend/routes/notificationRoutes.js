@@ -10,7 +10,8 @@ const {
   reportConflictNotification, 
   getNotifications, 
   markAsRead, 
-  deleteNotification 
+  deleteNotification,
+  countUnreadNotifications 
 } = notificationController;
 
 // Route for requesting an edit notification
@@ -38,5 +39,8 @@ router.delete('/delete/:id', deleteNotification);
 router.post('/edit-request', (req, res) => {
   notificationController.requestEditNotification(req, res, req.app.get('io'));
 });
+
+// Route to get unread notification count
+router.get('/unread-count/:userId', countUnreadNotifications);
 
 module.exports = router;
