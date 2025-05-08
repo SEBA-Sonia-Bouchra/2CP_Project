@@ -16,7 +16,7 @@ const ReportConflict = ({ setReportConflict, annotation, project }) => {
   useEffect(() => {
     const fetchContributorInfo = async () => {
       try {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const response = await axios.get(
           `${localhost}/api/annotations/project/${project._id}/section/${annotation.sectionId}/contributor`,
           {
@@ -45,7 +45,7 @@ const ReportConflict = ({ setReportConflict, annotation, project }) => {
     setSuccessMsg('');
 
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await axios.post(
         `${localhost}/api/conflict/report`,
         {

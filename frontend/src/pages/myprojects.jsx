@@ -13,7 +13,7 @@ export default function Projects() {
     const fetchOwnedProjects  = async () => {
       try {
       console.log("fetching projects...");
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
 
       if (!token) throw new Error("No token found");
         const response = await fetch("http://localhost:5000/homepage", {
@@ -45,7 +45,7 @@ export default function Projects() {
 
   const handleDelete = async (projectId) => {
     try {
-      const token = localStorage.getItem('token'); // Get JWT from localStorage
+      const token = sessionStorage.getItem('token'); // Get JWT from sessionStorage
       if (!token) {
         throw new Error("No token found");
       }

@@ -10,7 +10,7 @@ export default function Projects() {
     // Fetch projects from backend API
     const fetchContributedProjects = async () => {
       try {
-        const token = localStorage.getItem('token');  // Get JWT from localStorage
+        const token = sessionStorage.getItem('token');  // Get JWT from sessionStorage
 
       if (!token) {
         throw new Error("No token found");

@@ -19,7 +19,7 @@ const EditAnnotation = ({setEditAnnotation, onSaveAnnotation, annotation}) => {
       return;
     }
   
-    const token = localStorage.getItem("token"); // Get token
+    const token = sessionStorage.getItem("token"); // Get token
     if (!token) {
       console.error("User not authenticated");
       return;

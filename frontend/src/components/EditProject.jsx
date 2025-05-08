@@ -116,7 +116,7 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
         formData.append('sections', JSON.stringify(preparedSections));
         formData.append('references', JSON.stringify(references));
 
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
         if (!token) {
           console.error("No auth token found.");
           return;
