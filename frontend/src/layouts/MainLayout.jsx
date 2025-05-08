@@ -6,7 +6,6 @@ import NavbarProfessional from '../components/NavbarProfessional';
 import Notifications from '../components/Notifications.jsx'
 import NavbarAdmin from '../components/NavbarAdmin.jsx'
 import useCurrentUser from '../utils/useCurrentUser.js'
-import Search from "../components/search";
 import ScrollToTop from "../components/ScrollToTop.jsx"
 
 export default function MainLayout() {
