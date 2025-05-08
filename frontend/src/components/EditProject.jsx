@@ -109,7 +109,7 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
           title: section.title,
           content: section.editor.getHTML(),
           dimension: section.title.toLowerCase(),
-          contributor: savedProject?.author
+          contributor: user?._id,
         }));
 
         formData.append('sections', JSON.stringify(preparedSections));
@@ -130,7 +130,12 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
             }
         });
         console.log(`Project ${isEdit ? 'updated' : 'created'}:`, response.data);
-        navigate("/My_Projects");
+        if(isEdit && (user._id !== savedProject?.author._id)){
+          navigate('/My_contributions')
+        }
+        else{
+          navigate("/My_Projects");
+        }
       } catch (error) {
         console.error('Project save failed:', error.response?.data || error.message);
       }
@@ -190,6 +195,10 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
           InternalLinkHandler,
           Gapcursor,
           ExtendedParagraph,
+          Image.configure({
+            inline: true,
+            allowBase64: true, 
+          }),
           ReferenceBlock.configure({
             addReferenceCallback: (newRef) => {
               setReferences((prev) => [...prev, newRef]);
@@ -207,9 +216,6 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
           TableRow,
           TableCell,
           TableHeader,
-          Image.configure({
-            inline:true,
-          }),
           TextAlign.configure({
             types: ['heading', 'paragraph'], 
             alignments: ['left', 'center', 'right', 'justify'], 
@@ -231,7 +237,7 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
         nodeViews: {
           image: ({ node }) => <ResizableImage node={node} />, // Render ResizableImage for image nodes
         },
-        editable: savedProject
+        editable: savedProject.title
         ? savedProject.author?._id === user?._id ||
           ((user?.role === 'Architect' && section.title === 'Architecture') ||
           (user?.role === 'Historian' && section.title === 'History') ||
@@ -240,13 +246,7 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
       }),
     }));
     setSections(initializedSections);
-  }, [user]);
-
-  useEffect(()=>{
-    console.log(user);
-    console.log(savedProject);
-    console.log(savedProject?.author?._id === user?._id)
-  },[user])
+  }, [user, savedProject]);
 
   useEffect(() => { // to know which section editor is currently focused
       sections.forEach(section => {
@@ -497,7 +497,7 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
         {errors.coverPicture && (image=='') && <p className='text-red-700 self-start'>{errors.coverPicture}</p>}
         <div className='py-4 px-8 flex flex-col gap-5 w-full '>
           <div className='border-gray-500 border rounded-md border-opacity-10 shadow-sm w-full'>
-            { savedProject.author?._id === user?._id ? (<input type="text" placeholder='Add a title' className={`outline-none appearance-none rounded-md py-2 px-4 text-md w-full`} name='title'
+            { (savedProject.author?._id === user?._id || !savedProject.title ) ? (<input type="text" placeholder='Add a title' className={`outline-none appearance-none rounded-md py-2 px-4 text-md w-full`} name='title'
              value={values.title} onChange={handleChange} ref={titleRef}/>) : (<p className={`outline-none appearance-none rounded-md py-2 px-4 text-md w-full`}
              onChange={handleChange} ref={titleRef}>{values.title}</p>) }
             {errors.title && <p className='text-red-700 '>{errors.title}</p>}
