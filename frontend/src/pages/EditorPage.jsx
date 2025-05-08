@@ -3,11 +3,13 @@ import EditorToolbar from '../components/EditorToolbar'
 import EditProject from '../components/EditProject'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
+import useCurrentUser from '../utils/useCurrentUser'
 
 export default function EditorPage() {
   const [activeEditor, setActiveEditor] = useState(null); 
   const [coverImageFile, setCoverImageFile] = useState(null);
   const [projectData, setProjectData] = useState(null)
+  const user=useCurrentUser();
   const { id } = useParams() // gets the current page url 
   useEffect(() => {
     if (id) { // get the project with the matching id 
@@ -18,7 +20,7 @@ export default function EditorPage() {
           console.error('Failed to load project:', err)
         })
     } else {
-      // new project
+      // new project (initializes savedProject)
       setProjectData({
         title: '',
         sections: [],
@@ -30,7 +32,7 @@ export default function EditorPage() {
     <>
     <div className='flex justify-center'>
       <div className='fixed top-0 z-50 bg-white'>
-        <EditorToolbar editor={activeEditor} onSelectCoverPicture={setCoverImageFile}/> {/*So the toolbar can control the currently focused editor*/}
+        <EditorToolbar editor={activeEditor} onSelectCoverPicture={setCoverImageFile} savedProject={projectData} user={user}/> {/*So the toolbar can control the currently focused editor*/}
       </div> 
     </div> 
       <div className='mt-20'>

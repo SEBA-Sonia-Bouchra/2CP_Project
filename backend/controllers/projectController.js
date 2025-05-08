@@ -295,7 +295,7 @@ exports.createProject = async (req, res) => {
           title,
           content,
           dimension,
-          contributor: isOwner ? userId : null
+          contributor: userId,
         };
       });
 

@@ -51,7 +51,7 @@ const Mycontributionscomponents = ({ projects, loading, error }) => {
                 >
                   Read
                 </Link>
-                <Link to={"/editor"} 
+                <Link to={`/projects/${project._id}/edit`}
                   className="mt-2 bg-[#213824CF] text-white w-[125px] h-[40px] rounded-full text-sm font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824] flex items-center justify-center">                
                     Edit
                 </Link>
