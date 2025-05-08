@@ -10,7 +10,7 @@ const AccountRequest = () => {
     const navigate = useNavigate();
   
     useEffect(() => {
-      const email = localStorage.getItem("signupEmail"); // assuming you saved it after signup
+      const email = sessionStorage.getItem("signupEmail"); // assuming you saved it after signup
       if (!email) return;
   
       const checkStatus = async () => {

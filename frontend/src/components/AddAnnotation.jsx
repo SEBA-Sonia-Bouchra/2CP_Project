@@ -12,7 +12,7 @@ const AddAnnotation = ({color, section, setAddAnnotation, onSaveAnnotation, proj
       return;
     }
 
-    const token = localStorage.getItem('token'); 
+    const token = sessionStorage.getItem('token'); 
     
     const annotationData = {
       user: user?._id,

@@ -9,7 +9,7 @@ const GoogleCallback = () => {
     const accessToken = params.get('access_token');
 
     if (accessToken) {
-      localStorage.setItem('access_token', accessToken);
+      sessionStorage.setItem('access_token', accessToken);
       navigate('/dashboard'); 
     } else {
       console.error('No access token found');

@@ -4,7 +4,7 @@ import React from 'react'
 const DeleteSection = ({setDeleteSection, projectId, sectionId, onDeleteSection}) => {
   const handleDelete = async () => {
     try{
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const res = await axios.delete(`http://localhost:5000/api/projects/${projectId}/sections/${sectionId}`,{
         headers:{
           "Content-Type": "application/json",

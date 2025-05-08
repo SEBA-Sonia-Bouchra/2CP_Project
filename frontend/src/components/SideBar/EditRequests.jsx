@@ -11,7 +11,7 @@ const EditRequests = ({ projectId }) => {
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const res = await axios.get(`${localhost}/api/editrequests/project/${projectId}`,{
           headers: {
             Authorization: `Bearer ${token}`
@@ -28,7 +28,7 @@ const EditRequests = ({ projectId }) => {
 
   const handleRequest = async (id, action) => {
     try{
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       await axios.patch(`${localhost}/api/approveeditreqest/${id}`,
         {action},
         {headers: {Authorization: `Bearer ${token}`}}
