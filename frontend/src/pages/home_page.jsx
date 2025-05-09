@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import RecentProjects from "../components/RecentProjects";
 import AnnotatedProjects from "../components/AnnotatedProjects";
 import DiscoverProjects from "../components/DiscoverProjects";
+import ChatbotWidget from '../components/ChatBotWidget';
 import useCurrentUser from "../utils/useCurrentUser"
 
 export default function Projects() {
@@ -38,7 +39,7 @@ export default function Projects() {
         const data = await response.json();
         
         setProjects({
-              recent: [],  // You don't have recentProjects from backend yet so it is empty for the moment
+              recent: [],  // don't have recentProjects from backend yet so it is empty for the moment
               annotated: data.annotated || [],
               discovered: data.discovered || []
         });
@@ -53,7 +54,7 @@ export default function Projects() {
    }, []);
    console.log('Annotated projects:', projects.annotated);
   return (
-    <div className="bg-[#f5f5dc] min-h-screen flex flex-col pt-6"> 
+    <div className="bg-[#fffcf4] min-h-screen flex flex-col pt-6"> 
       {user?.isProfessional === true && (
           <>
                {/* Recent Projects Section with Scrollable Feature  */}
@@ -90,6 +91,8 @@ export default function Projects() {
       ) : ( 
         <p className="text-center font-montserral mt-8 text-xl">No projects available.</p>
       )}
+
+      <ChatbotWidget/>
       
     </div>
   );

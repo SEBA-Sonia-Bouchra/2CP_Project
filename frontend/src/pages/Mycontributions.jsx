@@ -41,7 +41,7 @@ export default function Projects() {
   
   console.log(contributedProjects);
   return (
-    <div className="bg-[#FFFFF1] min-h-screen flex flex-col">
+    <div className="bg-[#fffcf4] min-h-screen flex flex-col">
 
 
       {/* MyProjects Section */}
