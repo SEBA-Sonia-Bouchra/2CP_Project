@@ -10,7 +10,7 @@ export default function Projects() {
     // Fetch projects from backend API
     const fetchContributedProjects = async () => {
       try {
-        const token = localStorage.getItem('token');  // Get JWT from localStorage
+        const token = sessionStorage.getItem('token');  // Get JWT from sessionStorage
 
       if (!token) {
         throw new Error("No token found");
@@ -41,7 +41,7 @@ export default function Projects() {
   
   console.log(contributedProjects);
   return (
-    <div className="bg-[#FFFFF1] min-h-screen flex flex-col">
+    <div className="bg-[#fffcf4] min-h-screen flex flex-col">
 
 
       {/* MyProjects Section */}

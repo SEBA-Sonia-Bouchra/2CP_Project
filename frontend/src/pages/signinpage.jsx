@@ -13,7 +13,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedEmails = JSON.parse(localStorage.getItem("savedEmails")) || [];
+    const storedEmails = JSON.parse(sessionStorage.getItem("savedEmails")) || [];
     setSavedEmails(storedEmails);
   }, []);
 
@@ -46,8 +46,8 @@ const LoginPage = () => {
         email,
         password,
       });
-      // Save token to localStorage or context if needed
-      localStorage.setItem("token", response.data.token);
+      // Save token to sessionStorage or context if needed
+      sessionStorage.setItem("token", response.data.token);
       console.log(response.data.message); //
       if(response.data.status=='rejected'){
         navigate('/request-rejected')

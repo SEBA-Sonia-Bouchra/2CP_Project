@@ -1,4 +1,3 @@
-// font size extension
 import { Mark, mergeAttributes } from '@tiptap/core'
 
 export const FontSize = Mark.create({

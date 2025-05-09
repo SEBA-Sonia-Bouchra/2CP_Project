@@ -1,6 +1,6 @@
 import React , {useRef, useState, useEffect} from 'react'
 import {Plus ,ChevronDown ,ChevronUp ,Minus} from 'lucide-react'
-import { EditorContent, Editor } from '@tiptap/react';
+import { EditorContent, Editor, ReactNodeViewRenderer } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import Placeholder from '@tiptap/extension-placeholder'
@@ -15,7 +15,6 @@ import OrderedList from '@tiptap/extension-ordered-list'
 import ListItem from '@tiptap/extension-list-item'
 import Link from '@tiptap/extension-link'
 import Image from '@tiptap/extension-image'
-import { Rnd } from 'react-rnd';
 import ImageResize from 'tiptap-extension-resize-image';
 import Table from '@tiptap/extension-table'
 import TableRow from '@tiptap/extension-table-row'
@@ -29,9 +28,11 @@ import { InternalLinkHandler } from './extensions/InternalLinkHandler'
 import { ExtendedParagraph } from './extensions/ExtendedParagraph.js'
 import { Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import useCurrentUser from '../utils/useCurrentUser.js';
 
 export default function EditProject({ onEditorFocus, coverImageFile, savedProject }) {
   const navigate = useNavigate();
+  const user = useCurrentUser();
   const [image,setImage]=useState('');
   const defaultSections = !savedProject ? [ //this initializes "sections" with this predefined sections.
     { id: 'desc', title: 'Description', content: '', showContent: true  },
@@ -92,7 +93,6 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
     } else if (validationErrors.coverPicture) {
       coverPictureRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-    console.log(validationErrors)
     if (Object.keys(validationErrors).length === 0) {
       try {
         const formData = new FormData(); // save the project information
@@ -100,9 +100,8 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
         formData.append('description', newValues.description);
         formData.append('coverPhoto', newValues.coverPicture); 
         const preparedSections = sections
-        .filter(section => { 
-          if (section.title === "Description") return false; // exclude Description ( since it's not included with sections array in backend)
-          if (section.title === "References") return false;
+        .filter(section => { if (section.title === "Description") return false;
+          if(section.title === "References") return false; // exclude Description ( since it's not included with sections array in backend)
           const html = section.editor ? section.editor.getHTML() : section?.content;
           return html && html !== '<p></p>'; // only keep non-empty content
         })
@@ -110,13 +109,13 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
           title: section.title,
           content: section.editor.getHTML(),
           dimension: section.title.toLowerCase(),
-          contributor: savedProject?.author
+          contributor: user?._id,
         }));
 
         formData.append('sections', JSON.stringify(preparedSections));
         formData.append('references', JSON.stringify(references));
 
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
         if (!token) {
           console.error("No auth token found.");
           return;
@@ -132,7 +131,12 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
             }
         });
         console.log(`Project ${isEdit ? 'updated' : 'created'}:`, response.data);
-        navigate("/My_Projects");
+        if(isEdit && (user._id !== savedProject?.author._id)){
+          navigate('/My_contributions')
+        }
+        else{
+          navigate("/My_Projects");
+        }
       } catch (error) {
         console.error('Project save failed:', error.response?.data || error.message);
       }
@@ -140,6 +144,8 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
       console.log("Validation error");
     }
   }
+
+  console.log(references)
 
   const handleChange = (e) => { // update form fields(when entering input)
     const { name, value } = e.target;
@@ -190,10 +196,15 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
           InternalLinkHandler,
           Gapcursor,
           ExtendedParagraph,
+          Image.configure({
+            inline: true,
+            allowBase64: true, 
+          }),
           ReferenceBlock.configure({
             addReferenceCallback: (newRef) => {
-              setReferences(prev => [...prev, newRef]); // updates references with the new reference that we got from the reference block
+              setReferences((prev) => [...prev, newRef]);
             },
+            getGlobalReferenceCount: () => references.length, // Always uses latest value
           }),
           LinkBlock,
           Youtube.configure({
@@ -206,9 +217,6 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
           TableRow,
           TableCell,
           TableHeader,
-          Image.configure({
-            inline:true,
-          }),
           TextAlign.configure({
             types: ['heading', 'paragraph'], 
             alignments: ['left', 'center', 'right', 'justify'], 
@@ -230,10 +238,16 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
         nodeViews: {
           image: ({ node }) => <ResizableImage node={node} />, // Render ResizableImage for image nodes
         },
+        editable: savedProject.title
+        ? savedProject.author?._id === user?._id ||
+          ((user?.role === 'Architect' && section.title === 'Architecture') ||
+          (user?.role === 'Historian' && section.title === 'History') ||
+          (user?.role === 'Archeologist' && section.title === 'Archeology'))
+        : true
       }),
     }));
     setSections(initializedSections);
-  }, []);
+  }, [user, savedProject]);
 
   useEffect(() => { // to know which section editor is currently focused
       sections.forEach(section => {
@@ -257,10 +271,15 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
           paragraph:false,
         }),
         BulletList, OrderedList, ListItem, Underline , TextStyle, FontFamily, FontSize, Color, CustomHighlight, Image, ImageResize,Gapcursor,
-        Table, TableRow, TableCell, TableHeader,  ReferenceBlock, LinkBlock, ExtendedParagraph, InternalLinkHandler,// the editor of the new section
+        Table, TableRow, TableCell, TableHeader, LinkBlock, ExtendedParagraph, InternalLinkHandler,// the editor of the new section
           TextAlign.configure({
             types: ['heading', 'paragraph'], 
             alignments: ['left', 'center', 'right', 'justify'], 
+          }),
+          ReferenceBlock.configure({
+            addReferenceCallback: (newRef) => {
+              setReferences(prev => [...prev, newRef]); // updates references with the new reference that we got from the reference block
+            },
           }),
           Link.configure({
             openOnClick: false,
@@ -274,6 +293,16 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
             showOnlyCurrent: true, }),], })
       };
       setSections([...sections, newSection]);
+      setSections((prevSections) => {
+        const index1 = prevSections.findIndex((section) => section.title === 'References');
+        const index2 = prevSections.findIndex((section) => section.title === 'Other');
+        if (index1 === -1 || index2 === -1) {
+          return prevSections;
+        }
+        const newSections = [...prevSections];
+        [newSections[index1], newSections[index2]] = [newSections[index2], newSections[index1]];
+        return newSections;
+      })
   };
 
   useEffect(()=>{
@@ -284,7 +313,7 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
     setSections(sections.filter((section) => section.id !== id)); //removes a section based on its id 
   };
 
-  const toggleContentVisibility = (id) => {
+  const toggleContentVisibility = (id) => { // to hide/show section content
     setSections(
       sections.map((section) =>
         section.id === id ? { ...section, showContent: !section.showContent } : section
@@ -311,7 +340,7 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
       };
   }, [showRemoveSection]);
 
-  useEffect(() => {
+  useEffect(() => { // to fill references section with content whenever a reference is added 
     const referencesSection = sections.find(section => section.title === 'References');
     if (referencesSection?.editor && references.length > 0) {
       const paragraphs = references.map((ref, idx) => ({
@@ -334,13 +363,14 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
     }
   }, [references, sections]);
 
+  console.log(sections)
+
   useEffect(() => {
     if (savedProject?.coverPhoto) {
       const imagePath = savedProject.coverPhoto.replace("\\", "/");
       setImage(`http://localhost:5000/${imagePath}`);
     }
   }, [savedProject]);
-  
 
   const renderSection = (section) => {
     switch (section.title) {
@@ -455,8 +485,7 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
 
   return (
     <>
-      <div className='flex flex-col items-center justify-self-center font-montserral min-h-screen w-full max-w-[900px] shadow-lg overflow-y-auto mt-24 mb-8
-      '>
+      <div className='flex flex-col items-center justify-self-center font-montserral min-h-screen w-full max-w-[900px] shadow-lg overflow-y-auto mt-24 mb-8'>
         <div className='bg-[#4F3726] bg-opacity-20 flex items-center justify-center w-full h-[320px] ' style={{ backgroundImage: image ? `url("${image}")` : 'none' ,
         backgroundSize: 'cover', backgroundPosition: 'center',  }} ref={coverPictureRef}>
           <input type="file" accept="image/*" className="hidden" id="imageUpload" onChange={handleImageChange} name='coverPicture' />
@@ -469,12 +498,13 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
         {errors.coverPicture && (image=='') && <p className='text-red-700 self-start'>{errors.coverPicture}</p>}
         <div className='py-4 px-8 flex flex-col gap-5 w-full '>
           <div className='border-gray-500 border rounded-md border-opacity-10 shadow-sm w-full'>
-            <input type="text" placeholder='Add a title' className={`outline-none appearance-none rounded-md py-2 px-4 text-md w-full`} name='title'
-             value={values.title} onChange={handleChange} ref={titleRef}/>
+            { (savedProject.author?._id === user?._id || !savedProject.title ) ? (<input type="text" placeholder='Add a title' className={`outline-none appearance-none rounded-md py-2 px-4 text-md w-full`} name='title'
+             value={values.title} onChange={handleChange} ref={titleRef}/>) : (<p className={`outline-none appearance-none rounded-md py-2 px-4 text-md w-full`}
+             onChange={handleChange} ref={titleRef}>{values.title}</p>) }
             {errors.title && <p className='text-red-700 '>{errors.title}</p>}
           </div>       
-          <div className="section-list">
-            {sections.map((section) =>{if(section.title!=='References' || references.length>0){
+          <div>
+            {sections.map((section) =>{if(section.title!=='References' || references.length > 0){
               return renderSection(section);
             }})} 
           </div>
@@ -485,7 +515,6 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
               <span>Add Section</span>
             </button>
           </div>
-
           <button className='bg-[#4F3726] text-white text-lg py-2.5 px-10 rounded-full place-self-end shadow-md ' onClick={handleSave}>
             Save
           </button>

@@ -21,7 +21,7 @@ const AnnotatedProjects = ({ projects }) => {
   
   console.log('Annotated projects:', AnnotatedProjects);
   return (
-    <div className="w-full max-w-6xl mx-auto p-6 relative">
+    <div className="w-full max-w-5xl mx-auto pt-6 px-6 relative">
       {/* Title */}
       <h2 className="text-2xl mb-4 flex items-center space-x-3">
         <img src={AnnotatedIcon} alt="Vector Icon" className="w-6 h-6" />
@@ -29,7 +29,7 @@ const AnnotatedProjects = ({ projects }) => {
       </h2>
 
       {/* Scrollable Container */}
-      <div className="relative">
+      <div className="">
         <button
           onClick={scrollLeft}
           className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-[#213824] p-2 rounded-full shadow-md hover:bg-[#1a2b1d]"
@@ -39,18 +39,18 @@ const AnnotatedProjects = ({ projects }) => {
 
         <div
           ref={scrollRef}
-          className="flex space-x-4 overflow-x-auto hide-scrollbar scroll-smooth"
+          className="flex space-x-4 overflow-x-auto overflow-y-visible hide-scrollbar scroll-smooth pb-5 px-4"
         >
           {projects.slice(0, 6).map((project) => (
             <div
               key={project._id}
-              className="flex-shrink-0 w-80 bg-white rounded-lg shadow-lg overflow-hidden flex flex-col"
+              className="flex-shrink-0 w-80 bg-white rounded-lg shadow-lg overflow-clip flex flex-col border"
             >
               <img 
               src={`http://localhost:5000/${project.coverPhoto}`} alt='project cover picture' className="w-full h-40 object-cover" />
               <div className="p-4 flex flex-col flex-grow justify-between">
                 <div>
-                  <h3 className="text-lg font-semibold">{project.title}</h3>
+                  <h3 className="text-lg font-playfairdisplay">{project.title}</h3>
                   <p className='text-gray-500 text-[10px] font-montserral pb-1'>
                       {new Date(project.dateOfPublish).toLocaleDateString()} - {project.author?.firstname} {project.author?.lastname}
                     </p>

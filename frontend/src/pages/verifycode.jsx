@@ -29,7 +29,7 @@ export default function VerifyCode() {
   const handleVerify = async () => { 
     try {
       const otpString = otp.join('').trim();
-      const email = localStorage.getItem("signupEmail"); // Get stored email
+      const email = sessionStorage.getItem("signupEmail"); // Get stored email
       if (!email) {
       console.log("email error ");
       setError("Email not found. Please sign up again.");
