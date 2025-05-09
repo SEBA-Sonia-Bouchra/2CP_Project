@@ -67,7 +67,7 @@ const ChatbotWidget = () => {
       <div className="flex justify-end space-x-3 mt-3">
         <button
           className="bg-[#B57D57] text-white p-4 rounded-full shadow-lg hover:bg-[#ce8b5e] text-2xl"
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => setIsOpen(!isOpen)} title='BinaaBot'
         >
           {isOpen ? <HiX /> : <FaRobot />}
         </button>

@@ -58,7 +58,7 @@ const AccountsPage = () => {
 
   return (
     <>
-    <div className="flex justify-center min-h-screen bg-[#FFFFF1] pt-12 pb-28 font-montserral">
+    <div className="flex justify-center min-h-screen bg-[#fffcf4] pt-12 pb-28 font-montserral">
       {Accounts.length > 0 ? (
       <div className="w-3/4">
         {Accounts.map((account) => (
