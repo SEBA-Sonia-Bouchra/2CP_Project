@@ -16,7 +16,7 @@ const SectionDropDown = ({color, section, isOwner, currentUser, project, setSect
         { isWriter && (
           <>
             <span className='h-[0.1px] w-full' style={{backgroundColor: `${color}`}}></span>
-            <Link to={'/editor'}>
+            <Link to={`/projects/${project._id}/edit`}>
               <button className='py-2 px-4 text-sm'>Edit section</button>
             </Link>           
           </>

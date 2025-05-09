@@ -85,7 +85,7 @@ const Options = ({ isOwner, project }) => {
       {isOwner && (
         <>
           <span className='h-[0.1px] bg-[rgba(79,55,38,0.48)] w-full'></span>
-          <Link to={"/editor"} className='py-2'>
+          <Link to={`/projects/${project._id}/edit`} className='py-2'>
             <span className='text-[#4F3726] text-sm cursor-pointer'>Edit Project</span>
           </Link>
         </>
