@@ -6,7 +6,7 @@ const useCurrentUser = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (!token) return;
 
     axios.get("http://localhost:5000/api/auth/me", {
@@ -17,7 +17,7 @@ const useCurrentUser = () => {
       console.error("Error fetching user:", err);
     
       if (err.response?.status === 401) {
-        localStorage.removeItem("token");
+        sessionStorage.removeItem("token");
         window.location.href = "/signin";
       }
     });

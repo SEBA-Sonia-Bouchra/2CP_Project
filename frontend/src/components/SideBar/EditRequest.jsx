@@ -9,7 +9,7 @@ const EditRequest = ({ projectId }) => {
 
   const sendEditRequest = async () => {
     try {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const response = await fetch(`${localhost}/api/editrequests/${projectId}`, {
         method: 'POST',
         headers: {
@@ -33,7 +33,7 @@ const EditRequest = ({ projectId }) => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (!token) return;
   
     const fetchRequestStatus = async () => {
