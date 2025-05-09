@@ -10,6 +10,7 @@ const fs = require("fs");
 const crypto = require("crypto");
 const authenticateUser = require('../middleware/authUser');
 require("dotenv").config();
+const rateLimit = require('express-rate-limit');
 
 // ✅ Ensure upload directories exist
 const uploadDir = "uploads/certificates";
@@ -64,7 +65,11 @@ const sendOtpEmail = (email, otp) => {
       });
 };
 
-
+const otpResendLimiter = rateLimit({
+  windowMs: 30 * 1000, // 30 seconds
+  max: 1, // 1 request per window per user
+  message: "Too many OTP requests. Please try again in 30 seconds."
+});
 
 // ✅ Signup Route
 router.post("/signup", upload.single("certificate"), async (req, res) => {
@@ -117,6 +122,31 @@ router.post("/signup", upload.single("certificate"), async (req, res) => {
         console.error(error);
         res.status(500).json({ message: "Server error" });
     }
+});
+
+router.post('/resend-otp', otpResendLimiter, async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    return res.status(400).json({ message: "Email is required to resend OTP." });
+  }
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+    const otp = Math.floor(1000 + Math.random() * 9000);
+    const otpExpires = new Date(Date.now() + 10 * 60 * 1000);
+    user.otp = otp;
+    user.otpExpires = otpExpires;
+    await user.save();
+
+    sendOtpEmail(user.email, otp);
+    res.status(200).json({ message: "OTP has been resent successfully." });
+  } catch (error) {
+    console.error("Error resending OTP:", error);
+    res.status(500).json({ message: "Server error. Please try again." });
+  }
 });
   
 router.post("/verify-otp", async (req, res) => {

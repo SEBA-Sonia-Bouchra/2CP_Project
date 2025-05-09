@@ -9,6 +9,7 @@ export default function EmailVerification() {
   const [error, setError] = useState(null);
   const inputRefs = useRef([]);
   const navigate = useNavigate();
+
   const handleChange = (index, e) => {
     const value = e.target.value;
     if (!/^[0-9]?$/.test(value)) return;
@@ -25,26 +26,49 @@ export default function EmailVerification() {
     }
   }
   
-    const handleVerify = async () => {
-      try {
-        const otpString = otp.join('').trim();
-        const email = sessionStorage.getItem("signupEmail"); // Get stored email
-        if (!email) {
-         console.log("email error ");
-         setError("Email not found. Please sign up again.");
-         return;
-        }
-        const response = await axios.post("http://localhost:5000/api/auth/verify-otp", {
-          email,
-          otp: otpString,
-        });
-        if (response.status === 200) {
-          navigate('/email-approval'); // redirect to email approval page
-        }
-      } catch (err) {
-        setError(err.response?.data?.message || "Invalid code");
+  const handleVerify = async () => {
+    try {
+      const otpString = otp.join('').trim();
+      const email = sessionStorage.getItem("signupEmail"); // Get stored email
+      if (!email) {
+        console.log("email error ");
+        setError("Email not found. Please sign up again.");
+        return;
       }
+      const response = await axios.post("http://localhost:5000/api/auth/verify-otp", {
+        email,
+        otp: otpString,
+      });
+      if (response.status === 200) {
+        navigate('/email-approval'); // redirect to email approval page
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || "Invalid code");
     }
+  }
+
+  const resendOtp = async (email) => {
+  try {
+    const response = await axios.post("http://localhost:5000/api/auth/resend-otp", {
+      email,
+    });
+    console.log(response.data);
+    alert("Your verification code has been resent successfully.");
+  } catch (error) {
+    console.error("Failed to resend OTP:", error.response?.data || error.message);
+    alert(error.response?.data?.message || "Please wait for 30 seconds to send another verification code.");
+  }
+  };
+
+  const handleResendOtp = async () => {
+    const email = sessionStorage.getItem("signupEmail"); 
+    if (!email) {
+      console.log("email error ");
+      setError("Email not found. Please sign up again.");
+      return;
+    }
+    await resendOtp(email);
+  };
   return (
     <>
       <div className='sm:flex gap-8 sm:flex-col md:grid md:grid-cols-3 md:h-screen'>
@@ -70,8 +94,9 @@ export default function EmailVerification() {
             {error && <p className="text-red-500 text-center">{error}</p>}
             <div className='flex place-content-center'>
               <button type='submit' className='bg-[#b57D57] rounded-[50px] object-cover text-[20px] text-[#FFF8E3] px-8 py-2
-              drop-shadow-md mt-3 mb-3 font-montserral place-delf-center' onClick={handleVerify} >Verify</button>
+              drop-shadow-md mt-3 font-montserral place-delf-center' onClick={handleVerify} >Verify</button>
             </div>
+            <p className='cursor-pointer text-black underline flex place-content-center' onClick={handleResendOtp}>Resend email verification code</p>
           </div>
         </div>
       </div>
