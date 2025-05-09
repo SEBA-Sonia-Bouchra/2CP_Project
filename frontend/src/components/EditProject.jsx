@@ -44,7 +44,7 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
   { id: 'arch', title: 'Architecture', content: savedProject?.sections.find(s => s.title === 'Architecture')?.content, showContent: true },
   { id: 'hist', title: 'History', content: savedProject?.sections.find(s => s.title === 'History')?.content, showContent: true },
   { id: 'archaeo', title: 'Archeology', content: savedProject?.sections.find(s => s.title === 'Archeology')?.content, showContent: true },
-  { id: 'rfrncs', title: 'References', content: savedProject?.sections.find(s => s.title === 'References')?.content, showContent: true }] ;
+  { id: 'rfrncs', title: 'References', content: '', showContent: true }] ;
   const [sections, setSections] = useState(defaultSections); // To store sections
   const [showRemoveSection,setShowRemoveSection]=useState(false);
   const [errors,setErrors]= useState({});
@@ -52,7 +52,7 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
   const initialValues = {
     title: savedProject?.title || '',
     coverPicture: ImageUrl || null,
-    description: savedProject?.description || ''
+    description: savedProject?.description || '' 
   }; // initializes the values array with savedProject necessary fields if it's edit else empty if the project is new 
   const [values, setValues]=useState(initialValues);
   const [references, setReferences] = useState([]); 
@@ -113,7 +113,7 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
         }));
 
         formData.append('sections', JSON.stringify(preparedSections));
-        formData.append('references', JSON.stringify(references));
+        formData.append('references', JSON.stringify(references || []));
         const token = localStorage.getItem("token");
         if (!token) {
           console.error("No auth token found.");
@@ -143,8 +143,6 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
       console.log("Validation error");
     }
   }
-
-  console.log(references)
 
   const handleChange = (e) => { // update form fields(when entering input)
     const { name, value } = e.target;
@@ -203,7 +201,7 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
             addReferenceCallback: (newRef) => {
               setReferences((prev) => [...prev, newRef]);
             },
-            getGlobalReferenceCount: () => references.length, // Always uses latest value
+            getGlobalReferenceCount: () => references?.length, // Always uses latest value
           }),
           LinkBlock,
           Youtube.configure({
@@ -341,7 +339,7 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
 
   useEffect(() => { // to fill references section with content whenever a reference is added 
     const referencesSection = sections.find(section => section.title === 'References');
-    if (referencesSection?.editor && references.length > 0) {
+    if (referencesSection?.editor && references?.length > 0) {
       const paragraphs = references.map((ref, idx) => ({
         type: 'paragraph',
         attrs: {
@@ -362,14 +360,18 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
     }
   }, [references, sections]);
 
-  console.log(sections)
-
   useEffect(() => {
     if (savedProject?.coverPhoto) {
       const imagePath = savedProject.coverPhoto.replace("\\", "/");
       setImage(`http://localhost:5000/${imagePath}`);
     }
   }, [savedProject]);
+
+  useEffect(()=>{
+    if(savedProject){
+      setReferences(savedProject.references)
+    }
+  },[])
 
   const renderSection = (section) => {
     switch (section.title) {
@@ -503,7 +505,7 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
             {errors.title && <p className='text-red-700 '>{errors.title}</p>}
           </div>       
           <div>
-            {sections.map((section) =>{if(section.title!=='References' || references.length > 0){
+            {sections.map((section) =>{if(section.title!=='References' || references?.length > 0){
               return renderSection(section);
             }})} 
           </div>
