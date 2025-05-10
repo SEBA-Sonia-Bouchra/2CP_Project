@@ -4,7 +4,7 @@ import { ChevronUpDownIcon } from '@heroicons/react/20/solid';
 import filterIcon from '../assets/images/filter-icon.png';
 import { Link } from 'react-router-dom'
 
-const categories = ["Architecture", "History", "Archaeology"];
+const categories = ["Architecture", "History", "Archeology"];
 
 const regions = [
   "Adrar", "Chlef", "Laghouat", "Oum El Bouaghi", "Batna", "Béjaïa", "bejaia", "Biskra", "Béchar", "bechar",
