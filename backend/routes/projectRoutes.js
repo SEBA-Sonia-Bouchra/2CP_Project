@@ -20,7 +20,7 @@ const upload = multer({ storage });
 console.log('✅ projectRoutes loaded successfully');
 
 // ✅ GET ALL Projects Route (NEW)
-router.get('/', async (req, res) => {
+router.get('/', async (req// ✅ CREATE Project Route, res) => {
   try {
     // Get optional query parameters for pagination/filtering
     const { page = 1, limit = 10, sort = '-createdAt' } = req.query;
@@ -49,7 +49,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// ✅ CREATE Project Route
+
 router.post('/',
   authenticateUser,
   upload.fields([
