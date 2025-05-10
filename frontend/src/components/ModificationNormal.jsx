@@ -70,7 +70,7 @@ export default function ModificationNormal() {
 
   return (
     <>
-      <div className='bg-[#FFFFFF] min-h-screen min-w-screen flex place-content-center overflow-x-hidden pt-16 overflow-y-hidden pb-6 font-montserral'>
+      <div className='bg-[#fffcf4] min-h-screen min-w-screen flex place-content-center overflow-x-hidden pt-16 overflow-y-hidden pb-6 font-montserral'>
         <form action="" className='bg-[#213824] bg-opacity-[46%] flex flex-col rounded-bl-[20px] rounded-tr-[20px] rounded-br-[70px]
          rounded-tl-[70px] items-center self-center drop-shadow px-20 py-6  md:px-0 gap-14 md:py-14'>
         <div className='grid md:grid-cols-2 gap-14 md:gap-28'>

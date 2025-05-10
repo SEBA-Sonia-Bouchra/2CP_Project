@@ -69,7 +69,7 @@ export default function Projects() {
   }; 
 
   return (
-    <div className="bg-[#FFFFF1] min-h-screen flex flex-col">
+    <div className="bg-[#fffcf4] min-h-screen flex flex-col">
 
       {/* MyProjects Section */}
         <MyProjectsComponent projects={ownedProjects} loading={loading} error={error} onDelete={handleDelete}/>

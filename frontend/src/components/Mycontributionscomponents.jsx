@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const Mycontributionscomponents = ({ projects, loading, error }) => {
 
   return (
-    <div className="w-full max-w-6xl mx-auto p-6 relative mt-6">
+    <div className="w-full max-w-5xl mx-auto p-6 relative mt-6">
       {/* Title */}
       <div className="w-full max-w-4xl flex items-center space-x-3 mb-6">
         <img src={DiscoverIcon} alt="Vector Icon" className="w-6 h-6" />
@@ -40,7 +40,6 @@ const Mycontributionscomponents = ({ projects, loading, error }) => {
                   </h3>
                   <p className="text-xs text-gray-500 mb-2">
                     {new Date(project.dateOfPublish).toLocaleDateString()} -  {project.author.firstname} {project.author.lastname}
-                    {/* {new Date(project.dateOfPublish).toLocaleDateString()} - {authors[project.author] ? `${authors[project.author].firstname} ${authors[project.author].lastname}` : "Loading..."} */}
                   </p>
                   <p className="text-sm text-gray-700 line-clamp-2" dangerouslySetInnerHTML={{ __html: project.description }} />
                 </div>

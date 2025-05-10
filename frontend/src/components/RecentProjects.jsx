@@ -23,7 +23,7 @@ const RecentProjects = ({ projects }) => {
   return (
     
     <div className=" flex flex-col mb-0 pb-0 pt-12">
-      <div className="w-full max-w-6xl mx-auto relative">
+      <div className="w-full max-w-5xl mx-auto relative">
         {/* Title */}
         <h2 className="text-2xl font-semibold mb-4 flex items-center space-x-3">
           <img src={RecentIcon} alt="Recent Icon" className="w-6 h-6" />

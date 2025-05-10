@@ -20,7 +20,7 @@ const MyProjectsComponent = ({ projects, loading, error, onDelete }) => {
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto p-6 relative">
+    <div className="w-full max-w-5xl mx-auto p-6 relative">
       {/* Title */}
       <div className="w-full max-w-4xl flex items-center space-x-3 mb-6 pt-6">
         <img src={DiscoverIcon} alt="Vector Icon" className="w-6 h-6" />

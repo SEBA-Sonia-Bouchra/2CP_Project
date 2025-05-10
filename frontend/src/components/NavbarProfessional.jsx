@@ -47,7 +47,7 @@ export default function NavbarProfessional({toggleNotifications , showNotificati
                     </button>
                     {/* <ul className="absolute left-0 mt-2 w-56 bg-[#A3AD92] text-white shadow-lg rounded-1200 opacity-0 group-hover:opacity-100
                      transition-opacity duration-300 z-50"> */}
-                     <div className="absolute left-0 mt-2 w-56 bg-[#A3AD92] text-white shadow-lg rounded-1200 opacity-0 z-50 hidden-ul flex flex-col">
+                     <div className="absolute left-0 mt-2 w-56 bg-[#A3AD92] text-white shadow-lg rounded-1200 opacity-0 z-50 hidden-ul flex flex-col rounded-md overflow-clip">
                         <Link to="/My_projects" className="px-4 py-2 hover:bg-[#F5F5DC] hover:text-[#213824] cursor-pointer">My Projects</Link>
                         <Link to="/My_contributions" className="px-4 py-2 hover:bg-[#F5F5DC] hover:text-[#213824] cursor-pointer">My Contributions</Link>
                     </div>
@@ -81,7 +81,7 @@ export default function NavbarProfessional({toggleNotifications , showNotificati
                     </button>
                     {/* <ul className="absolute left-0 mt-2 w-56 bg-[#A3AD92] text-white shadow-lg rounded-1200 opacity-0 group-hover:opacity-100 
                     transition-opacity duration-300 z-50"> */}
-                    <div className="absolute left-0 mt-2 w-56 bg-[#A3AD92] text-white shadow-lg rounded-1200 opacity-0 z-50 hidden-ul flex flex-col">
+                    <div className="absolute left-0 mt-2 w-56 bg-[#A3AD92] text-white shadow-lg rounded-1200 opacity-0 z-50 hidden-ul flex flex-col rounded-md overflow-clip">
                         <Link to="/My_projects" className="px-4 py-2 hover:bg-[#F5F5DC] hover:text-[#213824] cursor-pointer">My Projects</Link>
                         <Link to="/My_contributions" className="px-4 py-2 hover:bg-[#F5F5DC] hover:text-[#213824] cursor-pointer">My Contributions</Link>
                     </div>

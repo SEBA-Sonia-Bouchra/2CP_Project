@@ -160,7 +160,7 @@ exports.getHomeProjects = async (req, res) => {
         .limit(20)
         .populate({
           path: 'project',
-          match: { author: { $ne: userId } }, // Exclude user's own projects
+          //match: { author: { $ne: userId } }, 
           populate: { path: 'author', select: 'firstname lastname' }
         }),
       

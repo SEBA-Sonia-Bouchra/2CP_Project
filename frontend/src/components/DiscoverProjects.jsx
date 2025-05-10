@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 
 const DiscoverProjects = ({ projects, loading, error }) => {
   return (
-    <div className="w-full max-w-6xl mx-auto p-6 relative">
+    <div className="w-full max-w-5xl mx-auto p-6 relative">
       {/* Title */}
       <div className="w-full max-w-4xl flex items-center space-x-3 mb-6">
         <img src={DiscoverIcon} alt="Vector Icon" className="w-6 h-6" />
@@ -27,7 +27,7 @@ const DiscoverProjects = ({ projects, loading, error }) => {
           projects.map((project) => (
             <div
               key={project._id}
-              className="bg-white rounded-lg shadow-lg flex overflow-hidden h-[220px]"
+              className="bg-white rounded-lg shadow-lg flex overflow-hidden h-[220px] border"
             >
               <img
                src={`http://localhost:5000/${project.coverPhoto}`}
@@ -44,13 +44,13 @@ const DiscoverProjects = ({ projects, loading, error }) => {
                   <p className='text-gray-500 text-[10px] font-montserral pb-1'>
                       {new Date(project.dateOfPublish).toLocaleDateString()} - {project.author?.firstname} {project.author?.lastname}
                     </p>
-                    <p className="text-sm text-gray-700 line-clamp-2" dangerouslySetInnerHTML={{ __html: project.description }} />
+                    <p className="text-sm text-gray-700 line-clamp-3" dangerouslySetInnerHTML={{ __html: project.description }} />
 
                 </div>
                 <div className="flex justify-end">
                   <Link to={`/projects/${project._id}`}>
                       <button 
-                      className="mt-2 bg-[#213824CF] text-white w-[160px] h-[50px] rounded-full text-lg font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824]
+                      className="mt-2 bg-[#213824CF] text-white w-[150px] h-[40px] rounded-full font-medium transition duration-300 hover:bg-transparent hover:text-[#213824] border border-[#213824]
                       font-montserral">
                         View Project
                       </button>
