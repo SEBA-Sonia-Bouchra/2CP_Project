@@ -34,17 +34,28 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
   const navigate = useNavigate();
   const user = useCurrentUser();
   const [image,setImage]=useState('');
-  const defaultSections = !savedProject ? [ //this initializes "sections" with this predefined sections.
-    { id: 'desc', title: 'Description', content: '', showContent: true  },
-    { id: 'arch', title: 'Architecture', content: '', showContent: true },
-    { id: 'hist', title: 'History', content: '', showContent: true },
-    { id: 'archaeo', title: 'Archeology', content: '', showContent: true },
-    { id: 'rfrncs', title: 'References', content: '', showContent: true },
-  ] : [ { id: 'desc', title: 'Description', content: savedProject?.description, showContent: true  }, // this is for the case where a user wants to edit their project
+  const defaultSections = !savedProject ? [ 
+  { id: 'desc', title: 'Description', content: '', showContent: true  },
+  { id: 'arch', title: 'Architecture', content: '', showContent: true },
+  { id: 'hist', title: 'History', content: '', showContent: true },
+  { id: 'archaeo', title: 'Archeology', content: '', showContent: true },
+  { id: 'rfrncs', title: 'References', content: '', showContent: true },
+  ] : [ 
+  { id: 'desc', title: 'Description', content: savedProject?.description, showContent: true  },
   { id: 'arch', title: 'Architecture', content: savedProject?.sections.find(s => s.title === 'Architecture')?.content, showContent: true },
   { id: 'hist', title: 'History', content: savedProject?.sections.find(s => s.title === 'History')?.content, showContent: true },
   { id: 'archaeo', title: 'Archeology', content: savedProject?.sections.find(s => s.title === 'Archeology')?.content, showContent: true },
-  { id: 'rfrncs', title: 'References', content: '', showContent: true }] ;
+  ...savedProject.sections // this adds the additional section (if it exists in savedProject) to defaultSections so that it appears in the editor when savedProject is edited
+    .filter(section => !['Description', 'Architecture', 'History', 'Archeology', 'References']
+      .includes(section.title))
+    .map(section => ({
+      id: section.title.toLowerCase(),
+      title: section.title,
+      content: section.content,
+      showContent: true
+    })),
+  { id: 'rfrncs', title: 'References', content: '', showContent: true },
+  ];
   const [sections, setSections] = useState(defaultSections); // To store sections
   const [showRemoveSection,setShowRemoveSection]=useState(false);
   const [errors,setErrors]= useState({});
@@ -74,10 +85,6 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
     return errors;
   }
 
-  useEffect(()=>{
-    console.log(image)
-  },[image])
-
   const handleSave = async (e) => {
     e.preventDefault();
     const descriptionSection = sections.find(section => section.title === 'Description');
@@ -100,8 +107,8 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
         formData.append('description', newValues.description);
         formData.append('coverPhoto', newValues.coverPicture); 
         const preparedSections = sections
-        .filter(section => { if (section.title === "Description") return false;
-          if(section.title === "References") return false; // exclude Description ( since it's not included with sections array in backend)
+        .filter(section => { if (section.title === "Description") return false; // exclude Description ( since it's not included with sections array in backend)
+          if(section.title === "References") return false;
           const html = section.editor ? section.editor.getHTML() : section?.content;
           return html && html !== '<p></p>'; // only keep non-empty content
         })
@@ -171,7 +178,7 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
     }
   }, [savedProject]);
 
-  useEffect(() => {
+  useEffect(() => { // initializing the editor of each section in defaultSections
     const initializedSections = defaultSections.map(section => ({
       ...section,
       editor: new Editor({
@@ -234,7 +241,7 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
           }),
         ],
         nodeViews: {
-          image: ({ node }) => <ResizableImage node={node} />, // Render ResizableImage for image nodes
+          image: ({ node }) => <ResizableImage node={node} />, 
         },
         editable: savedProject.title
         ? savedProject.author?._id === user?._id ||
@@ -291,7 +298,7 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
             showOnlyCurrent: true, }),], })
       };
       setSections([...sections, newSection]);
-      setSections((prevSections) => {
+      setSections((prevSections) => { // interchanges between References and Other in the array so that references doesn't appear before Other in the editor (when creating a new project)
         const index1 = prevSections.findIndex((section) => section.title === 'References');
         const index2 = prevSections.findIndex((section) => section.title === 'Other');
         if (index1 === -1 || index2 === -1) {
