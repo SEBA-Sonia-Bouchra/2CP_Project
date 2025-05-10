@@ -7,6 +7,7 @@ export default function Profile() {
   const { id } = useParams(); 
   const [user, setUser] = useState(null); 
   const [error, setError] = useState(null);
+  const localhost = "http://localhost:5000";
 
   useEffect(() => {
     const getData = async () => {
@@ -30,8 +31,6 @@ export default function Profile() {
     return <div className="text-center mt-10">Loading profile...</div>;
   }
 
-  console.log(user.profilePicture);
-
   return (
     <div className='bg-[#FFFFFF] min-h-screen flex place-content-center overflow-x-hidden font-montserral pt-16 mb-14 md:mb-28 min-w-screen'>
       <div className='bg-[#213824] bg-opacity-[40%] flex flex-col rounded-bl-[20px] rounded-tr-[20px] py-10
@@ -40,7 +39,7 @@ export default function Profile() {
           {/* image + description */}
           <div className='place-content-center pt-10 md:pt-0 grid md:pl-40 gap-6 '>
             <div className="relative">
-              <img src={`http://localhost:5000${user.profilePicture}` || icon} alt="icon" className='w-[192px] h-[192px] rounded-[50%] justify-self-center object-cover object-center'/>
+              <img src={user.profilePicture ? `${localhost}${user.profilePicture}` : icon} alt="user profile picture" className='w-[192px] h-[192px] rounded-[50%] justify-self-center object-cover object-center'/>
             </div>
             <div className='flex flex-col gap-2 flex-wrap '>
               <label htmlFor="description" className='text-lg md:text-xl drop-shadow ml-2'>Description</label>

@@ -33,7 +33,7 @@ const Contributers = ({ project }) => {
           <div key={section._id} className='p-2 flex flex-row justify-between'>
             <Link to={`/see-profile/${section.contributor?._id}`}>
               <div className='flex flex-row items-center'>
-                <img src={`${localhost}${section?.contributor?.profilePicture}`} alt="User profile picture" className='rounded-full h-6 w-6 object-cover object-center' />
+                <img src={section.contributor.profilePicture ? `${localhost}${section.contributor.profilePicture}` : icon} alt="User profile picture" className='rounded-full h-6 w-6 object-cover object-center' />
                 <span className='pl-1 pr-5 hover:underline cursor-pointer truncate max-w-[150px]'>
                   {section?.contributor?.firstname || "Unknown"} {section?.contributor?.lastname || "Unknown"}
                 </span>

@@ -13,7 +13,7 @@ const SectionDropDown = ({color, section, isOwner, currentUser, project, setSect
       <div    
       className='flex z-10 flex-col items-center rounded-lg absolute right-0 top-full mt-2 bg-white shadow-md whitespace-nowrap font-montserral'style={{ border: `1px solid ${color}` }} >
         <button className='py-2 px-4 text-sm' onClick={() => (setAddAnnotation(true))}>Add annotation</button>
-        { isWriter && (
+        { (isOwner || isWriter) && (
           <>
             <span className='h-[0.1px] w-full' style={{backgroundColor: `${color}`}}></span>
             <Link to={`/projects/${project._id}/edit`}>
@@ -21,7 +21,7 @@ const SectionDropDown = ({color, section, isOwner, currentUser, project, setSect
             </Link>           
           </>
         )}
-         { (isOwner || isWriter) && (
+         { (isOwner) && (
           <>
             <span className='h-[0.1px] w-full' style={{backgroundColor: `${color}`}}></span>
             <button className='py-2 px-4 text-sm' onClick={() => (setDeleteSection(true))}>Delete section</button> 
