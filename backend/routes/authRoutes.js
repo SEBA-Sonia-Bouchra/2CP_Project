@@ -180,26 +180,26 @@ router.post("/verify-otp", async (req, res) => {
 
 
 // ✅ Approve/Reject Route using POST
-/*router.post("/approve", async (req, res) => {
+router.post("/approve", authenticateUser, async (req, res) => {
     try {
-        const { userId, action } = req.body; // Get user ID and action from request body
+        if (!req.user.isAdmin) {
+            return res.status(403).json({ message: "Only admins can perform this action." });
+        }
 
+        const { userId, action } = req.body;
         if (!userId || !action) {
             return res.status(400).json({ message: "User ID and action are required!" });
         }
 
         const user = await User.findById(userId);
-
-        if (!user) {
-            return res.status(404).json({ message: "User not found!" });
-        }
+        if (!user) return res.status(404).json({ message: "User not found!" });
 
         if (action === "accept") {
             user.status = "accepted";
         } else if (action === "reject") {
             user.status = "rejected";
         } else {
-            return res.status(400).json({ message: "Invalid action! Use 'accept' or 'reject'. Please log in." });
+            return res.status(400).json({ message: "Invalid action! Use 'accept' or 'reject'." });
         }
 
         await user.save();
