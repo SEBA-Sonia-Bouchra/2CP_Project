@@ -42,9 +42,12 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
   { id: 'rfrncs', title: 'References', content: '', showContent: true },
   ] : [ 
   { id: 'desc', title: 'Description', content: savedProject?.description, showContent: true  },
-  { id: 'arch', title: 'Architecture', content: savedProject?.sections.find(s => s.title === 'Architecture')?.content, showContent: true },
-  { id: 'hist', title: 'History', content: savedProject?.sections.find(s => s.title === 'History')?.content, showContent: true },
-  { id: 'archaeo', title: 'Archeology', content: savedProject?.sections.find(s => s.title === 'Archeology')?.content, showContent: true },
+  { id: 'arch', title: 'Architecture', content: savedProject?.sections.find(s => s.title === 'Architecture')?.content,
+   contributor: savedProject?.sections.find(s => s.title === 'Architecture')?.contributor, showContent: true },
+  { id: 'hist', title: 'History', content: savedProject?.sections.find(s => s.title === 'History')?.content,
+   contributor:savedProject?.sections.find(s => s.title === 'History')?.contributor, showContent: true },
+  { id: 'archaeo', title: 'Archeology', content: savedProject?.sections.find(s => s.title === 'Archeology')?.content,
+   contributor:savedProject?.sections.find(s => s.title === 'Archeology')?.contributor, showContent: true },
   ...savedProject.sections // this adds the additional section (if it exists in savedProject) to defaultSections so that it appears in the editor when savedProject is edited
     .filter(section => !['Architecture', 'History', 'Archeology']
       .includes(section.title))
@@ -52,6 +55,7 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
       id: section.title.toLowerCase(),
       title: section.title,
       content: section.content,
+      contributor: section.contributor,
       showContent: true
     })),
   { id: 'rfrncs', title: 'References', content: '', showContent: true },
@@ -120,9 +124,8 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
           title: section.title,
           content: section.editor.getHTML(),
           dimension: section.title.toLowerCase(),
-          contributor: user?._id,
+          contributor: section.contributor,
         }));
-
         formData.append('sections', JSON.stringify(preparedSections));
         formData.append('references', JSON.stringify(references || []));
 
@@ -276,6 +279,7 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
         id: 'other',
         title: 'Other',
         content: '',
+        contributor:user?._id,
         showContent: true,
         editor: new Editor({ extensions: [StarterKit.configure({
           bulletList: false,
@@ -389,6 +393,28 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
       setReferences(savedProject.references)
     }
   },[])
+
+  useEffect(() => {
+  if (savedProject) {
+    setSections(prevSections =>
+      prevSections.map(section => {
+        if (section.title === "Description" || section.title === "References") {
+          return section; 
+        }
+        return {
+          ...section,
+          contributor: ((user?.role === 'Architect' && section.title === 'Architecture') ||
+                       (user?.role === 'Historian' && section.title === 'History') ||
+                       (user?.role === 'Archeologist' && section.title === 'Archeology'))
+            ? user?._id 
+            : section.contributor
+        };
+      })
+    );
+  }
+}, [savedProject, user, setSections]);
+
+
 
   const renderSection = (section) => {
     switch (section.title) {

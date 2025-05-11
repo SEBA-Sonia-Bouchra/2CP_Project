@@ -39,7 +39,7 @@ const Mycontributionscomponents = ({ projects, loading, error }) => {
                     {project.title}
                   </h3>
                   <p className="text-xs text-gray-500 mb-2">
-                    {new Date(project.dateOfPublish).toLocaleDateString()} -  {project.author.firstname} {project.author.lastname}
+                    {new Date(project.dateOfPublish).toLocaleDateString()} -  {project.author?.firstname} {project.author?.lastname}
                   </p>
                   <p className="text-sm text-gray-700 line-clamp-2" dangerouslySetInnerHTML={{ __html: project.description }} />
                 </div>
