@@ -180,37 +180,36 @@ router.post("/verify-otp", async (req, res) => {
 
 
 // ✅ Approve/Reject Route using POST
-// router.post("/approve", async (req, res) => {
-//     try {
-//         const { userId, action } = req.body; // Get user ID and action from request body
+router.post("/approve", authenticateUser, async (req, res) => {
+    try {
+        if (!req.user.isAdmin) {
+            return res.status(403).json({ message: "Only admins can perform this action." });
+        }
 
-//         if (!userId || !action) {
-//             return res.status(400).json({ message: "User ID and action are required!" });
-//         }
+        const { userId, action } = req.body;
+        if (!userId || !action) {
+            return res.status(400).json({ message: "User ID and action are required!" });
+        }
 
-//         const user = await User.findById(userId);
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ message: "User not found!" });
 
-//         if (!user) {
-//             return res.status(404).json({ message: "User not found!" });
-//         }
+        if (action === "accept") {
+            user.status = "accepted";
+        } else if (action === "reject") {
+            user.status = "rejected";
+        } else {
+            return res.status(400).json({ message: "Invalid action! Use 'accept' or 'reject'." });
+        }
 
-//         if (action === "accept") {
-//             user.status = "accepted";
-//         } else if (action === "reject") {
-//             user.status = "rejected";
-//         } else {
-//             return res.status(400).json({ message: "Invalid action! Use 'accept' or 'reject'. Please log in." });
-//         }
+        await user.save();
+        return res.json({ message: `User ${userId} has been ${action}ed successfully.` });
 
-//         await user.save();
-//         return res.json({ message: `User ${userId} has been ${action}ed successfully.` });
-
-//     } catch (error) {
-//         console.error("Error in approval route:", error);
-//         res.status(500).json({ message: "Internal server error" });
-//     }
-// });
-
+    } catch (error) {
+        console.error("Error in approval route:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});*/
 router.post("/approve", authenticateUser, async (req, res) => {
     try {
         if (!req.user.isAdmin) {
