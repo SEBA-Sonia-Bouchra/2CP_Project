@@ -3,28 +3,23 @@ import { NodeViewWrapper } from '@tiptap/react'
 import { useState } from 'react'
 
 function ReferenceBlockComponent({ node, updateAttributes, getPos, editor, addReferenceCallback, getGlobalReferenceCount}) {
-  const [newReference, setNewReference] = useState(''); // input only
+  const [newReference, setNewReference] = useState(''); 
   const references = node.attrs.references || [];
   const handleAddReference = () => {
     if (!newReference.trim()) return;
-    const nextId = references.length + 1;
     const newRef = {
       title: newReference.trim(),
-      id: nextId,
+      id: getGlobalReferenceCount() + 1,
     };
-
     const updatedReferences = [...references, newRef];
-    updateAttributes({ references: updatedReferences }); // correctly update node.attrs
+    updateAttributes({ references: updatedReferences }); 
 
     if (addReferenceCallback) {
       addReferenceCallback(newRef);
     }
 
-    const newRefId = `ref-${nextId}`;
-    editor
-    .chain()
-    .focus()
-    .insertContent([
+    const newRefId = `ref-${newRef.id}`;
+    editor.chain().focus().insertContent([
       {
         type: 'text',
         text: `[${getGlobalReferenceCount() + 1}]`,
@@ -54,7 +49,7 @@ function ReferenceBlockComponent({ node, updateAttributes, getPos, editor, addRe
   };
 
   return (
-    <NodeViewWrapper className="shadow-xl p-4 rounded-lg my-4 bg-white flex flex-col gap-2 font-montserral w-96">
+    <NodeViewWrapper  id={`ref-${node.attrs.reference?.id}`} className="shadow-xl p-4 rounded-lg my-4 bg-white flex flex-col gap-2 font-montserral w-96">
       <input type="text" value={newReference} onChange={(e) => setNewReference(e.target.value)} placeholder="Reference" className="border-2 border-[#2345AB]
        rounded-md px-3 py-2 outline-none"/>
       <button disabled={!newReference.trim()} onClick={handleAddReference} className={`px-4 py-2 self-end rounded transition ${ newReference.trim() ? 'text-[#2345AB]' :
@@ -104,4 +99,3 @@ export const ReferenceBlock = Node.create({
   }
   
 })
-

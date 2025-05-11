@@ -46,7 +46,7 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
   { id: 'hist', title: 'History', content: savedProject?.sections.find(s => s.title === 'History')?.content, showContent: true },
   { id: 'archaeo', title: 'Archeology', content: savedProject?.sections.find(s => s.title === 'Archeology')?.content, showContent: true },
   ...savedProject.sections // this adds the additional section (if it exists in savedProject) to defaultSections so that it appears in the editor when savedProject is edited
-    .filter(section => !['Description', 'Architecture', 'History', 'Archeology', 'References']
+    .filter(section => !['Architecture', 'History', 'Archeology']
       .includes(section.title))
     .map(section => ({
       id: section.title.toLowerCase(),
@@ -70,6 +70,7 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
   const titleRef = useRef(null);
   const descriptionRef = useRef(null);
   const coverPictureRef = useRef(null);
+  const referencesRef = useRef(references);
 
   const validate = (values) => {
     const errors = {};
@@ -85,6 +86,10 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
     return errors;
   }
 
+  useEffect(() => {
+  referencesRef.current = references;
+}, [references]);
+
   const handleSave = async (e) => {
     e.preventDefault();
     const descriptionSection = sections.find(section => section.title === 'Description');
@@ -96,7 +101,6 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
       titleRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } else if (validationErrors.description) {
       descriptionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      console.log(descriptionRef.current)
     } else if (validationErrors.coverPicture) {
       coverPictureRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
@@ -105,7 +109,7 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
         const formData = new FormData(); // save the project information
         formData.append('title', newValues.title);
         formData.append('description', newValues.description);
-        formData.append('coverPhoto', newValues.coverPicture); 
+        formData.append('coverPhoto', newValues.coverPicture);
         const preparedSections = sections
         .filter(section => { if (section.title === "Description") return false; // exclude Description ( since it's not included with sections array in backend)
           if(section.title === "References") return false;
@@ -209,7 +213,7 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
             addReferenceCallback: (newRef) => {
               setReferences((prev) => [...prev, newRef]);
             },
-            getGlobalReferenceCount: () => references?.length, // Always uses latest value
+             getGlobalReferenceCount: () => referencesRef.current.length, 
           }),
           LinkBlock,
           Youtube.configure({
@@ -262,6 +266,10 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
       })
   }, [sections])
 
+  useEffect(()=> {
+    console.log(references)
+  },[references])
+
   const addSection = (title) => {
       if (title === 'Other' && sections.some(s => s.title === 'Other')) return; 
       const newSection = { 
@@ -285,6 +293,7 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
             addReferenceCallback: (newRef) => {
               setReferences(prev => [...prev, newRef]); // updates references with the new reference that we got from the reference block
             },
+            getGlobalReferenceCount: () => referencesRef.current.length,
           }),
           Link.configure({
             openOnClick: false,
@@ -376,7 +385,7 @@ export default function EditProject({ onEditorFocus, coverImageFile, savedProjec
   }, [savedProject]);
 
   useEffect(()=>{
-    if(savedProject){
+    if(savedProject && savedProject.references){
       setReferences(savedProject.references)
     }
   },[])
