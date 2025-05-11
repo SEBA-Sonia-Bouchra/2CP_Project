@@ -1,4 +1,3 @@
-
 const ChatMessage = require('../models/ChatMessage');
 const generateContent = require('../utils/generateContent');
 
