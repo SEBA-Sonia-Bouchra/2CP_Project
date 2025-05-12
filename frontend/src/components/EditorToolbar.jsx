@@ -31,7 +31,12 @@ export default function EditorToolbar({ editor, onSelectCoverPicture, savedProje
   const [row, setRow]=useState(1);
   const [col, setCol]=useState(1);
   const [display, setDisplay]= useState(true);
-
+  const [bold, setBold] = useState(false);
+  const [italic, setItalic] = useState(false);
+  const [underline, setUnderline] = useState(false);
+  const [strikeThrough, setStrike] = useState(false);
+  const [bullet, setBullet]= useState(false);
+  const [ordered, setOrdered]= useState(false);
 
   const dropdownRefs = useRef({
     text: null,
@@ -140,6 +145,7 @@ export default function EditorToolbar({ editor, onSelectCoverPicture, savedProje
       onSelectCoverPicture(file); 
     }
   };
+
   const addImage = () => {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
@@ -326,30 +332,41 @@ export default function EditorToolbar({ editor, onSelectCoverPicture, savedProje
             )}
         </div>
         <div className='flex'>
-            <button className={`hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5`} title='set text to bold'
-             onClick={() =>{ editor.chain().focus().toggleBold().run()}}> {/* these are tiptap commands for formatting text */}
+            <button className={`hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5 ${bold ? 'bg-[#4F3726] bg-opacity-20' : 'bg-white'}`} title='set text to bold'
+             onClick={() =>{ editor.chain().focus().toggleBold().run()
+              setBold((prev) => !prev)
+             }}> {/* these are tiptap commands for formatting text */}
                 <Bold/>
             </button>
-            <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5' title='set text to italic' 
-            onClick={() => editor.chain().focus().toggleItalic().run()}>
+            <button className={`hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5 ${italic ? 'bg-[#4F3726] bg-opacity-20' : 'bg-white'}`} title='set text to italic' 
+            onClick={() => {editor.chain().focus().toggleItalic().run()
+              setItalic((prev) => !prev)}
+            }>
                 <Italic/>
             </button>
-            <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5' title='underline text'
-            onClick={() => editor.chain().focus().toggleUnderline().run()}>
+            <button className={`hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5 ${underline ? 'bg-[#4F3726] bg-opacity-20' : 'bg-white'}`} title='underline text'
+            onClick={() => {editor.chain().focus().toggleUnderline().run()
+              setUnderline((prev) => !prev)
+            }}>
                 <Underline/>
             </button>
-            <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5' title='strikethrough text'
-            onClick={() => editor.chain().focus().toggleStrike().run()}>
+            <button className={`hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5 ${strikeThrough ? 'bg-[#4F3726] bg-opacity-20' : 'bg-white'} `} title='strikethrough text'
+            onClick={() =>{ editor.chain().focus().toggleStrike().run()
+              setStrike((prev) => !prev)}
+            }>
                 <StrikethroughIcon/>
             </button>
         </div>
         <div className='flex'>
-            <button className='hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5' title='normal list'
-            onClick={()=> editor.chain().focus().toggleBulletList().run()}>
+            <button className={`hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5 ${bullet ? 'bg-[#4F3726] bg-opacity-20' : 'bg-white'}`} title='normal list'
+            onClick={()=>{ editor.chain().focus().toggleBulletList().run()
+              setBullet((prev) => !prev);}
+            }>
                 <List/>
             </button>
-            <button className={`hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5 ${editor.isActive('orderedList') ? 'active' : ''}`} title='ordered list'
-            onClick={() => editor.chain().focus().toggleOrderedList().run()}>
+            <button className={`hover:bg-[#4F3726] hover:bg-opacity-20 rounded-md p-1.5 ${ordered ? 'bg-[#4F3726] bg-opacity-20' : 'bg-white'}`} title='ordered list'
+            onClick={() =>{ editor.chain().focus().toggleOrderedList().run()
+            setOrdered((prev) => !prev)}}>
                 <ListOrdered/>
             </button>
         </div>

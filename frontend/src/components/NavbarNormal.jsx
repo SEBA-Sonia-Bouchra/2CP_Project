@@ -36,6 +36,7 @@ export default function NavbarNormal() {
             <img src={title} alt="logo-title" className='w-20'/>
         </div>
         <div className='flex self-center gap-4 md:gap-6 justify-self-end md:px-10 px-6'>
+          <Link to="/home_page" className="mr-4 text-white text-xl self-center">Home</Link>
           <button className='bg-[#DFD8C8] flex rounded-[70px] py-2 px-8 gap-2 place-content-center drop-shadow hover:bg-[#FFF8E3]' onClick={() => navigate("/search")}>
             <img src={search} alt="search-icon" className='self-center w-4 h-4' />
             <p className='self-center text-xl'>Search</p>

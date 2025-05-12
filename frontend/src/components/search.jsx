@@ -123,7 +123,7 @@ export default function Search({ projects, initialLoading }) {
   };
 
   return (
-    <div className="flex flex-col items-center gap-6 w-full pb-6">
+    <div className="flex flex-col items-center gap-6 w-full pb-6 font-montserral">
       {/* Search bar */}
       <div className="flex items-center w-full max-w-2xl rounded-full overflow-hidden bg-white shadow-md">
         <div className="bg-[#213824] px-4 py-3 flex items-center justify-center">
@@ -166,8 +166,8 @@ export default function Search({ projects, initialLoading }) {
         <div className="flex flex-col md:flex-row gap-4">
           {/* Category Filter */}
           <Listbox value={filters.category} onChange={handleCategoryChange}>
-            <div className="relative w-[200px]">
-              <Listbox.Button className={`relative w-full cursor-default rounded-xl border border-[#4B5E4B] py-2 pl-3 pr-10 text-center shadow-sm focus:outline-none font-[Montserrat] ${filters.category ? "bg-[#4B5E4B] text-[#FFF8E3]" : "bg-transparent text-white hover:bg-[#4B5E4B]"}`}>
+            <div className="relative w-[200px] cursor-pointer">
+              <Listbox.Button className={`relative w-full cursor-default rounded-xl border border-[#4B5E4B] py-2 pl-3 pr-10 text-center shadow-sm focus:outline-none font-montserral cursor-pointer ${filters.category ? "bg-[#4B5E4B] text-[#FFF8E3]" : "bg-transparent text-white hover:bg-[#4B5E4B]"}`}>
                 <span className={`block truncate ${filters.category ? 'text-[#FFF8E3]' : 'text-[#213824]'}`}>{filters.category || "Category"}</span>
                 <ChevronUpDownIcon className="h-5 w-5 absolute right-3 top-1/2 -translate-y-1/2 text-[#213824]" />
               </Listbox.Button>
@@ -194,7 +194,7 @@ export default function Search({ projects, initialLoading }) {
           {/* Region Filter */}
           <Listbox value={filters.region} onChange={handleRegionChange}>
             <div className="relative w-[200px]">
-              <Listbox.Button className={`relative w-full cursor-default rounded-xl border border-[#4B5E4B] py-2 pl-3 pr-10 text-center shadow-sm focus:outline-none font-[Montserrat] ${filters.region ? "bg-[#4B5E4B] text-[#FFF8E3]" : "bg-transparent text-white hover:bg-[#4B5E4B]"}`}>
+              <Listbox.Button className={`relative w-full cursor-default rounded-xl border border-[#4B5E4B] py-2 pl-3 pr-10 text-center shadow-sm focus:outline-none font-montserral cursor-pointer ${filters.region ? "bg-[#4B5E4B] text-[#FFF8E3]" : "bg-transparent text-white hover:bg-[#4B5E4B]"}`}>
                 <span className={`block truncate ${filters.region ? 'text-[#FFF8E3]' : 'text-[#213824]'}`}>{filters.region || "Region"}</span>
                 <ChevronUpDownIcon className="h-5 w-5 absolute right-3 top-1/2 -translate-y-1/2 text-[#213824]" />
               </Listbox.Button>
@@ -230,7 +230,7 @@ export default function Search({ projects, initialLoading }) {
       )}
 
       {/* Display Projects */}
-      <div className="w-full max-w-4xl mt-6 flex flex-col gap-4">
+      <div className="w-full max-w-4xl mt-6 flex flex-col gap-4 font-montserral">
         {initialLoading || loading ? (
           <div className="text-gray-500 text-center">Loading projects...</div>
         ) : displayedProjects.length > 0 ? (

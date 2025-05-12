@@ -277,3 +277,6 @@ th {
   line-height: 1.2;
 }
 
+.ProseMirror a {
+  text-decoration: underline;
+}
