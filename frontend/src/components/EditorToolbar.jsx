@@ -12,7 +12,7 @@ import TableGridSelector from './TableGridSelector.jsx'
 import useCurrentUser from '../utils/useCurrentUser.js';
 // () Don't forget keyboard shortcuts for toolbar functionalities ) <= a message for myself
 
-export default function EditorToolbar({ editor, onSelectCoverPicture, savedProject, user }) {
+export default function EditorToolbar({ editor, onSelectCoverPicture, savedProject, user, clearContent }) {
   const [textColor, setTextColor] = useState("#212529");
   const [backgroundColor, setBackgroundColor] = useState("#ffffff");
   const [showPickerText, setShowPickerText] = useState(false);
@@ -202,7 +202,7 @@ export default function EditorToolbar({ editor, onSelectCoverPicture, savedProje
       }
     }
   }
-)
+  )
   
   if (!editor) return null;
   return (
@@ -371,7 +371,8 @@ export default function EditorToolbar({ editor, onSelectCoverPicture, savedProje
             onClick={handleCoverPicture}><FilePenLine/> edit cover picture </li> 
             <input type="file" accept="image/*" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange}/>
           </div>) }
-          <li className='p-2 cursor-pointer hover:bg-[#4F3726] hover:bg-opacity-20 flex gap-2 items-center justify-center'><X/> clear content</li>
+          <li className='p-2 cursor-pointer hover:bg-[#4F3726] hover:bg-opacity-20 flex gap-2 items-center justify-center' onClick={clearContent}>
+            <X/> clear content</li>
           </ul>)}
         </div>
       </div>

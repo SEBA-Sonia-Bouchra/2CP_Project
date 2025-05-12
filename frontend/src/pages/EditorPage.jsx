@@ -27,12 +27,18 @@ export default function EditorPage() {
       })
     }
   }, [id])
+  const clearContent = () => {
+    if (activeEditor) {
+      activeEditor.commands.clearContent();
+    }
+  };
   if (!projectData) return <div className='font-montserral'>Loading...</div>
   return (
     <>
     <div className='flex justify-center'>
       <div className='fixed top-0 z-50 bg-white'>
-        <EditorToolbar editor={activeEditor} onSelectCoverPicture={setCoverImageFile} savedProject={projectData} user={user}/> {/*So the toolbar can control the currently focused editor*/}
+        <EditorToolbar editor={activeEditor} onSelectCoverPicture={setCoverImageFile} savedProject={projectData} user={user}
+        clearContent={clearContent}/> {/*So the toolbar can control the currently focused editor*/}
       </div> 
     </div> 
       <div className='mt-20'>
