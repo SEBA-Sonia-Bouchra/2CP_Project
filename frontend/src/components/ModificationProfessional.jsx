@@ -124,7 +124,7 @@ export default function ModificationProfessional() {
                       <input type='text' className='appearance-none outline-none rounded-[5px] md:w-64 py-2 px-2 bg-[#DFD8C8]' 
                       maxLength={30} name='firstname' id="firstname"  value={formValues.firstname} onChange={handleChange}/>
                     ) : (
-                      <p className={`rounded-[5px] py-2 px-2 bg-[#DFD8C8] h-10 md:w-64 truncate`}>{user?.firstname}</p>
+                      <p className={`rounded-[5px] py-2 px-2 bg-[#DFD8C8] h-10 md:w-64 truncate`}>{formValues.firstname}</p>
                     )}
                   </div>
                     {/* last name */}
@@ -135,7 +135,7 @@ export default function ModificationProfessional() {
                       py-2 px-2 bg-[#DFD8C8]' maxLength={30} name='lastname' id="lastname" value={formValues.lastname} onChange={handleChange}/>)
                     : (
                       <p className={`rounded-[5px] py-2 px-2 h-10 md:w-64 bg-[#DFD8C8] truncate`}>
-                      {user?.lastname}</p>
+                      {formValues.lastname}</p>
                     )}
                   </div>
                   {/* email */}

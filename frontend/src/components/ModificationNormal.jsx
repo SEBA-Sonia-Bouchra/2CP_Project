@@ -93,7 +93,7 @@ export default function ModificationNormal() {
                   <input type="text" className='appearance-none outline-none rounded-[5px] py-1 px-1 md:py-2 md:px-2 bg-[#DFD8C8] truncate'
                     maxLength={30} name='firstname' id='firstname' value={formValues.firstname} onChange={handleChange}/>
                 ) : (
-                  <p className='rounded-[5px] py-1 px-1 md:py-2 md:px-2 bg-[#DFD8C8] h-8 md:h-10'> {user?.firstname}</p>
+                  <p className='rounded-[5px] py-1 px-1 md:py-2 md:px-2 bg-[#DFD8C8] h-8 md:h-10'> {formValues.firstname}</p>
                   )}
               </div>
               <div className='flex flex-col '>
@@ -102,7 +102,7 @@ export default function ModificationNormal() {
                   <input type="text" className='appearance-none outline-none rounded-[5px] py-1 px-1 md:py-2 md:px-2 bg-[#DFD8C8]' maxLength={30}
                  name='lastname' id='lastname' value={formValues.lastname} onChange={handleChange}/>
                 ) : (
-                <p className='rounded-[5px] py-1 px-1 md:py-2 md:px-2 bg-[#DFD8C8] h-8 md:h-10 truncate'>{user?.lastname}</p>
+                <p className='rounded-[5px] py-1 px-1 md:py-2 md:px-2 bg-[#DFD8C8] h-8 md:h-10 truncate'>{formValues.lastname}</p>
                 )}
               </div>
               <div className='flex flex-col '>
