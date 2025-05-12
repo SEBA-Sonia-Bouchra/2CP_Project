@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios';
 import Accept from '../../assets/images/Accept.svg';
 import Reject from '../../assets/images/Reject.svg';
+import icon from '../../assets/images/icon-placeholder.png';
 
 const EditRequests = ({ projectId }) => {
   const [editRequests, setEditRequests] = useState([]);
@@ -49,7 +50,7 @@ const EditRequests = ({ projectId }) => {
           <div key={request._id} className='pt-2 px-2 flex flex-row justify-between'>
             <Link to={`/see-profile/${request.requester._id}`}>
             <div className='flex flex-row items-center'>
-              <img src={`${localhost}${request.requester.profilePicture} ` || edit} 
+              <img src={request.requester.profilePicture ? `${localhost}${request.requester.profilePicture}` : icon} 
               alt="User profile" className='rounded-full h-6 w-6 object-cover object-center' />
               <span className='pl-1 pr-5 hover:underline cursor-pointer truncate max-w-[150px]'>
                 {request.requester.firstname} {request.requester.lastname}

@@ -2,6 +2,7 @@ import React from 'react'
 import title from '../assets/images/BinaA.svg'
 import logo from '../assets/images/LOGO.svg'
 import { Link } from 'react-router-dom'
+import userguide from '../assets/userguide/userguide.pdf';
 
 export default function Footer() {
   return (
@@ -24,7 +25,9 @@ export default function Footer() {
             <Link to="/About_Us">
               <button className='text-xl'>About us</button>
             </Link>
-            <p className='text-xl'>Help</p>
+            <a href={userguide} target="_blank" rel="noopener noreferrer">
+              <button className='text-xl'>Help</button>
+            </a>
             <Link to="/terms">
               <button className='text-xl'>Terms & privacy policy</button>
             </Link>

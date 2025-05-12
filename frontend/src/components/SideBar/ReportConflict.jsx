@@ -80,7 +80,7 @@ const ReportConflict = ({ setReportConflict, annotation, project }) => {
         <div className="text-sm mb-6 px-2">
           <p className="mb-2">Send an email to:</p>
           <div className="grid grid-cols-[auto_1fr_auto] gap-2 items-center">
-            {(project.author?._id !== annotation?.user && project.author?._id !== contributor?._id) && (
+            {(project.author?._id !== annotation?.user && project.author?._id !== contributor?._id && user?._id !== project.author?._id) && (
               <>
                 <Link to={`/see-profile/${project.author?._id}`}>
                   <img
@@ -98,7 +98,7 @@ const ReportConflict = ({ setReportConflict, annotation, project }) => {
               </>
             )}
 
-            {(contributor?._id !== annotation.user) && (
+            {(contributor?._id !== annotation.user && (user?._id !== contributor?._id)) && (
               <>
                 <Link to={`/see-profile/${contributor?._id}`}>
                 <img

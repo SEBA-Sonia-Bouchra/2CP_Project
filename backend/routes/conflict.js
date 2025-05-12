@@ -163,7 +163,7 @@ router.post('/report', authenticateUser, async (req, res) => {
 
     // Find users
     const projectOwner = await User.findById(project.author);
-    const sectionOwner = section.author ? await User.findById(section.author) : null;
+    const sectionOwner = section.contributor ? await User.findById(section.contributor) : null;
     const annotationOwner = await User.findById(annotation.user);
 
     // 🔁 Collect unique email recipients
